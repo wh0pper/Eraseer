@@ -12,10 +12,16 @@ export default class Box extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log('Props passed to box: ', this.props.boxInfo);
+  }
+
   render() {
     return (
       <View style={[styles.container, {backgroundColor: this.props.boxInfo.color}]}>
         <Text>{this.props.boxInfo.name}</Text>
+        <Text>Clicks: {this.props.boxInfo.clickCount}</Text>
+        <Text>Peripheral ID: {this.props.boxInfo.peripheralId}</Text>
       </View>
     );
   }
