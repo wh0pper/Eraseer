@@ -31,6 +31,7 @@ export default class RegisterModal extends Component {
               <Text>X</Text>
             </TouchableHighlight>
             <TextInput
+              placeholder="name"
               onChangeText={(name) => this.setState({name})}
               value={this.state.name}
             />

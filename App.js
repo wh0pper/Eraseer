@@ -10,8 +10,13 @@ import {
   NativeModules,
   NativeEventEmitter,
 } from 'react-native';
-import PlayerBox from './app/components/PlayerBox';
-import RegisterModal from './app/components/RegisterModal';
+
+import { createStackNavigator } from 'react-navigation';
+
+import GameScreen from './app/screens/GameScreen';
+import RegistrationScreen from './app/screens/RegistrationScreen';
+
+
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -92,7 +97,6 @@ export default class App extends Component<Props> {
       registrationList: colorBank,
       playerCount: 0,
       roundCount: 0,
-      registrationVisible: false
     };
 
     this.handleDiscovery = this.handleDiscovery.bind(this);
@@ -163,31 +167,6 @@ export default class App extends Component<Props> {
     }
   }
 
-  showRegistration(selectedBox) {
-    console.log('Registering new player');
-    this.setState({
-      registrationVisible: true,
-      colorPendingRegistration: selectedBox.color
-    });
-  }
-
-  processRegistration(name) {
-    this.hideRegistration();
-    let registrations = this.state.registrationList;
-    let regToUpdate = registrations.find((reg) => reg.color == this.state.colorPendingRegistration);
-    let removeIndex = registrations.indexOf(regToUpdate);
-    console.log('updating registration for: ', regToUpdate);
-    registrations.splice(removeIndex, 1);
-    regToUpdate.name = name;
-    regToUpdate.color = this.state.colorPendingRegistration;
-    registrations.splice(removeIndex, 0, regToUpdate);
-    this.setState({
-      registrationList: registrations,
-      colorPendingRegistration: ''
-    });
-    console.log('updated reg: ', regToUpdate);
-  }
-
   subscribeToClick(peripheralId) {
     BleManager.retrieveServices(peripheralId).then((serviceData) => {
       BleManager.startNotification(peripheralId, ITAG_SERVICE, ITAG_CHARACTERISTIC)
@@ -224,44 +203,36 @@ export default class App extends Component<Props> {
     }
   }
 
-  // startGame() {
-  //
-  // }
 
-  hideRegistration() {
-    // let newValue = !this.state.registrationVisible;
-    this.setState({ registrationVisible: false });
-  }
 
   render() {
     console.log('registration list: ', this.state.registrationList);
     return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={() => this.startGame()}><Text>Start Game</Text></TouchableOpacity>
-        <FlatList
-            data={this.state.registrationList}
-            extraData={this.state}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => {
-              return (
-                <View>
-                  <TouchableOpacity onPress={() => this.showRegistration(item)}>
-                    <PlayerBox displayInfo={item}></PlayerBox>
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
-        <TouchableOpacity style={styles.button} onPress={() => this.startScan()}><Text>{this.state.isScanning ? "Stop" : "Scan"}</Text></TouchableOpacity>
-      <RegisterModal
-        visible={this.state.registrationVisible}
-        register={(name) => this.processRegistration(name)}
-        hide={() => this.hideRegistration()}
-        ></RegisterModal>
-      </View>
+      // <View style={styles.container}>
+        <NavigationStack/>
+      // </View>
     );
   }
 }
+
+const NavigationStack = createStackNavigator({
+    registration: {
+        screen: RegistrationScreen,
+        navigationOptions: () => ({
+          header: null,
+        }),
+      },
+    game: {
+      screen: GameScreen,
+      navigationOptions: () => ({
+        header: null,
+      }),
+    }
+  },
+  {
+    initialRouteName: 'registration'
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -271,19 +242,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
     padding: 20
-  },
-  button: {
-    backgroundColor: 'lightgray',
-    padding: 10
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  }
 });

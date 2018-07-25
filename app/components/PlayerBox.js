@@ -32,11 +32,13 @@ export default class PlayerBox extends Component {
       //   </View>
     // }
 
+
     return (
 
         // {content}
         <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
-          <Text>{this.props.displayInfo.name || 'Claim'}</Text>
+          <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name || 'Available'}</Text>
+          <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.points || ''}</Text>
         </View>
 
     );
@@ -45,8 +47,8 @@ export default class PlayerBox extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     marginBottom: 10
   }
 });
