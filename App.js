@@ -10,7 +10,8 @@ import {
   NativeModules,
   NativeEventEmitter,
 } from 'react-native';
-import Box from './box';
+import PlayerBox from './app/components/PlayerBox';
+import RegisterModal from './app/components/RegisterModal';
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -24,7 +25,32 @@ const SCAN_TIME = 60;
 const ITAG_SERVICE = "ffe0";
 const ITAG_CHARACTERISTIC = "ffe1";
 
-let colorBank = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+const colorBank = [
+  {
+    color: '#7C9132',
+    isPopulated: false
+  },
+  {
+    color: '#292929',
+    isPopulated: false
+  },
+  {
+    color: '#5386AD',
+    isPopulated: false
+  },
+  {
+    color: '#BCAC46',
+    isPopulated: false
+  },
+  {
+    color: '#673D91',
+    isPopulated: false
+  },
+  {
+    color: '#88241E',
+    isPopulated: false
+  }
+];
 
 let playerBank = [
   {
@@ -62,7 +88,11 @@ export default class App extends Component<Props> {
 
     this.state = {
       isScanning: false,
-      boxList: []
+      playerList: [],
+      registrationList: colorBank,
+      playerCount: 0,
+      roundCount: 0,
+      registrationVisible: false
     };
 
     this.handleDiscovery = this.handleDiscovery.bind(this);
@@ -105,19 +135,25 @@ export default class App extends Component<Props> {
   handleDiscovery(peripheral) {
     // console.log('New device discovered: ', peripheral);
     let name = peripheral.name || '';
-    if (this.state.boxList.length < 6) {
+    if (this.state.playerList.length < 6) {
       if (name.toLowerCase().trim() == 'itag') {
         console.log('Initializing connection with found iTag device.')
         BleManager.connect(peripheral.id)
         .then(() => {
           console.log('Connected to new iTag with id: ', peripheral.id);
-          let players = this.state.boxList;
-          let newPlayer = playerBank.pop();
-          newPlayer.peripheralId = peripheral.id;
-          newPlayer.clickCount = 0;
+          let players = this.state.playerList;
+          let nextColor = colorBank.pop();
+          let newPlayer = {
+            hasInfo: false,
+            color: nextColor
+          };
+          // let newPlayer = playerBank.pop();
+          // newPlayer.peripheralId = peripheral.id;
+          // newPlayer.clickTime = null;
           players.push(newPlayer);
-          this.setState({boxList: players});
-          console.log('Current players list: ', this.state.boxList);
+          this.setState({
+            playerList: players,
+          });
           this.subscribeToClick(peripheral.id);
         })
         .catch((error) => {
@@ -125,6 +161,18 @@ export default class App extends Component<Props> {
         });
       }
     }
+  }
+
+  registerNewPlayer(selectedBox) {
+    console.log('Registering new player');
+    this.setState({registrationVisible: true});
+    let registrations = this.state.registrationList;
+    let regToUpdate = registrations.find((reg) => reg.color == selectedBox.color)
+    let removeIndex = registrations.indexOf(regToUpdate);
+    registrations.splice(removeIndex, 1);
+    regToUpdate.name = 'name';
+    registrations.splice(removeIndex, 0, regToUpdate);
+    this.setState({registrationList: registrations});
   }
 
   subscribeToClick(peripheralId) {
@@ -136,12 +184,19 @@ export default class App extends Component<Props> {
   }
 
   handleSubscription(data) {
+    let recievedTime = Date.now();
     console.log('Subscription listener fired, received data from:' + data.peripheral, data);
+    let players = this.state.playerList;
+    let updatePlayer = players.find((player, index) => player.peripheralId == data.peripheral);
+    updatePlayer.clickTime = recievedTime;
+    let updateIndex = players.indexOf(updatePlayer);
+    players[updateIndex] = updatePlayer;
+    this.setState({playerList: players});
   }
 
   handleDisconnect(data) {
     console.log('Peripheral initiated a disconnect: ', data);
-    let players = this.state.boxList;
+    let players = this.state.playerList;
     let removePlayer = players.find((player) => player.peripheralId == data.peripheral);
     if (removePlayer) {
       console.log('Removing player from game: ', removePlayer);
@@ -150,32 +205,45 @@ export default class App extends Component<Props> {
       delete removePlayer.peripheralId;
       delete removePlayer.clickCount;
       playerBank.push(removePlayer);
-      this.setState({boxList: players});
+      this.setState({playerList: players});
     } else {
       console.log('Error removing player from game');
     }
   }
 
+  // startGame() {
+  //
+  // }
+
+  hideRegistration() {
+    let newValue = !this.state.registrationVisible;
+    this.setState({ registrationVisible: newValue });
+  }
 
   render() {
-    let playerList = this.state.boxList;
-    console.log('Playerlist in render: ', playerList);
+
     return (
       <View style={styles.container}>
+        <TouchableOpacity style={styles.button} onPress={() => this.startGame()}><Text>Start Game</Text></TouchableOpacity>
         <FlatList
-            data={this.state.boxList}
+            data={this.state.registrationList}
             extraData={this.state}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => {
               return (
                 <View>
-                  <Box boxInfo={item}></Box>
-                  {/* <Text>{item.name}</Text> */}
+                  <TouchableOpacity onPress={() => this.registerNewPlayer(item)}>
+                    <PlayerBox displayInfo={item}></PlayerBox>
+                  </TouchableOpacity>
                 </View>
               );
             }}
           />
         <TouchableOpacity style={styles.button} onPress={() => this.startScan()}><Text>{this.state.isScanning ? "Stop" : "Scan"}</Text></TouchableOpacity>
+      <RegisterModal
+        visible={this.state.registrationVisible}
+        // hide={() => this.hideRegistration}
+        ></RegisterModal>
       </View>
     );
   }
