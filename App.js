@@ -240,10 +240,10 @@ export default class App extends Component<Props> {
             }}
           />
         <TouchableOpacity style={styles.button} onPress={() => this.startScan()}><Text>{this.state.isScanning ? "Stop" : "Scan"}</Text></TouchableOpacity>
-      <RegisterModal
+      {/* <RegisterModal
         visible={this.state.registrationVisible}
         // hide={() => this.hideRegistration}
-        ></RegisterModal>
+        ></RegisterModal> */}
       </View>
     );
   }
