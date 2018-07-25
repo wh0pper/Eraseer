@@ -5,34 +5,45 @@ import {
   Modal,
   Text,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } from 'react-native';
 
 export default class RegisterModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      name: ''
     };
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <Modal
           visible={this.props.visible}
           onRequestClose={() => null}>
-          <View>
+          <View style={styles.container}>
+            <TouchableHighlight
+              onPress={() => {
+                this.props.hide()
+              }}>
+              <Text>X</Text>
+            </TouchableHighlight>
             <TextInput
-              placeholder="Name"
+              onChangeText={(name) => this.setState({name})}
+              value={this.state.name}
             />
+            <TouchableOpacity
+              onPress={() => {
+                this.props.register(this.state.name);
+                this.setState({name: ''});
+              }}
+              >
+              <Text>Submit</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableHighlight
-            onPress={() => {
-              this.props.hide
-            }}>
-            <Text>x</Text>
-          </TouchableHighlight>
+
         </Modal>
       </View>
     )

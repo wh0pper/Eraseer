@@ -163,16 +163,29 @@ export default class App extends Component<Props> {
     }
   }
 
-  registerNewPlayer(selectedBox) {
+  showRegistration(selectedBox) {
     console.log('Registering new player');
-    this.setState({registrationVisible: true});
+    this.setState({
+      registrationVisible: true,
+      colorPendingRegistration: selectedBox.color
+    });
+  }
+
+  processRegistration(name) {
+    this.hideRegistration();
     let registrations = this.state.registrationList;
-    let regToUpdate = registrations.find((reg) => reg.color == selectedBox.color)
+    let regToUpdate = registrations.find((reg) => reg.color == this.state.colorPendingRegistration);
     let removeIndex = registrations.indexOf(regToUpdate);
+    console.log('updating registration for: ', regToUpdate);
     registrations.splice(removeIndex, 1);
-    regToUpdate.name = 'name';
+    regToUpdate.name = name;
+    regToUpdate.color = this.state.colorPendingRegistration;
     registrations.splice(removeIndex, 0, regToUpdate);
-    this.setState({registrationList: registrations});
+    this.setState({
+      registrationList: registrations,
+      colorPendingRegistration: ''
+    });
+    console.log('updated reg: ', regToUpdate);
   }
 
   subscribeToClick(peripheralId) {
@@ -216,12 +229,12 @@ export default class App extends Component<Props> {
   // }
 
   hideRegistration() {
-    let newValue = !this.state.registrationVisible;
-    this.setState({ registrationVisible: newValue });
+    // let newValue = !this.state.registrationVisible;
+    this.setState({ registrationVisible: false });
   }
 
   render() {
-
+    console.log('registration list: ', this.state.registrationList);
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={() => this.startGame()}><Text>Start Game</Text></TouchableOpacity>
@@ -232,7 +245,7 @@ export default class App extends Component<Props> {
             renderItem={({item}) => {
               return (
                 <View>
-                  <TouchableOpacity onPress={() => this.registerNewPlayer(item)}>
+                  <TouchableOpacity onPress={() => this.showRegistration(item)}>
                     <PlayerBox displayInfo={item}></PlayerBox>
                   </TouchableOpacity>
                 </View>
@@ -240,10 +253,11 @@ export default class App extends Component<Props> {
             }}
           />
         <TouchableOpacity style={styles.button} onPress={() => this.startScan()}><Text>{this.state.isScanning ? "Stop" : "Scan"}</Text></TouchableOpacity>
-      {/* <RegisterModal
+      <RegisterModal
         visible={this.state.registrationVisible}
-        // hide={() => this.hideRegistration}
-        ></RegisterModal> */}
+        register={(name) => this.processRegistration(name)}
+        hide={() => this.hideRegistration()}
+        ></RegisterModal>
       </View>
     );
   }
