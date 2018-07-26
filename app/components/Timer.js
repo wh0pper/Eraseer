@@ -25,7 +25,13 @@ export default class Timer extends Component {
     }, 1000);
   }
 
+  componentWillUnmount() {
+    clearInterval(timer);
+  }
 
+  onComplete() {
+
+  }
 
   render() {
 

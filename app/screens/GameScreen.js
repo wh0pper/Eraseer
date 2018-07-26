@@ -16,7 +16,8 @@ export default class GameScreen extends Component {
     super(props);
 
     this.state = {
-      players: this.props.navigation.getParam('players', []),
+      initialPlayers: this.props.navigation.getParam('players', []).slice(),
+      remainingPlayers: this.props.navigation.getParam('players', []).slice(),
       nextRoundReady: false,
       gameWon: false,
       noClickRoundCount: 0,
@@ -26,6 +27,10 @@ export default class GameScreen extends Component {
   }
 
   componentDidMount() {
+    this.startTimer();
+  }
+
+  startTimer() {
     let timer = setInterval(() => {
       let newValue = this.state.timerDuration - 1;
       if (newValue >= 0) {
@@ -40,7 +45,7 @@ export default class GameScreen extends Component {
 
   mockClick(player) {
     let clickTime = Date.now();
-    let players = this.state.players;
+    let players = this.state.remainingPlayers;
     let clickedPlayer = players.find((individual) => individual.color == player.color);
     clickedPlayer.click = clickTime;
     let updateIndex = players.indexOf(clickedPlayer);
@@ -49,27 +54,34 @@ export default class GameScreen extends Component {
   }
 
   processRound() {
-    let allPlayers = this.state.players;
-    let clickers = allPlayers.filter((player) => player.click > 0);
+    let allPlayers = this.state.initialPlayers;
+    let remainingPlayers = this.state.remainingPlayers;
+    console.log('all players before process: ', allPlayers);
+    //determine elimination
+    let clickers = remainingPlayers.filter((player) => player.click > 0);
     clickers.sort((a,b) => {return a.click-b.click});
     if (clickers.length > 0) {
       this.setState({noClickRoundCount: 0});
       let firstClicker = clickers[0];
-      let startIndex = allPlayers.indexOf(firstClicker);
+      let startIndex = remainingPlayers.indexOf(firstClicker);
       //if everyone clicks, need to loop back to index 1
       let removeIndex = startIndex + clickers.length;
-      if (removeIndex > allPlayers.length) {
-        removeIndex = removeIndex % allPlayers.length;
+      if (removeIndex >= remainingPlayers.length) {
+        removeIndex = removeIndex % remainingPlayers.length;
       }
-      let removePlayer = allPlayers[removeIndex];
+      let removePlayer = remainingPlayers[removeIndex];
       console.log("first click from: ", clickers[0]);
       console.log('All clickers: ', clickers);
       console.log('removed player: ', removePlayer)
-      allPlayers.splice(removeIndex, 1);
+      remainingPlayers.splice(removeIndex, 1);
+      this.setState({remainingPlayers: remainingPlayers});
 
       //determine points
-      allPlayers.forEach((player) => {
+      remainingPlayers.forEach((player) => {
         let wasClicker = (clickers.indexOf(player) == -1) ? false : true;
+        if (remainingPlayers.length == 1) {
+          player.points += 5;
+        }
         if (wasClicker) {
           if (player != removePlayer) {
             if (player == firstClicker) {
@@ -79,6 +91,12 @@ export default class GameScreen extends Component {
             }
           }
         }
+        //update that player in allPlayers list
+        let updateObject = allPlayers.find((p) => p.color == player.color);
+        let updateIndex = allPlayers.indexOf(updateObject);
+        allPlayers.splice(updateIndex,1,updateObject);
+        console.log('all players with updated points: ', allPlayers);
+        this.setState({initialPlayers: allPlayers});
       });
     } else {
       let newValue = this.state.noClickRoundCount + 1;
@@ -87,9 +105,9 @@ export default class GameScreen extends Component {
         //go to game over screen
       }
     }
-    this.setState({players: allPlayers});
-    console.log('players at end of round: ', allPlayers);
-    if (allPlayers.length>1) {
+    this.setState({remainingPlayers: remainingPlayers});
+    console.log('players at end of round: ', remainingPlayers);
+    if (remainingPlayers.length>1) {
       // this.startNewRound();
       this.setState({nextRoundReady: true})
     } else {
@@ -97,31 +115,44 @@ export default class GameScreen extends Component {
         nextRoundReady: false,
         gameWon: true
       });
+      this.props.navigation.navigate('score', {
+        players: this.state.initialPlayers,
+        lastPlayerStanding: remainingPlayers[0] 
+      });
     }
   }
 
-  startNewRound() {
+  calcScores() {
 
+  }
+
+  startNewRound() {
+    let remainingPlayers = this.state.remainingPlayers;
+    remainingPlayers.forEach((player) => player.click = 0);
+    this.setState({
+      timerDuration: 10,
+      players: remainingPlayers,
+    });
+    this.startTimer();
   }
 
   render() {
     let nextRoundButton = null;
     if (this.state.nextRoundReady) {
       nextRoundButton =
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => this.startNewRound()}>
         <Text>Next Round</Text>
       </TouchableOpacity>
     }
 
     // console.log('player list in game screen: ', this.props.navigation.getParam('players','no players'));
-    let players = this.state.players;
+    let displayPlayers = this.state.remainingPlayers;
     return (
       <View style={styles.container}>
         <Text>Game screen</Text>
         <Text style={{color: '#ff0000', fontSize: 30}}>{this.state.timerDuration}</Text>
-        {/* <Timer processRound={() => this.processRound()}/> */}
         <FlatList
-            data={players}
+            data={displayPlayers}
             extraData={this.state}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => {

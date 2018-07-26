@@ -15,8 +15,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import GameScreen from './app/screens/GameScreen';
 import RegistrationScreen from './app/screens/RegistrationScreen';
-
-
+import ScoreScreen from './app/screens/ScoreScreen';
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -224,6 +223,12 @@ const NavigationStack = createStackNavigator({
       },
     game: {
       screen: GameScreen,
+      navigationOptions: () => ({
+        header: null,
+      }),
+    },
+    score: {
+      screen: ScoreScreen,
       navigationOptions: () => ({
         header: null,
       }),
