@@ -11,30 +11,50 @@ import {
 import RegisterModal from '../components/RegisterModal';
 import PlayerBox from '../components/PlayerBox';
 
+function resolveAfter2Seconds() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, 2000);
+  });
+}
+
 let realms = [
   {
+    name: 'Deceit',
     color: '#7C9132',
-    isPopulated: false
+    isPopulated: false,
+    peripheralId: null
   },
   {
+    name: 'Despair',
     color: '#292929',
-    isPopulated: false
+    isPopulated: false,
+    peripheralId: null
   },
   {
+    name: 'Indifference',
     color: '#5386AD',
-    isPopulated: false
+    isPopulated: false,
+    peripheralId: null
   },
   {
+    name: 'Indulgence',
     color: '#BCAC46',
-    isPopulated: false
+    isPopulated: false,
+    peripheralId: null
   },
   {
+    name: 'Arrogance',
     color: '#673D91',
-    isPopulated: false
+    isPopulated: false,
+    peripheralId: null
   },
   {
+    name: 'Anger',
     color: '#88241E',
-    isPopulated: false
+    isPopulated: false,
+    peripheralId: null
   }
 ];
 
@@ -46,7 +66,9 @@ export default class RegistrationScreen extends Component {
     this.state = {
       realms: realms.slice(),
       registrationVisible: false,
-      playerList: []
+      playerList: [],
+      availableDevices: this.props.screenProps.deviceList,
+      realmBeingClaimed: {}
     };
 
   }
@@ -56,21 +78,31 @@ export default class RegistrationScreen extends Component {
     this.setState({realms: realms.slice()});
   }
 
-  registerPlayer(selectedBox) {
+  async registerPlayer(selectedBox) {
     console.log('Registering new player');
+    let startTime = Date.now();
     this.setState({
       registrationVisible: true,
-      colorPendingRegistration: selectedBox.color
+      colorPendingRegistration: selectedBox.color,
+      realmBeingClaimed: selectedBox
     });
-
+    await resolveAfter2Seconds();
+    while (this.props.screenProps.lastClick.time < startTime) {
+      //app will hold here until registering a click
+      this.props.screenProps.clickHandler();
+    }
+    //then associate the peripheral with a new player
+    let newPlayer = {
+      name: selectedBox.name,
+      color: selectedBox.color,
+      peripheralId: this.props.screenProps.lastClick.peripheral
+    }
     //update info for rendering
-    this.hideRegistration();
     let registrations = this.state.realms;
     let regToUpdate = registrations.find((reg) => reg.color == selectedBox.color);
     let removeIndex = registrations.indexOf(regToUpdate);
     console.log('updating registration for: ', regToUpdate);
     registrations.splice(removeIndex, 1);
-    regToUpdate.name = 'Claimed';
     regToUpdate.color = selectedBox.color;
     regToUpdate.isPopulated = true;
     regToUpdate.click = 0;
@@ -79,12 +111,16 @@ export default class RegistrationScreen extends Component {
 
     //also add this player to playerlist
     // let players = this.state.playerList;
-    let playerList = registrations.filter((realm) => realm.isPopulated == true);
+    //let playerList = registrations.filter((realm) => realm.isPopulated == true);
+    let playerList = this.state.playerList;
+    playerList.push(newPlayer);
     this.setState({
-      realms: registrations,
+      // realms: registrations,
       colorPendingRegistration: '',
       playerList: playerList
     });
+    console.log('sleep done, before loop');
+    console.log('Finished registering, updated Player list: ', this.state.playerList);
   }
 
   startGame() {
@@ -97,7 +133,7 @@ export default class RegistrationScreen extends Component {
   }
 
   render() {
-    // console.log('registration list: ', this.state.realms);
+    console.log('available devices in registration: ', this.state.availableDevices);
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
@@ -125,6 +161,11 @@ export default class RegistrationScreen extends Component {
                 </View>
               );
             }}
+          />
+          <RegisterModal
+            visible={this.state.registrationVisible}
+            hide={() => this.hideRegistration()}
+            realm={this.state.realmBeingClaimed}
           />
       </View>
     );

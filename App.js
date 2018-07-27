@@ -38,7 +38,11 @@ export default class App extends Component<Props> {
 
     this.state = {
       isScanning: false,
-      subscribedDevices: []
+      subscribedDevices: [],
+      lastClick: {
+        peripheral: null,
+        time: 0
+      }
     };
 
     this.handleDiscovery = this.handleDiscovery.bind(this);
@@ -79,25 +83,23 @@ export default class App extends Component<Props> {
   }
 
   handleDiscovery(peripheral) {
-    console.log('New device discovered: ', peripheral);
     let name = peripheral.name || '';
-    if (this.state.playerList.length < 6) {
-      if (name.toLowerCase().trim() == 'itag') {
-        console.log('Initializing connection with found iTag device.')
-        BleManager.connect(peripheral.id)
-        .then(() => {
-          console.log('Connected to new iTag with id: ', peripheral.id);
-          let existingDevices = this.state.subscribedDevices;
-          if (!existingDevices.includes(periperal.id)) {
-            existingDevices.push(peripheral.id)
-          }
-          this.setState({subscribedDevices: existingDevices});
-          this.subscribeToClick(peripheral.id);
-        })
-        .catch((error) => {
-          console.log('Error connecting to new iTag: ', error);
-        });
-      }
+    if (name.toLowerCase().trim() == 'itag') {
+      console.log('New iTag discovered: ', peripheral);
+      console.log('Initializing connection with found iTag device.')
+      BleManager.connect(peripheral.id)
+      .then(() => {
+        console.log('Connected to new iTag with id: ', peripheral.id);
+        let existingDevices = this.state.subscribedDevices;
+        if (!existingDevices.includes(peripheral.id)) {
+          existingDevices.push(peripheral.id)
+        }
+        this.setState({subscribedDevices: existingDevices});
+        this.subscribeToClick(peripheral.id);
+      })
+      .catch((error) => {
+        console.log('Error connecting to new iTag: ', error);
+      });
     }
   }
 
@@ -112,6 +114,12 @@ export default class App extends Component<Props> {
   handleSubscription(data) {
     let recievedTime = Date.now();
     console.log('Subscription listener fired, received data from:' + data.peripheral, data);
+    this.setState({
+      lastClick: {
+        peripheral: data.peripheral,
+        time: recievedTime
+      }
+    })
     // let players = this.state.playerList;
     // let updatePlayer = players.find((player, index) => player.peripheralId == data.peripheral);
     // updatePlayer.clickTime = recievedTime;
@@ -145,7 +153,8 @@ export default class App extends Component<Props> {
         <NavigationStack screenProps={{
           deviceList: this.state.subscribedDevices,
           startScan: () => this.startScan(),
-          clickHandler: (clickData) => this.handleSubscription(clickData)
+          clickHandler: (clickData) => this.handleSubscription(clickData),
+          lastClick: this.state.lastClick
         }}/>
       // </View>
     );

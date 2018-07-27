@@ -13,7 +13,7 @@ export default class RegisterModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: ''
+
     };
   }
 
@@ -24,17 +24,13 @@ export default class RegisterModal extends Component {
           visible={this.props.visible}
           onRequestClose={() => null}>
           <View style={styles.container}>
+            <Text>Press your ruin to claim the realm of {this.props.realm.name}</Text>
             <TouchableHighlight
               onPress={() => {
                 this.props.hide()
               }}>
               <Text>X</Text>
             </TouchableHighlight>
-            <TextInput
-              placeholder="name"
-              onChangeText={(name) => this.setState({name})}
-              value={this.state.name}
-            />
             <TouchableOpacity
               onPress={() => {
                 this.props.register(this.state.name);
@@ -44,7 +40,6 @@ export default class RegisterModal extends Component {
               <Text>Submit</Text>
             </TouchableOpacity>
           </View>
-
         </Modal>
       </View>
     )
@@ -57,7 +52,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     padding: 10
   }
 });
