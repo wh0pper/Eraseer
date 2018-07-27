@@ -100,7 +100,7 @@ export default class RegistrationScreen extends Component {
     // console.log('registration list: ', this.state.realms);
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={() => this.startScan()}>
+        <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
           <Text>{this.state.isScanning ? "Stop" : "Scan"}</Text>
         </TouchableOpacity>
         <TouchableOpacity

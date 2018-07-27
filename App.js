@@ -29,60 +29,6 @@ const SCAN_TIME = 60;
 const ITAG_SERVICE = "ffe0";
 const ITAG_CHARACTERISTIC = "ffe1";
 
-const colorBank = [
-  {
-    color: '#7C9132',
-    isPopulated: false
-  },
-  {
-    color: '#292929',
-    isPopulated: false
-  },
-  {
-    color: '#5386AD',
-    isPopulated: false
-  },
-  {
-    color: '#BCAC46',
-    isPopulated: false
-  },
-  {
-    color: '#673D91',
-    isPopulated: false
-  },
-  {
-    color: '#88241E',
-    isPopulated: false
-  }
-];
-
-let playerBank = [
-  {
-    name: 'Player 6',
-    color: colorBank[5]
-  },
-  {
-    name: 'Player 5',
-    color: colorBank[4]
-  },
-  {
-    name: 'Player 4',
-    color: colorBank[3]
-  },
-  {
-    name: 'Player 3',
-    color: colorBank[2]
-  },
-  {
-    name: 'Player 2',
-    color: colorBank[1]
-  },
-  {
-    name: 'Player 1',
-    color: colorBank[0]
-  }
-];
-
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
@@ -92,10 +38,7 @@ export default class App extends Component<Props> {
 
     this.state = {
       isScanning: false,
-      playerList: [],
-      registrationList: colorBank,
-      playerCount: 0,
-      roundCount: 0,
+      subscribedDevices: []
     };
 
     this.handleDiscovery = this.handleDiscovery.bind(this);
@@ -136,7 +79,7 @@ export default class App extends Component<Props> {
   }
 
   handleDiscovery(peripheral) {
-    // console.log('New device discovered: ', peripheral);
+    console.log('New device discovered: ', peripheral);
     let name = peripheral.name || '';
     if (this.state.playerList.length < 6) {
       if (name.toLowerCase().trim() == 'itag') {
@@ -144,19 +87,11 @@ export default class App extends Component<Props> {
         BleManager.connect(peripheral.id)
         .then(() => {
           console.log('Connected to new iTag with id: ', peripheral.id);
-          let players = this.state.playerList;
-          let nextColor = colorBank.pop();
-          let newPlayer = {
-            hasInfo: false,
-            color: nextColor
-          };
-          // let newPlayer = playerBank.pop();
-          // newPlayer.peripheralId = peripheral.id;
-          // newPlayer.clickTime = null;
-          players.push(newPlayer);
-          this.setState({
-            playerList: players,
-          });
+          let existingDevices = this.state.subscribedDevices;
+          if (!existingDevices.includes(periperal.id)) {
+            existingDevices.push(peripheral.id)
+          }
+          this.setState({subscribedDevices: existingDevices});
           this.subscribeToClick(peripheral.id);
         })
         .catch((error) => {
@@ -177,38 +112,41 @@ export default class App extends Component<Props> {
   handleSubscription(data) {
     let recievedTime = Date.now();
     console.log('Subscription listener fired, received data from:' + data.peripheral, data);
-    let players = this.state.playerList;
-    let updatePlayer = players.find((player, index) => player.peripheralId == data.peripheral);
-    updatePlayer.clickTime = recievedTime;
-    let updateIndex = players.indexOf(updatePlayer);
-    players[updateIndex] = updatePlayer;
-    this.setState({playerList: players});
+    // let players = this.state.playerList;
+    // let updatePlayer = players.find((player, index) => player.peripheralId == data.peripheral);
+    // updatePlayer.clickTime = recievedTime;
+    // let updateIndex = players.indexOf(updatePlayer);
+    // players[updateIndex] = updatePlayer;
+    // this.setState({playerList: players});
   }
 
   handleDisconnect(data) {
     console.log('Peripheral initiated a disconnect: ', data);
-    let players = this.state.playerList;
-    let removePlayer = players.find((player) => player.peripheralId == data.peripheral);
-    if (removePlayer) {
-      console.log('Removing player from game: ', removePlayer);
-      let removeIndex = players.indexOf(removePlayer);
-      players.splice(removeIndex, 1);
-      delete removePlayer.peripheralId;
-      delete removePlayer.clickCount;
-      playerBank.push(removePlayer);
-      this.setState({playerList: players});
-    } else {
-      console.log('Error removing player from game');
-    }
+    // let players = this.state.playerList;
+    // let removePlayer = players.find((player) => player.peripheralId == data.peripheral);
+    // if (removePlayer) {
+    //   console.log('Removing player from game: ', removePlayer);
+    //   let removeIndex = players.indexOf(removePlayer);
+    //   players.splice(removeIndex, 1);
+    //   delete removePlayer.peripheralId;
+    //   delete removePlayer.clickCount;
+    //   playerBank.push(removePlayer);
+    //   this.setState({playerList: players});
+    // } else {
+    //   console.log('Error removing player from game');
+    // }
   }
 
 
-
   render() {
-    console.log('registration list: ', this.state.registrationList);
+    console.log('paired and subscribed devices: ', this.state.subscribedDevices);
     return (
       // <View style={styles.container}>
-        <NavigationStack/>
+        <NavigationStack screenProps={{
+          deviceList: this.state.subscribedDevices,
+          startScan: () => this.startScan(),
+          clickHandler: (clickData) => this.handleSubscription(clickData)
+        }}/>
       // </View>
     );
   }
