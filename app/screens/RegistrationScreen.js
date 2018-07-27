@@ -87,10 +87,12 @@ export default class RegistrationScreen extends Component {
       realmBeingClaimed: selectedBox
     });
     await resolveAfter2Seconds();
+    let clickListener = this.props.screenProps.eventEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleClick );
     while (this.props.screenProps.lastClick.time < startTime) {
       //app will hold here until registering a click
-      this.props.screenProps.clickHandler();
+      // this.props.screenProps.clickHandler();
     }
+    clickListener.remove();
     //then associate the peripheral with a new player
     let newPlayer = {
       name: selectedBox.name,
@@ -119,8 +121,11 @@ export default class RegistrationScreen extends Component {
       colorPendingRegistration: '',
       playerList: playerList
     });
-    console.log('sleep done, before loop');
     console.log('Finished registering, updated Player list: ', this.state.playerList);
+  }
+
+  handleClick() {
+    console.log('click in registration')
   }
 
   startGame() {
