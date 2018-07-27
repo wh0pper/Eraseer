@@ -11,7 +11,7 @@ import {
 import RegisterModal from '../components/RegisterModal';
 import PlayerBox from '../components/PlayerBox';
 
-const realms = [
+let realms = [
   {
     color: '#7C9132',
     isPopulated: false
@@ -38,14 +38,13 @@ const realms = [
   }
 ];
 
-
 export default class RegistrationScreen extends Component {
   constructor(props) {
 
     super(props);
 
     this.state = {
-      realms: realms,
+      realms: realms.slice(),
       registrationVisible: false,
       playerList: []
     };
@@ -54,6 +53,7 @@ export default class RegistrationScreen extends Component {
 
   componentDidMount() {
     console.log('reg mounted');
+    this.setState({realms: realms.slice()});
   }
 
   registerPlayer(selectedBox) {

@@ -28,6 +28,12 @@ export default class ScoreScreen extends Component {
     this.setState({players: players});
   }
 
+  resetGame() {
+    let players = this.state.players;
+    players.forEach((player) => player = {} );
+    this.props.navigation.navigate('registration');
+  }
+
   render() {
 
     return (
@@ -48,6 +54,11 @@ export default class ScoreScreen extends Component {
               );
             }}
           />
+          <TouchableOpacity
+            onPress={() => this.resetGame()}
+            >
+            <Text>New Match</Text>
+          </TouchableOpacity>
       </View>
     );
   }

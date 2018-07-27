@@ -21,7 +21,7 @@ export default class GameScreen extends Component {
       nextRoundReady: false,
       gameWon: false,
       noClickRoundCount: 0,
-      timerDuration: 10
+      timerDuration: 5
     };
 
   }
@@ -117,7 +117,7 @@ export default class GameScreen extends Component {
       });
       this.props.navigation.navigate('score', {
         players: this.state.initialPlayers,
-        lastPlayerStanding: remainingPlayers[0] 
+        lastPlayerStanding: remainingPlayers[0]
       });
     }
   }
