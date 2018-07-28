@@ -11,15 +11,15 @@ import {
 import RegisterModal from '../components/RegisterModal';
 import PlayerBox from '../components/PlayerBox';
 
-function resolveAfter2Seconds() {
+function sleep(time) {
   return new Promise(resolve => {
     setTimeout(() => {
       resolve('resolved');
-    }, 2000);
+    }, time);
   });
 }
 
-let realms = [
+const realms = [
   {
     name: 'Deceit',
     color: '#7C9132',
@@ -74,8 +74,7 @@ export default class RegistrationScreen extends Component {
   }
 
   componentDidMount() {
-    console.log('reg mounted');
-    this.setState({realms: realms.slice()});
+
   }
 
   async registerPlayer(selectedBox) {
@@ -83,45 +82,54 @@ export default class RegistrationScreen extends Component {
     let startTime = Date.now();
     this.setState({
       registrationVisible: true,
-      colorPendingRegistration: selectedBox.color,
       realmBeingClaimed: selectedBox
     });
-    await resolveAfter2Seconds();
-    let clickListener = this.props.screenProps.eventEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleClick );
-    while (this.props.screenProps.lastClick.time < startTime) {
-      //app will hold here until registering a click
-      // this.props.screenProps.clickHandler();
-    }
-    clickListener.remove();
-    //then associate the peripheral with a new player
+    //delay to allow modal to render
+    await sleep(1000);
+    let peripheralId = await this.listenForClick(startTime).catch((e) => console.log(e));
     let newPlayer = {
       name: selectedBox.name,
       color: selectedBox.color,
       peripheralId: this.props.screenProps.lastClick.peripheral
     }
     //update info for rendering
-    let registrations = this.state.realms;
-    let regToUpdate = registrations.find((reg) => reg.color == selectedBox.color);
-    let removeIndex = registrations.indexOf(regToUpdate);
-    console.log('updating registration for: ', regToUpdate);
-    registrations.splice(removeIndex, 1);
-    regToUpdate.color = selectedBox.color;
-    regToUpdate.isPopulated = true;
-    regToUpdate.click = 0;
-    regToUpdate.points = 0;
-    registrations.splice(removeIndex, 0, regToUpdate);
-
+    // let registrations = this.state.realms;
+    // let regToUpdate = registrations.find((reg) => reg.color == selectedBox.color);
+    // let removeIndex = registrations.indexOf(regToUpdate);
+    // console.log('updating registration for: ', regToUpdate);
+    // registrations.splice(removeIndex, 1);
+    // regToUpdate.color = selectedBox.color;
+    // regToUpdate.isPopulated = true;
+    // regToUpdate.click = 0;
+    // regToUpdate.points = 0;
+    // registrations.splice(removeIndex, 0, regToUpdate);
     //also add this player to playerlist
     // let players = this.state.playerList;
     //let playerList = registrations.filter((realm) => realm.isPopulated == true);
     let playerList = this.state.playerList;
     playerList.push(newPlayer);
     this.setState({
-      // realms: registrations,
-      colorPendingRegistration: '',
+      registrationVisible: false,
       playerList: playerList
     });
     console.log('Finished registering, updated Player list: ', this.state.playerList);
+  }
+
+  async listenForClick(startTime) {
+    console.log('Listening for registration click w startTime: ', startTime);
+    return new Promise((resolve, reject) => {
+      let listening = setInterval(() => {
+        console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
+        if (this.props.screenProps.lastClick.time > startTime) {
+          resolve(this.props.screenProps.lastClick.peripheral);
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(listening);
+        reject('No click detected')
+      }, 10000);
+    })
+
   }
 
   handleClick() {

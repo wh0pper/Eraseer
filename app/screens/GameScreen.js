@@ -28,9 +28,12 @@ export default class GameScreen extends Component {
 
   componentDidMount() {
     this.startTimer();
+
   }
 
   startTimer() {
+    let startTime = Date.now();
+    // this.listenForClick(startTime);
     let timer = setInterval(() => {
       let newValue = this.state.timerDuration - 1;
       if (newValue >= 0) {
@@ -42,6 +45,16 @@ export default class GameScreen extends Component {
       }
     }, 1000);
   }
+
+  // listenForClick(startTime) {
+  //   let lastClick = this.props.screenProps.lastClick;
+  //   do {
+  //     if (lastClick.time > startTime) {
+  //       let clickedPlayer = this.state.remainingPlayers.find((player) => )
+  //     }
+  //   }
+  //   while (this.state.timerDuration > 0)
+  // }
 
   mockClick(player) {
     let clickTime = Date.now();

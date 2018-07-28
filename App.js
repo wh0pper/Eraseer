@@ -153,8 +153,8 @@ export default class App extends Component<Props> {
         <NavigationStack screenProps={{
           deviceList: this.state.subscribedDevices,
           startScan: () => this.startScan(),
-          clickHandler: () => this.subscriptionHandler,
-          eventEmitter: BleManagerEmitter,
+          // clickHandler: () => this.subscriptionHandler,
+          // eventEmitter: BleManagerEmitter,
           lastClick: this.state.lastClick
         }}/>
       // </View>
