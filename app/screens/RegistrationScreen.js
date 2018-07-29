@@ -74,11 +74,11 @@ export default class RegistrationScreen extends Component {
   }
 
   componentDidMount() {
-
+    //console.log('current screen passed to reg screen: ', this.props.screenProps.currentScreen);
   }
 
   async registerPlayer(selectedBox) {
-    console.log('Registering new player');
+    //console.log('Registering new player');
     let startTime = Date.now();
     this.setState({
       registrationVisible: true,
@@ -86,17 +86,18 @@ export default class RegistrationScreen extends Component {
     });
     //delay to allow modal to render
     await sleep(1000);
-    let peripheralId = await this.listenForClick(startTime).catch((e) => console.log(e));
+    let peripheralId = await this.listenForClick(startTime).catch((e) => {});//console.log(e));
     let newPlayer = {
       name: selectedBox.name,
       color: selectedBox.color,
-      peripheralId: this.props.screenProps.lastClick.peripheral
+      peripheralId: this.props.screenProps.lastClick.peripheral,
+      click: 0
     }
     //update info for rendering
     // let registrations = this.state.realms;
     // let regToUpdate = registrations.find((reg) => reg.color == selectedBox.color);
     // let removeIndex = registrations.indexOf(regToUpdate);
-    // console.log('updating registration for: ', regToUpdate);
+    // //console.log('updating registration for: ', regToUpdate);
     // registrations.splice(removeIndex, 1);
     // regToUpdate.color = selectedBox.color;
     // regToUpdate.isPopulated = true;
@@ -112,14 +113,15 @@ export default class RegistrationScreen extends Component {
       registrationVisible: false,
       playerList: playerList
     });
-    console.log('Finished registering, updated Player list: ', this.state.playerList);
+    //console.log('Finished registering, updated Player list: ', this.state.playerList);
   }
 
   async listenForClick(startTime) {
-    console.log('Listening for registration click w startTime: ', startTime);
+    //console.log('Listening for registration click w startTime: ', startTime);
     return new Promise((resolve, reject) => {
       let listening = setInterval(() => {
-        console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
+        // need to refactor here to end interval when we've moved on, console log shows
+        // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime) {
           resolve(this.props.screenProps.lastClick.peripheral);
         }
@@ -133,11 +135,11 @@ export default class RegistrationScreen extends Component {
   }
 
   handleClick() {
-    console.log('click in registration')
+    //console.log('click in registration')
   }
 
   startGame() {
-    // console.log('playerlist on game start: ', this.state.playerList)
+    // //console.log('playerlist on game start: ', this.state.playerList)
   }
 
   hideRegistration() {
@@ -146,7 +148,7 @@ export default class RegistrationScreen extends Component {
   }
 
   render() {
-    console.log('available devices in registration: ', this.state.availableDevices);
+
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
@@ -169,7 +171,7 @@ export default class RegistrationScreen extends Component {
               return (
                 <View>
                   <TouchableOpacity onPress={() => this.registerPlayer(item)}>
-                    <PlayerBox displayInfo={item}></PlayerBox>
+                    <PlayerBox currentScreen={this.props.screenProps.currentScreen} displayInfo={item}></PlayerBox>
                   </TouchableOpacity>
                 </View>
               );

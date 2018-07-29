@@ -63,10 +63,10 @@ export default class BluetoothContainer extends Component {
         setTimeout(() => {
           this.setState({isScanning: false});
         }, SCAN_TIME * 1000);
-        console.log('Scan initialized');
+        //console.log('Scan initialized');
       })
       .catch((error) => {
-        console.log('Error initializing scan: ', error);
+        //console.log('Error initializing scan: ', error);
       });
 
     } else {
@@ -75,14 +75,14 @@ export default class BluetoothContainer extends Component {
   }
 
   handleDiscovery(peripheral) {
-    // console.log('New device discovered: ', peripheral);
+    // //console.log('New device discovered: ', peripheral);
     let name = peripheral.name || '';
     if (this.state.playerList.length < 6) {
       if (name.toLowerCase().trim() == 'itag') {
-        console.log('Initializing connection with found iTag device.')
+        //console.log('Initializing connection with found iTag device.')
         BleManager.connect(peripheral.id)
         .then(() => {
-          console.log('Connected to new iTag with id: ', peripheral.id);
+          //console.log('Connected to new iTag with id: ', peripheral.id);
           let existingDevices = this.state.availableDevices;
           if (!existingDevices.includes(periperal.id)) {
             existingDevices.push(peripheral.id)
@@ -91,7 +91,7 @@ export default class BluetoothContainer extends Component {
           this.subscribeToClick(peripheral.id);
         })
         .catch((error) => {
-          console.log('Error connecting to new iTag: ', error);
+          //console.log('Error connecting to new iTag: ', error);
         });
       }
     }
@@ -100,14 +100,14 @@ export default class BluetoothContainer extends Component {
   subscribeToClick(peripheralId) {
     BleManager.retrieveServices(peripheralId).then((serviceData) => {
       BleManager.startNotification(peripheralId, ITAG_SERVICE, ITAG_CHARACTERISTIC)
-      .then((results) => {console.log('Subscription started on peripheral with ID: ', peripheralId)})
-      .catch((error) => {console.log('Error starting subscription for periph with ID: ', peripheralId, error)})
+      .then((results) => {//console.log('Subscription started on peripheral with ID: ', peripheralId)})
+      .catch((error) => {//console.log('Error starting subscription for periph with ID: ', peripheralId, error)})
     })
   }
 
   handleSubscription(data) {
     let recievedTime = Date.now();
-    console.log('Subscription listener fired, received data from:' + data.peripheral, data);
+    //console.log('Subscription listener fired, received data from:' + data.peripheral, data);
     // let players = this.state.playerList;
     // let updatePlayer = players.find((player, index) => player.peripheralId == data.peripheral);
     // updatePlayer.clickTime = recievedTime;
@@ -117,11 +117,11 @@ export default class BluetoothContainer extends Component {
   }
 
   handleDisconnect(data) {
-    console.log('Peripheral initiated a disconnect: ', data);
+    //console.log('Peripheral initiated a disconnect: ', data);
     // let players = this.state.playerList;
     // let removePlayer = players.find((player) => player.peripheralId == data.peripheral);
     // if (removePlayer) {
-    //   console.log('Removing player from game: ', removePlayer);
+    //   //console.log('Removing player from game: ', removePlayer);
     //   let removeIndex = players.indexOf(removePlayer);
     //   players.splice(removeIndex, 1);
     //   delete removePlayer.peripheralId;
@@ -129,7 +129,7 @@ export default class BluetoothContainer extends Component {
     //   playerBank.push(removePlayer);
     //   this.setState({playerList: players});
     // } else {
-    //   console.log('Error removing player from game');
+    //   //console.log('Error removing player from game');
     // }
   }
 

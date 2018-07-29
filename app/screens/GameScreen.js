@@ -27,13 +27,15 @@ export default class GameScreen extends Component {
   }
 
   componentDidMount() {
-    this.startTimer();
-
+    console.log('game component did mount, starting timer');
+    // this.startTimer();
+    this.props.screenProps.setCurrentScreen('game');
   }
 
   startTimer() {
     let startTime = Date.now();
-    // this.listenForClick(startTime);
+    console.log('Round start time: ', startTime);
+    this.listenForClick(startTime);
     let timer = setInterval(() => {
       let newValue = this.state.timerDuration - 1;
       if (newValue >= 0) {
@@ -46,20 +48,39 @@ export default class GameScreen extends Component {
     }, 1000);
   }
 
-  // listenForClick(startTime) {
-  //   let lastClick = this.props.screenProps.lastClick;
-  //   do {
-  //     if (lastClick.time > startTime) {
-  //       let clickedPlayer = this.state.remainingPlayers.find((player) => )
-  //     }
-  //   }
-  //   while (this.state.timerDuration > 0)
-  // }
+  listenForClick(startTime) {
+    // do {
+    let players = this.state.remainingPlayers;
+    let clickedPlayer;
+    let listening = setInterval(() => {
+      // console.log('listening in round: ', this.props.screenProps.lastClick);
+      if (this.state.timerDuration == 0) {
+        clearInterval(listening);
+      }
+      let lastClick = this.props.screenProps.lastClick;
+      if (lastClick.time > startTime) {
+        console.log('Detected click in round:', lastClick)
+        clickedPlayer = players.find((p) => p !== undefined && p.peripheralId == lastClick.peripheral) || {click: 0}
+        //only log this click to user if they haven't already clicked this round
+        console.log('Found player: ',clickedPlayer);
+        console.log(!clickedPlayer.click > startTime);
+        if (clickedPlayer.click < startTime) {
+          let removeAt = players.indexOf(clickedPlayer);
+          clickedPlayer.click = lastClick.time;
+          console.log('logging received click to player: ',clickedPlayer);
+          players.splice(removeAt, 1, clickedPlayer);
+          console.log('updated playerlist: ', players);
+        }
+      }
+    }, 100)
+    // while (this.state.timerDuration > 0)
+    this.setState({remainingPlayers: players});
+  }
 
   mockClick(player) {
     let clickTime = Date.now();
     let players = this.state.remainingPlayers;
-    let clickedPlayer = players.find((individual) => individual.color == player.color);
+    let clickedPlayer = players.find((individual) => p !== undefined && individual.color == player.color);
     clickedPlayer.click = clickTime;
     let updateIndex = players.indexOf(clickedPlayer);
     players.splice(updateIndex,1);
@@ -69,9 +90,9 @@ export default class GameScreen extends Component {
   processRound() {
     let allPlayers = this.state.initialPlayers;
     let remainingPlayers = this.state.remainingPlayers;
-    console.log('all players before process: ', allPlayers);
+    //console.log('all players before process: ', allPlayers);
     //determine elimination
-    let clickers = remainingPlayers.filter((player) => player.click > 0);
+    let clickers = remainingPlayers.filter((p) => p !== undefined && p.click > 0);
     clickers.sort((a,b) => {return a.click-b.click});
     if (clickers.length > 0) {
       this.setState({noClickRoundCount: 0});
@@ -83,9 +104,9 @@ export default class GameScreen extends Component {
         removeIndex = removeIndex % remainingPlayers.length;
       }
       let removePlayer = remainingPlayers[removeIndex];
-      console.log("first click from: ", clickers[0]);
-      console.log('All clickers: ', clickers);
-      console.log('removed player: ', removePlayer)
+      //console.log("first click from: ", clickers[0]);
+      //console.log('All clickers: ', clickers);
+      //console.log('removed player: ', removePlayer)
       remainingPlayers.splice(removeIndex, 1);
       this.setState({remainingPlayers: remainingPlayers});
 
@@ -108,7 +129,7 @@ export default class GameScreen extends Component {
         let updateObject = allPlayers.find((p) => p.color == player.color);
         let updateIndex = allPlayers.indexOf(updateObject);
         allPlayers.splice(updateIndex,1,updateObject);
-        console.log('all players with updated points: ', allPlayers);
+        //console.log('all players with updated points: ', allPlayers);
         this.setState({initialPlayers: allPlayers});
       });
     } else {
@@ -119,7 +140,7 @@ export default class GameScreen extends Component {
       }
     }
     this.setState({remainingPlayers: remainingPlayers});
-    console.log('players at end of round: ', remainingPlayers);
+    //console.log('players at end of round: ', remainingPlayers);
     if (remainingPlayers.length>1) {
       // this.startNewRound();
       this.setState({nextRoundReady: true})
@@ -158,11 +179,15 @@ export default class GameScreen extends Component {
       </TouchableOpacity>
     }
 
-    // console.log('player list in game screen: ', this.props.navigation.getParam('players','no players'));
+    // //console.log('player list in game screen: ', this.props.navigation.getParam('players','no players'));
+    //console.log('player list from state in game: ', this.state.remainingPlayers);
     let displayPlayers = this.state.remainingPlayers;
     return (
       <View style={styles.container}>
         <Text>Game screen</Text>
+        <TouchableOpacity onPress={() => this.startTimer()}>
+          <Text>Start round</Text>
+        </TouchableOpacity>
         <Text style={{color: '#ff0000', fontSize: 30}}>{this.state.timerDuration}</Text>
         <FlatList
             data={displayPlayers}
@@ -172,7 +197,7 @@ export default class GameScreen extends Component {
               return (
                 <View>
                   <TouchableOpacity onPress={() => this.mockClick(item)}>
-                    <PlayerBox displayInfo={item}></PlayerBox>
+                    <PlayerBox currentScreen={this.props.screenProps.currentScreen} displayInfo={item}></PlayerBox>
                   </TouchableOpacity>
                 </View>
               );
