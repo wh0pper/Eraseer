@@ -21,7 +21,7 @@ export default class HexView extends Component {
 
 
     return (
-      <View style={styles.hexagon}>
+      <View style={[styles.hexagon]}>
         <View style={[styles.hexagonInner, {backgroundColor: this.props.color}]} />
         <View style={[styles.hexagonBefore, {borderBottomColor: this.props.color}]} />
         <View style={[styles.hexagonAfter, {borderTopColor: this.props.color}]} />

@@ -24,7 +24,7 @@ const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 // const ITAG_SERVICE = "0000ffe0-0000-1000-8000-00805f9b34fb";
 // const ITAG_CHARACTERISTIC = "0000ffe1-0000-1000-8000-00805f9b34fb";
 
-const SCAN_TIME = 60;
+const SCAN_TIME = 300;
 
 const ITAG_SERVICE = "ffe0";
 const ITAG_CHARACTERISTIC = "ffe1";
@@ -55,6 +55,7 @@ export default class App extends Component<Props> {
     this.discoveryHandler = BleManagerEmitter.addListener('BleManagerDiscoverPeripheral', this.handleDiscovery );
     this.subscriptionHandler = BleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleSubscription );
     this.disconnectHandler = BleManagerEmitter.addListener('BleManagerDisconnectPeripheral', this.handleDisconnect );
+    this.startScan();
   }
 
   componentWillUnmount() {
@@ -194,12 +195,12 @@ const NavigationStack = createStackNavigator({
 );
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    padding: 20
-  }
+  // container: {
+  //   flex: 1,
+  //   flexDirection: 'column',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#F5FCFF',
+  //   padding: 20
+  // }
 });
