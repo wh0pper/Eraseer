@@ -112,16 +112,17 @@ export default class RegistrationScreen extends Component {
 
   async listenForClick(startTime) {
     //console.log('Listening for registration click w startTime: ', startTime);
+    // this.listening;
     return new Promise((resolve, reject) => {
-      let listening = setInterval(() => {
+      this.listening = setInterval(() => {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime) {
           resolve(this.props.screenProps.lastClick.peripheral);
         }
       }, 100);
-      setTimeout(() => {
-        clearInterval(listening);
+      this.timeout = setTimeout(() => {
+        clearInterval(this.listening);
         this.setState({registrationVisible: false})
         reject('No click detected')
       }, 10000);
@@ -139,6 +140,8 @@ export default class RegistrationScreen extends Component {
 
   hideRegistration() {
     // let newValue = !this.state.registrationVisible;
+    clearInterval(this.listening);
+    clearTimeout(this.timeout);
     this.setState({
       registrationVisible: false
     });
