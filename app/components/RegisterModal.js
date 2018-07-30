@@ -20,6 +20,10 @@ export default class RegisterModal extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log('modal did mount');
+  }
+
   makeBlack() {
       // this.animatedColor.setValue(0);
       Animated.parallel([
@@ -40,43 +44,15 @@ export default class RegisterModal extends Component {
       ]).start();
   }
 
-  makeWhite() {
-    Animated.parallel([
-      Animated.timing(
-        this.animatedColor,
-        {
-          toValue: 0,
-          duration: 1000
-        }
-      ),
-      Animated.timing(
-        this.animatedText,
-        {
-          toValue: 0,
-          duration: 1000
-        }
-      ),
-    ]).start();
-  }
-
   render() {
-    let backgroundColor;
-    let textColor;
-
-    if (this.props.clickDetected) {
-      backgroundColor = this.animatedColor.interpolate({
+      let backgroundColor = this.animatedColor.interpolate({
         inputRange: [0, 1],
         outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
       });
-      textColor = this.animatedText.interpolate({
+      let textColor = this.animatedText.interpolate({
         inputRange: [0, 1],
         outputRange: ['#000000', '#ffffff']
       });
-    } else {
-      backgroundColor = '#DFDFDF';
-      textColor = '#000000';
-    }
-    console.log(backgroundColor, textColor);
 
     return (
       <View>

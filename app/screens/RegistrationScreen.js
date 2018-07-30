@@ -73,7 +73,6 @@ export default class RegistrationScreen extends Component {
     this.state = {
       realms: realms.slice(),
       registrationVisible: false,
-      clickDetected: false,
       playerList: [],
       availableDevices: this.props.screenProps.deviceList,
       realmBeingClaimed: {}
@@ -102,7 +101,6 @@ export default class RegistrationScreen extends Component {
       peripheralId: this.props.screenProps.lastClick.peripheral,
       click: 0
     }
-
     let playerList = this.state.playerList;
     playerList.push(newPlayer);
     this.setState({
@@ -119,12 +117,12 @@ export default class RegistrationScreen extends Component {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime) {
-          this.setState({clickDetected: true});
           resolve(this.props.screenProps.lastClick.peripheral);
         }
       }, 100);
       setTimeout(() => {
         clearInterval(listening);
+        this.setState({registrationVisible: false})
         reject('No click detected')
       }, 10000);
     })
@@ -142,8 +140,7 @@ export default class RegistrationScreen extends Component {
   hideRegistration() {
     // let newValue = !this.state.registrationVisible;
     this.setState({
-      registrationVisible: false,
-      clickDetected: false
+      registrationVisible: false
     });
 
   }
@@ -187,12 +184,11 @@ export default class RegistrationScreen extends Component {
           </TouchableOpacity>
           {/* <Text>Swipe right to start.</Text>
           <Text>Swipe left to re-start.</Text> */}
-          <RegisterModal
-            visible={this.state.registrationVisible}
+          {this.state.registrationVisible ? <RegisterModal
+            visible={true}
             hide={() => this.hideRegistration()}
             realm={this.state.realmBeingClaimed}
-            clickDetected={this.state.clickDetected}
-          />
+          /> : null}
       </View>
     );
   }
