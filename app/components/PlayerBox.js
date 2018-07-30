@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button} from 'react-native';
-
+import HexView from './HexView';
 
 export default class PlayerBox extends Component {
   constructor(props) {
@@ -22,9 +22,11 @@ export default class PlayerBox extends Component {
     let box = null;
     if (screen === 'registration') {
       box = (
-        <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
+        <HexView color={this.props.displayInfo.color}>
+        {/* // <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}> */}
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
-        </View>
+        </HexView>
+        // </View>
       )
     } else if (screen === 'game') {
       box = (
@@ -54,6 +56,7 @@ const styles = StyleSheet.create({
   container: {
     width: 100,
     height: 100,
-    marginBottom: 10
+    marginBottom: 10,
+    // transform: [{ rotate: '60deg'}]
   }
 });
