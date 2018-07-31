@@ -24,7 +24,7 @@ const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 // const ITAG_SERVICE = "0000ffe0-0000-1000-8000-00805f9b34fb";
 // const ITAG_CHARACTERISTIC = "0000ffe1-0000-1000-8000-00805f9b34fb";
 
-const SCAN_TIME = 300;
+const SCAN_TIME = 120;
 
 const ITAG_SERVICE = "ffe0";
 const ITAG_CHARACTERISTIC = "ffe1";
@@ -73,25 +73,26 @@ export default class App extends Component<Props> {
         setTimeout(() => {
           this.setState({isScanning: false});
         }, SCAN_TIME * 1000);
-        //console.log('Scan initialized');
+        console.log('Scan initialized');
       })
       .catch((error) => {
-        //console.log('Error initializing scan: ', error);
+        console.log('Error initializing scan: ', error);
       });
-
     } else {
+      console.log('Stopping scan.')
       BleManager.stopScan();
     }
   }
 
   handleDiscovery(peripheral) {
+    console.log('Peripheral discovered');
     let name = peripheral.name || '';
     if (name.toLowerCase().trim() == 'itag') {
-      //console.log('New iTag discovered: ', peripheral);
-      //console.log('Initializing connection with found iTag device.')
+      console.log('New iTag discovered: ', peripheral);
+      console.log('Initializing connection with found iTag device.')
       BleManager.connect(peripheral.id)
       .then(() => {
-        //console.log('Connected to new iTag with id: ', peripheral.id);
+        console.log('Connected to new iTag with id: ', peripheral.id);
         let existingDevices = this.state.subscribedDevices;
         if (!existingDevices.includes(peripheral.id)) {
           existingDevices.push(peripheral.id)
@@ -100,7 +101,7 @@ export default class App extends Component<Props> {
         this.subscribeToClick(peripheral.id);
       })
       .catch((error) => {
-        //console.log('Error connecting to new iTag: ', error);
+        console.log('Error connecting to new iTag: ', error);
       });
     }
   }
@@ -108,14 +109,14 @@ export default class App extends Component<Props> {
   subscribeToClick(peripheralId) {
     BleManager.retrieveServices(peripheralId).then((serviceData) => {
       BleManager.startNotification(peripheralId, ITAG_SERVICE, ITAG_CHARACTERISTIC)
-      .then((results) => {})//console.log('Subscription started on peripheral with ID: ', peripheralId)})
-      .catch((error) => {})//console.log('Error starting subscription for periph with ID: ', peripheralId, error)})
+      .then((results) => {console.log('Subscription started on peripheral with ID: ', peripheralId)})
+      .catch((error) => {console.log('Error starting subscription for periph with ID: ', peripheralId, error)})
     })
   }
 
   handleSubscription(data) {
     let recievedTime = Date.now();
-    //console.log('Subscription listener fired, received data from:' + data.peripheral, data);
+    console.log('Subscription listener fired, received data from:' + data.peripheral, data);
     this.setState({
       lastClick: {
         peripheral: data.peripheral,
