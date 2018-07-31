@@ -23,10 +23,10 @@ export default class PlayerBox extends Component {
     let box = null;
     if (screen === 'registration') {
       box = (
-        <ClaimedHexView color={this.props.displayInfo.color} position={this.props.displayInfo.position}>
+        <HexView color={this.props.displayInfo.color} position={this.props.displayInfo.position}>
         {/* // <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}> */}
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
-        </ClaimedHexView>
+        </HexView>
         // </View>
       )
     } else if (screen === 'game') {
