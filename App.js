@@ -50,8 +50,7 @@ export default class App extends Component<Props> {
       lastClick: {
         peripheral: null,
         time: 0
-      },
-      currentScreen: 'registration'
+      }
     };
 
     this.handleDiscovery = this.handleDiscovery.bind(this);
@@ -163,10 +162,6 @@ export default class App extends Component<Props> {
     // }
   }
 
-  setCurrentScreen(screen) {
-    this.setState({currentScreen: screen});
-  }
-
 
   render() {
     return (
@@ -177,8 +172,6 @@ export default class App extends Component<Props> {
           // clickHandler: () => this.subscriptionHandler,
           // eventEmitter: BleManagerEmitter,
           lastClick: this.state.lastClick,
-          currentScreen: this.state.currentScreen,
-          setCurrentScreen: (screen) => this.setCurrentScreen(screen),
           stopScan: () => this.stopScan()
         }}/>
       // </View>

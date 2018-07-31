@@ -30,7 +30,6 @@ export default class RegistrationScreen extends Component {
   }
 
   componentDidMount() {
-    //console.log('current screen passed to reg screen: ', this.props.screenProps.currentScreen);
   }
 
   async registerPlayer(selectedBox) {
@@ -105,7 +104,7 @@ export default class RegistrationScreen extends Component {
           <Text>DOMINIONS</Text>
         </View>
         <View style={styles.realmContainer}>
-          <RealmHex currentScreen={this.props.screenProps.currentScreen} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
+          <RealmHex registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
           {/* <FlatList
               data={this.state.realms}
               extraData={this.state}
@@ -114,7 +113,7 @@ export default class RegistrationScreen extends Component {
                 return (
                   <View>
                     <TouchableOpacity onPress={() => this.registerPlayer(item)}>
-                      <PlayerBox currentScreen={this.props.screenProps.currentScreen} displayInfo={item}></PlayerBox>
+                      <PlayerBox displayInfo={item}></PlayerBox>
                     </TouchableOpacity>
                   </View>
                 );

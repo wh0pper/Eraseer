@@ -29,7 +29,6 @@ export default class GameScreen extends Component {
   componentDidMount() {
     console.log('game component did mount, starting timer');
     this.startTimer();
-    this.props.screenProps.setCurrentScreen('game');
   }
 
   startTimer() {
@@ -191,7 +190,7 @@ export default class GameScreen extends Component {
               return (
                 <View>
                   <TouchableOpacity onPress={() => this.mockClick(item)}>
-                    <PlayerBox currentScreen={this.props.screenProps.currentScreen} displayInfo={item}></PlayerBox>
+                    <PlayerBox displayInfo={item}></PlayerBox>
                   </TouchableOpacity>
                 </View>
               );

@@ -18,12 +18,11 @@ export default class PlayerBox extends Component {
   }
 
   render() {
-    // //console.log('current screen passed to PlayerBox: ',this.props.currentScreen);
-    let screen = this.props.currentScreen;
+    let screen = 'registration';
     let box = null;
     if (screen === 'registration') {
       box = (
-        <HexView color={this.props.displayInfo.color} position={this.props.displayInfo.position}>
+        <HexView color={this.props.displayInfo.color}>
         {/* // <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}> */}
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
         </HexView>
@@ -31,13 +30,13 @@ export default class PlayerBox extends Component {
       )
     } else if (screen === 'game') {
       box = (
-        <HexView style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
+        <HexView color={this.props.displayInfo.color}>
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
         </HexView>
       )
     } else if (screen === 'score') {
       box = (
-        <HexView style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
+        <HexView color={this.props.displayInfo.color}>
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.points}</Text>
         </HexView>

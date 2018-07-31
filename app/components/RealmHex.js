@@ -69,28 +69,28 @@ export default class RealmHex extends Component {
       <View style={styles.container}>
         <View style={styles.rowOne}>
           <TouchableOpacity onPress={() => this.props.registerPlayer(realms[0])}>
-            <PlayerBox style={styles.one} displayInfo={realms[0]} currentScreen={this.props.currentScreen}/>
+            <PlayerBox style={styles.one} displayInfo={realms[0]}/>
           </TouchableOpacity>
         </View>
         <View style={styles.rowTwo}>
           <TouchableOpacity onPress={() => this.props.registerPlayer(realms[1])}>
-            <PlayerBox style={styles.two} displayInfo={realms[1]} currentScreen={this.props.currentScreen}/>
+            <PlayerBox style={styles.two} displayInfo={realms[1]}/>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.props.registerPlayer(realms[2])}>
-            <PlayerBox style={styles.three} displayInfo={realms[2]} currentScreen={this.props.currentScreen}/>
+            <PlayerBox style={styles.three} displayInfo={realms[2]}/>
           </TouchableOpacity>
         </View>
         <View style={styles.rowThree}>
           <TouchableOpacity onPress={() => this.props.registerPlayer(realms[3])}>
-            <PlayerBox style={styles.four} displayInfo={realms[3]} currentScreen={this.props.currentScreen}/>
+            <PlayerBox style={styles.four} displayInfo={realms[3]}/>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.props.registerPlayer(realms[4])}>
-            <PlayerBox style={styles.five} displayInfo={realms[4]} currentScreen={this.props.currentScreen}/>
+            <PlayerBox style={styles.five} displayInfo={realms[4]}/>
           </TouchableOpacity>
         </View>
         <View style={styles.rowFour}>
           <TouchableOpacity onPress={() => this.props.registerPlayer(realms[5])}>
-            <PlayerBox style={styles.six} displayInfo={realms[5]} currentScreen={this.props.currentScreen}/>
+            <PlayerBox style={styles.six} displayInfo={realms[5]}/>
           </TouchableOpacity>
         </View>
       </View>

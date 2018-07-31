@@ -25,7 +25,6 @@ export default class ScoreScreen extends Component {
     let players = this.state.playerList;
     players.sort((a,b) => {return b.points - a.points});
     this.setState({players: players});
-    this.props.screenProps.setCurrentScreen('score');
   }
 
   resetGame() {
@@ -49,7 +48,7 @@ export default class ScoreScreen extends Component {
             renderItem={({item}) => {
               return (
                 <View>
-                  <PlayerBox currentScreen={this.props.screenProps.currentScreen} displayInfo={item}></PlayerBox>
+                  <PlayerBox displayInfo={item}></PlayerBox>
                 </View>
               );
             }}
