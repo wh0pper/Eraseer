@@ -89,6 +89,7 @@ export default class GameScreen extends Component {
   processRound() {
     let allPlayers = this.state.playerList;
     let remainingPlayers = this.state.playerList.filter((p) => p.isAlive == true);
+    console.log('Scoring, remaining players before scoring: ', remainingPlayers);
     //determine elimination
     let clickers = remainingPlayers.filter((p) => p !== undefined && p.click > 0);
     clickers.sort((a,b) => {return a.click-b.click});
@@ -105,6 +106,7 @@ export default class GameScreen extends Component {
       let updateIndex = allPlayers.indexOf(removePlayer);
       removePlayer.isAlive = false;
       allPlayers.splice(updateIndex, 1, removePlayer);
+      remainingPlayers.splice(removeIndex, 1);
       this.setState({playerList: allPlayers});
 
       //determine points
@@ -155,11 +157,11 @@ export default class GameScreen extends Component {
   }
 
   startNewRound() {
-    let remainingPlayers = this.state.remainingPlayers;
+    let remainingPlayers = this.state.playerList;
     remainingPlayers.forEach((player) => player.click = 0);
     this.setState({
       timeRemaining: 10,
-      players: remainingPlayers,
+      playerList: remainingPlayers,
     });
     this.startTimer();
   }
@@ -175,7 +177,7 @@ export default class GameScreen extends Component {
 
     // //console.log('player list in game screen: ', this.props.navigation.getParam('players','no players'));
     //console.log('player list from state in game: ', this.state.remainingPlayers);
-    let displayPlayers = this.state.remainingPlayers;
+    let displayPlayers = this.state.playerList.filter((p) => p.isAlive);
     return (
       <View style={styles.container}>
         {/* <TouchableOpacity onPress={() => this.startTimer()}>
