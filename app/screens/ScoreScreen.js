@@ -30,8 +30,6 @@ export default class ScoreScreen extends Component {
   resetGame() {
     let players = this.state.playerList;
     players.forEach((player) => player = {} );
-    let resetPlayers = this.props.navigation.getParam('resetPlayers');
-    resetPlayers();
     this.props.navigation.navigate('registration');
   }
 

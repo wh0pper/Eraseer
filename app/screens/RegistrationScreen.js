@@ -34,10 +34,6 @@ export default class RegistrationScreen extends Component {
 
   }
 
-  resetPlayers() {
-    this.setState({playerList: []});
-  }
-
   async registerPlayer(selectedBox) {
     //console.log('Registering new player');
     let startTime = Date.now();
@@ -88,7 +84,7 @@ export default class RegistrationScreen extends Component {
     this.props.screenProps.stopScan();
     this.props.navigation.navigate('game', {
       players: this.state.playerList,
-      resetPlayers: this.resetPlayers()
+      resetPlayers: this.resetPlayers.bind(this)
     });
   }
 
@@ -100,6 +96,10 @@ export default class RegistrationScreen extends Component {
       registrationVisible: false
     });
 
+  }
+
+  resetPlayers() {
+    this.setState({playerList: []});
   }
 
   render() {

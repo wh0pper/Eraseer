@@ -146,9 +146,13 @@ export default class GameScreen extends Component {
         nextRoundReady: false,
         gameWon: true
       });
+      //this.props.navigation.state.params.resetPlayers();
+      console.log('navigation params via state: ', this.props.navigation.state.params);
+      console.log('navigation params via getParam: ', this.props.navigation.getParam('resetPlayers'));
+      this.props.navigation.state.params.resetPlayers();
       this.props.navigation.navigate('score', {
         players: this.state.playerList,
-        resetPlayers: this.props.navigation.getParam('resetPlayers')
+        // resetPlayers: this.props.navigation.getParam('resetPlayers')
       });
     }
     console.log('Player list at end of round: ', this.state.playerList);
