@@ -29,7 +29,12 @@ export default class ConfirmScreen extends Component {
   }
 
   componentDidMount() {
+    this.queueNextScreen();
+  }
 
+  async queueNextScreen() {
+    await sleep(1500);
+    this.props.navigation.navigate('registration');
   }
 
   render() {

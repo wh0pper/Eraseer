@@ -3,61 +3,26 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
 import PlayerBox from './PlayerBox';
 
-const realms = [
-  {
-    name: 'DECEIT',
-    color: '#7C9132',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 40, top: 10}
-  },
-  {
-    name: 'DESPAIR',
-    color: '#292929',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 70, top: 30}
-  },
-  {
-    name: 'INDIFFERENCE',
-    color: '#5386AD',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 70, top: 60}
-  },
-  {
-    name: 'INDULGENCE',
-    color: '#BCAC46',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 40, top: 70}
-  },
-  {
-    name: 'ARROGANCE',
-    color: '#673D91',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 0, top: 60}
-  },
-  {
-    name: 'ANGER',
-    color: '#88241E',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 0, top: 30}
-  }
-];
+
 
 export default class RealmHex extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-
+      realms: this.props.realms
     };
   }
 
   componentDidMount() {
+  }
+
+  claimRealm(realm) {
+    this.props.registerPlayer(realm);
+    // let realmsArray = this.state.realms;
+    // let updateIndex = realmsArray.indexOf(realm);
+    // realmsArray[updateIndex].isClaimed = true;
+    // this.setState({realms: realmsArray});
   }
 
   render() {
@@ -68,29 +33,29 @@ export default class RealmHex extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.rowOne}>
-          <TouchableOpacity onPress={() => this.props.registerPlayer(realms[0])}>
-            <PlayerBox style={styles.one} displayInfo={realms[0]}/>
+          <TouchableOpacity onPress={() => this.claimRealm(this.state.realms[0])}>
+            <PlayerBox style={styles.one} displayInfo={this.state.realms[0]}/>
           </TouchableOpacity>
         </View>
         <View style={styles.rowTwo}>
-          <TouchableOpacity onPress={() => this.props.registerPlayer(realms[1])}>
-            <PlayerBox style={styles.two} displayInfo={realms[1]}/>
+          <TouchableOpacity onPress={() => this.claimRealm(this.state.realms[1])}>
+            <PlayerBox style={styles.two} displayInfo={this.state.realms[1]}/>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.registerPlayer(realms[2])}>
-            <PlayerBox style={styles.three} displayInfo={realms[2]}/>
+          <TouchableOpacity onPress={() => this.claimRealm(this.state.realms[2])}>
+            <PlayerBox style={styles.three} displayInfo={this.state.realms[2]}/>
           </TouchableOpacity>
         </View>
         <View style={styles.rowThree}>
-          <TouchableOpacity onPress={() => this.props.registerPlayer(realms[3])}>
-            <PlayerBox style={styles.four} displayInfo={realms[3]}/>
+          <TouchableOpacity onPress={() => this.claimRealm(this.state.realms[3])}>
+            <PlayerBox style={styles.four} displayInfo={this.state.realms[3]}/>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.registerPlayer(realms[4])}>
-            <PlayerBox style={styles.five} displayInfo={realms[4]}/>
+          <TouchableOpacity onPress={() => this.claimRealm(this.state.realms[4])}>
+            <PlayerBox style={styles.five} displayInfo={this.state.realms[4]}/>
           </TouchableOpacity>
         </View>
         <View style={styles.rowFour}>
-          <TouchableOpacity onPress={() => this.props.registerPlayer(realms[5])}>
-            <PlayerBox style={styles.six} displayInfo={realms[5]}/>
+          <TouchableOpacity onPress={() => this.claimRealm(this.state.realms[5])}>
+            <PlayerBox style={styles.six} displayInfo={this.state.realms[5]}/>
           </TouchableOpacity>
         </View>
       </View>

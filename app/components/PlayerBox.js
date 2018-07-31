@@ -18,35 +18,18 @@ export default class PlayerBox extends Component {
   }
 
   render() {
-    let screen = 'registration';
-    let box = null;
-    if (screen === 'registration') {
-      box = (
-        <HexView color={this.props.displayInfo.color}>
-        {/* // <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}> */}
-          <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
-        </HexView>
-        // </View>
-      )
-    } else if (screen === 'game') {
-      box = (
-        <HexView color={this.props.displayInfo.color}>
-          <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
-        </HexView>
-      )
-    } else if (screen === 'score') {
-      box = (
-        <HexView color={this.props.displayInfo.color}>
-          <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
-          <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.points}</Text>
-        </HexView>
-      )
-    }
-
 
     return (
       <View>
-        {box}
+        { this.props.displayInfo.isClaimed ?
+          <ClaimedHexView color={this.props.displayInfo.color}>
+            <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
+          </ClaimedHexView>
+          :
+          <HexView color={this.props.displayInfo.color}>
+            <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
+          </HexView>
+        }
       </View>
     );
   }

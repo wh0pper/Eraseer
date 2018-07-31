@@ -21,6 +21,50 @@ async function sleep(time) {
   });
 }
 
+const realms = [
+  {
+    name: 'DECEIT',
+    color: '#7C9132',
+    isClaimed: false,
+    peripheralId: null,
+    position: {left: 40, top: 10}
+  },
+  {
+    name: 'DESPAIR',
+    color: '#292929',
+    isClaimed: false,
+    peripheralId: null,
+    position: {left: 70, top: 30}
+  },
+  {
+    name: 'INDIFFERENCE',
+    color: '#5386AD',
+    isClaimed: false,
+    peripheralId: null,
+    position: {left: 70, top: 60}
+  },
+  {
+    name: 'INDULGENCE',
+    color: '#BCAC46',
+    isClaimed: false,
+    peripheralId: null,
+    position: {left: 40, top: 70}
+  },
+  {
+    name: 'ARROGANCE',
+    color: '#673D91',
+    isClaimed: false,
+    peripheralId: null,
+    position: {left: 0, top: 60}
+  },
+  {
+    name: 'ANGER',
+    color: '#88241E',
+    isClaimed: false,
+    peripheralId: null,
+    position: {left: 0, top: 30}
+  }
+];
 
 export default class RegistrationScreen extends Component {
   constructor(props) {
@@ -31,6 +75,7 @@ export default class RegistrationScreen extends Component {
       registrationVisible: false,
       clickDetected: false,
       playerList: [],
+      realmList: realms.slice(),
       availableDevices: this.props.screenProps.deviceList,
       realmBeingClaimed: {}
     };
@@ -55,7 +100,10 @@ export default class RegistrationScreen extends Component {
       params: {realm: selectedBox}
     });
     let peripheralId = await this.listenForClick(startTime)
-      .then(() => {this.props.navigation.navigate('confirm')})
+      .then(() => {
+        this.markRealmClaimed(selectedBox);
+        this.props.navigation.navigate('confirm');
+      })
       .catch(() => {this.props.navigation.navigate('error')});//console.log(e));
     let newPlayer = {
       name: selectedBox.name,
@@ -97,6 +145,13 @@ export default class RegistrationScreen extends Component {
       }, 10000);
     })
 
+  }
+
+  markRealmClaimed(realm) {
+    let realmsArray = this.state.realmList;
+    let updateIndex = realmsArray.indexOf(realm);
+    realmsArray[updateIndex].isClaimed = true;
+    this.setState({realmList: realmsArray});
   }
 
   startGame() {
@@ -158,7 +213,7 @@ export default class RegistrationScreen extends Component {
           <Text>DOMINIONS</Text>
         </View>
         <View style={styles.realmContainer}>
-          <RealmHex registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
+          <RealmHex realms={this.state.realmList} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
           </View>
             <Text>Tap to select your domain.</Text>
           <TouchableOpacity
