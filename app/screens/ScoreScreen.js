@@ -16,21 +16,20 @@ export default class ScoreScreen extends Component {
     super(props);
 
     this.state = {
-      players: this.props.navigation.getParam('players', []),
-      lastPlayerStanding: this.props.navigation.getParam('lastPlayerStanding', {})
+      playerList: this.props.navigation.getParam('players', []),
     };
 
   }
 
   componentDidMount() {
-    let players = this.state.players;
+    let players = this.state.playerList;
     players.sort((a,b) => {return b.points - a.points});
     this.setState({players: players});
     this.props.screenProps.setCurrentScreen('score');
   }
 
   resetGame() {
-    let players = this.state.players;
+    let players = this.state.playerList;
     players.forEach((player) => player = {} );
     this.props.navigation.navigate('registration');
   }
@@ -41,10 +40,10 @@ export default class ScoreScreen extends Component {
       <View style={styles.container}>
         <Text>Score screen</Text>
         <Text>Last player standing:</Text>
-        <PlayerBox displayInfo={this.state.lastPlayerStanding}></PlayerBox>
+        <PlayerBox displayInfo={this.state.playerList.find((p) => p.isAlive == true)}></PlayerBox>
         <Text>Point Totals:</Text>
         <FlatList
-            data={this.state.players}
+            data={this.state.playerList}
             extraData={this.state}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => {

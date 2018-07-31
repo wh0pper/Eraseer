@@ -12,58 +12,7 @@ import RegisterModal from '../components/RegisterModal';
 import PlayerBox from '../components/PlayerBox';
 import RealmHex from '../components/RealmHex';
 
-function sleep(time) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('resolved');
-    }, time);
-  });
-}
 
-const realms = [
-  {
-    name: 'Deceit',
-    color: '#7C9132',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 40, top: 10}
-  },
-  {
-    name: 'Despair',
-    color: '#292929',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 70, top: 30}
-  },
-  {
-    name: 'Indifference',
-    color: '#5386AD',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 70, top: 60}
-  },
-  {
-    name: 'Indulgence',
-    color: '#BCAC46',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 40, top: 70}
-  },
-  {
-    name: 'Arrogance',
-    color: '#673D91',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 0, top: 60}
-  },
-  {
-    name: 'Anger',
-    color: '#88241E',
-    isPopulated: false,
-    peripheralId: null,
-    position: {left: 0, top: 30}
-  }
-];
 
 export default class RegistrationScreen extends Component {
   constructor(props) {
@@ -71,7 +20,6 @@ export default class RegistrationScreen extends Component {
     super(props);
 
     this.state = {
-      realms: realms.slice(),
       registrationVisible: false,
       clickDetected: false,
       playerList: [],
@@ -92,15 +40,14 @@ export default class RegistrationScreen extends Component {
       registrationVisible: true,
       realmBeingClaimed: selectedBox
     });
-    //delay to allow modal to render
-    // await sleep(1000);
-
     let peripheralId = await this.listenForClick(startTime).catch((e) => {});//console.log(e));
     let newPlayer = {
       name: selectedBox.name,
       color: selectedBox.color,
       peripheralId: this.props.screenProps.lastClick.peripheral,
-      click: 0
+      click: 0,
+      points: 0,
+      isAlive: true
     }
     let playerList = this.state.playerList;
     playerList.push(newPlayer);
@@ -108,7 +55,7 @@ export default class RegistrationScreen extends Component {
       registrationVisible: false,
       playerList: playerList
     });
-    //console.log('Finished registering, updated Player list: ', this.state.playerList);
+    console.log('Finished registering, updated Player list: ', this.state.playerList);
   }
 
   async listenForClick(startTime) {
@@ -132,12 +79,7 @@ export default class RegistrationScreen extends Component {
 
   }
 
-  handleClick() {
-    //console.log('click in registration')
-  }
-
   startGame() {
-    // //console.log('playerlist on game start: ', this.state.playerList)
     this.props.screenProps.stopScan();
     this.props.navigation.navigate('game', {players: this.state.playerList});
   }

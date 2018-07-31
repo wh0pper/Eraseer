@@ -31,16 +31,16 @@ export default class PlayerBox extends Component {
       )
     } else if (screen === 'game') {
       box = (
-        <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
+        <HexView style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
-        </View>
+        </HexView>
       )
     } else if (screen === 'score') {
       box = (
-        <View style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
+        <HexView style={[styles.container, {backgroundColor: this.props.displayInfo.color}]}>
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
           <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.points}</Text>
-        </View>
+        </HexView>
       )
     }
 

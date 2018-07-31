@@ -88,10 +88,15 @@ export default class App extends Component<Props> {
       .catch((error) => {
         console.log('Error initializing scan: ', error);
       });
-    } //else {
-    //   console.log('Stopping scan.')
-    //   BleManager.stopScan();
-    // }
+    } else {
+      console.log('Stopping scan.')
+      BleManager.stopScan();
+    }
+  }
+
+  stopScan() {
+    BleManager.stopScan();
+    this.setState({isScanning: false});
   }
 
   handleDiscovery(peripheral) {
@@ -173,7 +178,8 @@ export default class App extends Component<Props> {
           // eventEmitter: BleManagerEmitter,
           lastClick: this.state.lastClick,
           currentScreen: this.state.currentScreen,
-          setCurrentScreen: (screen) => this.setCurrentScreen(screen)
+          setCurrentScreen: (screen) => this.setCurrentScreen(screen),
+          stopScan: () => this.stopScan()
         }}/>
       // </View>
     );

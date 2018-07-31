@@ -16,8 +16,8 @@ export default class GameScreen extends Component {
     super(props);
 
     this.state = {
-      initialPlayers: this.props.navigation.getParam('players', []).slice(),
-      remainingPlayers: this.props.navigation.getParam('players', []).slice(),
+      playerList: this.props.navigation.getParam('players', []).slice(), //was initialPlayers
+      //remainingPlayers: this.props.navigation.getParam('players', []).slice(),
       nextRoundReady: false,
       gameWon: false,
       noClickRoundCount: 0,
@@ -50,7 +50,7 @@ export default class GameScreen extends Component {
 
   listenForClick(startTime) {
     // do {
-    let players = this.state.remainingPlayers;
+    let players = this.state.playerList;
     let clickedPlayer;
     let listening = setInterval(() => {
       // console.log('listening in round: ', this.props.screenProps.lastClick);
@@ -60,11 +60,11 @@ export default class GameScreen extends Component {
       let lastClick = this.props.screenProps.lastClick;
       if (lastClick.time > startTime) {
         // console.log('Detected click in round:', lastClick)
-        clickedPlayer = players.find((p) => p !== undefined && p.peripheralId == lastClick.peripheral) || {click: 0}
+        clickedPlayer = players.find((p) => p !== undefined && p.peripheralId == lastClick.peripheral);// || {click: 0}
         //only log this click to user if they haven't already clicked this round
         // console.log('Found player: ',clickedPlayer);
         // console.log(!clickedPlayer.click > startTime);
-        if (clickedPlayer.click < startTime) {
+        if (clickedPlayer !== undefined && clickedPlayer.click < startTime && clickedPlayer.isAlive) {
           let removeAt = players.indexOf(clickedPlayer);
           clickedPlayer.click = lastClick.time;
           console.log('logging received click to player: ',clickedPlayer);
@@ -74,12 +74,12 @@ export default class GameScreen extends Component {
       }
     }, 100)
     // while (this.state.timeRemaining > 0)
-    this.setState({remainingPlayers: players});
+    this.setState({playerList: players});
   }
 
   mockClick(player) {
     let clickTime = Date.now();
-    let players = this.state.remainingPlayers;
+    let players = this.state.playerList;
     let clickedPlayer = players.find((individual) => p !== undefined && individual.color == player.color);
     clickedPlayer.click = clickTime;
     let updateIndex = players.indexOf(clickedPlayer);
@@ -88,9 +88,8 @@ export default class GameScreen extends Component {
   }
 
   processRound() {
-    let allPlayers = this.state.initialPlayers;
-    let remainingPlayers = this.state.remainingPlayers;
-    //console.log('all players before process: ', allPlayers);
+    let allPlayers = this.state.playerList;
+    let remainingPlayers = this.state.playerList.filter((p) => p.isAlive == true);
     //determine elimination
     let clickers = remainingPlayers.filter((p) => p !== undefined && p.click > 0);
     clickers.sort((a,b) => {return a.click-b.click});
@@ -104,11 +103,10 @@ export default class GameScreen extends Component {
         removeIndex = removeIndex % remainingPlayers.length;
       }
       let removePlayer = remainingPlayers[removeIndex];
-      //console.log("first click from: ", clickers[0]);
-      //console.log('All clickers: ', clickers);
-      //console.log('removed player: ', removePlayer)
-      remainingPlayers.splice(removeIndex, 1);
-      this.setState({remainingPlayers: remainingPlayers});
+      let updateIndex = allPlayers.indexOf(removePlayer);
+      removePlayer.isAlive = false;
+      allPlayers.splice(updateIndex, 1, removePlayer);
+      this.setState({playerList: allPlayers});
 
       //determine points
       remainingPlayers.forEach((player) => {
@@ -129,18 +127,15 @@ export default class GameScreen extends Component {
         let updateObject = allPlayers.find((p) => p.color == player.color);
         let updateIndex = allPlayers.indexOf(updateObject);
         allPlayers.splice(updateIndex,1,updateObject);
-        //console.log('all players with updated points: ', allPlayers);
-        this.setState({initialPlayers: allPlayers});
       });
-    } else {
+      this.setState({playerList: allPlayers});
+    } else { //no one clicked in this round
       let newValue = this.state.noClickRoundCount + 1;
       this.setState({noClickRoundCount: newValue});
       if (newValue == 2) {
         //go to game over screen
       }
     }
-    this.setState({remainingPlayers: remainingPlayers});
-    //console.log('players at end of round: ', remainingPlayers);
     if (remainingPlayers.length>1) {
       // this.startNewRound();
       this.setState({nextRoundReady: true})
@@ -150,10 +145,10 @@ export default class GameScreen extends Component {
         gameWon: true
       });
       this.props.navigation.navigate('score', {
-        players: this.state.initialPlayers,
-        lastPlayerStanding: remainingPlayers[0]
+        players: this.state.playerList
       });
     }
+    console.log('Player list at end of round: ', this.state.playerList);
   }
 
   calcScores() {
