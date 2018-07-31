@@ -72,12 +72,9 @@ export default class RegistrationScreen extends Component {
     super(props);
     this.animatedModalColor = new Animated.Value(0);
     this.state = {
-      registrationVisible: false,
-      clickDetected: false,
       playerList: [],
       realmList: realms.slice(),
       availableDevices: this.props.screenProps.deviceList,
-      realmBeingClaimed: {}
     };
 
   }
@@ -90,11 +87,6 @@ export default class RegistrationScreen extends Component {
   async registerPlayer(selectedBox) {
     //console.log('Registering new player');
     let startTime = Date.now();
-    this.setState({
-      registrationVisible: true,
-      realmBeingClaimed: selectedBox,
-      clickDetected: false
-    });
     console.log('selected box: ', selectedBox);
     this.props.navigation.navigate('clickStack', {}, {
       params: {realm: selectedBox}
@@ -103,24 +95,20 @@ export default class RegistrationScreen extends Component {
       .then(() => {
         this.markRealmClaimed(selectedBox);
         this.props.navigation.navigate('confirm');
+        let newPlayer = {
+          name: selectedBox.name,
+          color: selectedBox.color,
+          peripheralId: this.props.screenProps.lastClick.peripheral,
+          click: 0,
+          points: 0,
+          isAlive: true
+        }
+        let playerList = this.state.playerList;
+        playerList.push(newPlayer);
+        this.setState({ playerList: playerList });
+        console.log('Finished registering, updated Player list: ', this.state.playerList);
       })
       .catch(() => {this.props.navigation.navigate('error')});//console.log(e));
-    let newPlayer = {
-      name: selectedBox.name,
-      color: selectedBox.color,
-      peripheralId: this.props.screenProps.lastClick.peripheral,
-      click: 0,
-      points: 0,
-      isAlive: true
-    }
-    let playerList = this.state.playerList;
-    playerList.push(newPlayer);
-    await sleep(1000);
-    this.setState({
-      registrationVisible: false,
-      playerList: playerList
-    });
-    console.log('Finished registering, updated Player list: ', this.state.playerList);
   }
 
   async listenForClick(startTime) {
@@ -131,16 +119,12 @@ export default class RegistrationScreen extends Component {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime) {
-          this.setState({clickDetected: true});
           this.makeModalBlack();
           resolve(this.props.screenProps.lastClick.peripheral);
         }
       }, 100);
       this.timeout = setTimeout(() => {
         clearInterval(this.listening);
-        this.setState({
-          registrationVisible: false
-        })
         reject('No click detected')
       }, 10000);
     })
@@ -163,13 +147,8 @@ export default class RegistrationScreen extends Component {
   }
 
   hideRegistration() {
-    // let newValue = !this.state.registrationVisible;
     clearInterval(this.listening);
     clearTimeout(this.timeout);
-    this.setState({
-      registrationVisible: false
-    });
-
   }
 
   makeModalWhite() {
@@ -184,7 +163,7 @@ export default class RegistrationScreen extends Component {
   }
 
   makeModalBlack() {
-    console.log('making modal black');
+    // console.log('making modal black');
     Animated.timing(
       this.animatedModalColor,
       {
@@ -226,15 +205,6 @@ export default class RegistrationScreen extends Component {
           </TouchableOpacity>
           {/* <Text>Swipe right to start.</Text>
           <Text>Swipe left to re-start.</Text> */}
-          {/* {this.state.registrationVisible ?
-            <RegisterModal
-              backgroundColor={modalBackgroundColor}
-              onRef={ref => (this.modal = ref)}
-              visible={this.state.registrationVisible}
-              hide={() => this.hideRegistration()}
-              realm={this.state.realmBeingClaimed}
-              clickDetected={this.state.clickDetected}
-            /> : null} */}
       </View>
     );
   }
