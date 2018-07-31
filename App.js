@@ -16,6 +16,11 @@ import { createStackNavigator } from 'react-navigation';
 import GameScreen from './app/screens/GameScreen';
 import RegistrationScreen from './app/screens/RegistrationScreen';
 import ScoreScreen from './app/screens/ScoreScreen';
+import ScanScreen from './app/screens/ScanScreen';
+import ClickListenScreen from './app/screens/ClickListenScreen';
+import WarningScreen from './app/screens/WarningScreen';
+import ConfirmScreen from './app/screens/ConfirmScreen';
+import ClaimErrorScreen from './app/screens/ClaimErrorScreen';
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -99,7 +104,7 @@ export default class App extends Component<Props> {
   }
 
   handleDiscovery(peripheral) {
-    console.log('Peripheral discovered');
+    //console.log('Peripheral discovered');
     let name = peripheral.name || '';
     if (name.toLowerCase().trim() == 'itag') {
       console.log('New iTag discovered: ', peripheral);
@@ -179,28 +184,29 @@ export default class App extends Component<Props> {
   }
 }
 
-const NavigationStack = createStackNavigator({
-    registration: {
-        screen: RegistrationScreen,
-        navigationOptions: () => ({
-          header: null,
-        }),
-      },
-    game: {
-      screen: GameScreen,
-      navigationOptions: () => ({
-        header: null,
-      }),
-    },
-    score: {
-      screen: ScoreScreen,
-      navigationOptions: () => ({
-        header: null,
-      }),
-    }
+const RegistrationStack = createStackNavigator({
+  warning: WarningScreen,
+  click: ClickListenScreen,
+  confirm: ConfirmScreen,
+  error: ClaimErrorScreen
   },
   {
-    initialRouteName: 'registration'
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'warning'
+  }
+);
+
+const NavigationStack = createStackNavigator({
+    scan: ScanScreen,
+    registration: RegistrationScreen,
+    clickStack: RegistrationStack,
+    game: GameScreen,
+    score: ScoreScreen,
+  },
+  {
+    headerMode: 'none',
+    initialRouteName: 'scan'
   }
 );
 

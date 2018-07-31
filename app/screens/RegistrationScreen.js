@@ -6,19 +6,27 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  Animated
 } from 'react-native';
 
-import RegisterModal from '../components/RegisterModal';
+//import RegisterModal from '../components/RegisterModal';
 import PlayerBox from '../components/PlayerBox';
 import RealmHex from '../components/RealmHex';
 
+async function sleep(time) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, time);
+  });
+}
 
 
 export default class RegistrationScreen extends Component {
   constructor(props) {
 
     super(props);
-
+    this.animatedModalColor = new Animated.Value(0);
     this.state = {
       registrationVisible: false,
       clickDetected: false,
@@ -39,9 +47,16 @@ export default class RegistrationScreen extends Component {
     let startTime = Date.now();
     this.setState({
       registrationVisible: true,
-      realmBeingClaimed: selectedBox
+      realmBeingClaimed: selectedBox,
+      clickDetected: false
     });
-    let peripheralId = await this.listenForClick(startTime).catch((e) => {});//console.log(e));
+    console.log('selected box: ', selectedBox);
+    this.props.navigation.navigate('clickStack', {}, {
+      params: {realm: selectedBox}
+    });
+    let peripheralId = await this.listenForClick(startTime)
+      .then(() => {this.props.navigation.navigate('confirm')})
+      .catch(() => {this.props.navigation.navigate('error')});//console.log(e));
     let newPlayer = {
       name: selectedBox.name,
       color: selectedBox.color,
@@ -52,6 +67,7 @@ export default class RegistrationScreen extends Component {
     }
     let playerList = this.state.playerList;
     playerList.push(newPlayer);
+    await sleep(1000);
     this.setState({
       registrationVisible: false,
       playerList: playerList
@@ -68,12 +84,15 @@ export default class RegistrationScreen extends Component {
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime) {
           this.setState({clickDetected: true});
+          this.makeModalBlack();
           resolve(this.props.screenProps.lastClick.peripheral);
         }
       }, 100);
       this.timeout = setTimeout(() => {
         clearInterval(this.listening);
-        this.setState({registrationVisible: false})
+        this.setState({
+          registrationVisible: false
+        })
         reject('No click detected')
       }, 10000);
     })
@@ -98,11 +117,37 @@ export default class RegistrationScreen extends Component {
 
   }
 
+  makeModalWhite() {
+    console.log('making modal white');
+    Animated.timing(
+      this.animatedModalColor,
+      {
+        toValue: 0,
+        duration: 1
+      }
+    ).start();
+  }
+
+  makeModalBlack() {
+    console.log('making modal black');
+    Animated.timing(
+      this.animatedModalColor,
+      {
+        toValue: 1,
+        duration: 1000
+      }
+    ).start();
+  }
+
   resetPlayers() {
     this.setState({playerList: []});
   }
 
   render() {
+    let modalBackgroundColor = this.animatedModalColor.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
+    });
 
     return (
       <View style={styles.container}>
@@ -114,20 +159,6 @@ export default class RegistrationScreen extends Component {
         </View>
         <View style={styles.realmContainer}>
           <RealmHex registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
-          {/* <FlatList
-              data={this.state.realms}
-              extraData={this.state}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => {
-                return (
-                  <View>
-                    <TouchableOpacity onPress={() => this.registerPlayer(item)}>
-                      <PlayerBox displayInfo={item}></PlayerBox>
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
-            /> */}
           </View>
             <Text>Tap to select your domain.</Text>
           <TouchableOpacity
@@ -140,13 +171,15 @@ export default class RegistrationScreen extends Component {
           </TouchableOpacity>
           {/* <Text>Swipe right to start.</Text>
           <Text>Swipe left to re-start.</Text> */}
-          {this.state.registrationVisible ?
+          {/* {this.state.registrationVisible ?
             <RegisterModal
+              backgroundColor={modalBackgroundColor}
+              onRef={ref => (this.modal = ref)}
               visible={this.state.registrationVisible}
               hide={() => this.hideRegistration()}
               realm={this.state.realmBeingClaimed}
               clickDetected={this.state.clickDetected}
-            /> : null}
+            /> : null} */}
       </View>
     );
   }
