@@ -21,7 +21,7 @@ export default class GameScreen extends Component {
       nextRoundReady: false,
       gameWon: false,
       noClickRoundCount: 0,
-      timerDuration: 5
+      timeRemaining: 5
     };
 
   }
@@ -37,9 +37,9 @@ export default class GameScreen extends Component {
     console.log('Round start time: ', startTime);
     this.listenForClick(startTime);
     let timer = setInterval(() => {
-      let newValue = this.state.timerDuration - 1;
+      let newValue = this.state.timeRemaining - 1;
       if (newValue >= 0) {
-        this.setState({timerDuration: newValue});
+        this.setState({timeRemaining: newValue});
       } else {
         clearInterval(timer);
         this.processRound();
@@ -54,7 +54,7 @@ export default class GameScreen extends Component {
     let clickedPlayer;
     let listening = setInterval(() => {
       // console.log('listening in round: ', this.props.screenProps.lastClick);
-      if (this.state.timerDuration == 0) {
+      if (this.state.timeRemaining == 0) {
         clearInterval(listening);
       }
       let lastClick = this.props.screenProps.lastClick;
@@ -73,7 +73,7 @@ export default class GameScreen extends Component {
         }
       }
     }, 100)
-    // while (this.state.timerDuration > 0)
+    // while (this.state.timeRemaining > 0)
     this.setState({remainingPlayers: players});
   }
 
@@ -164,7 +164,7 @@ export default class GameScreen extends Component {
     let remainingPlayers = this.state.remainingPlayers;
     remainingPlayers.forEach((player) => player.click = 0);
     this.setState({
-      timerDuration: 10,
+      timeRemaining: 10,
       players: remainingPlayers,
     });
     this.startTimer();
@@ -184,12 +184,12 @@ export default class GameScreen extends Component {
     let displayPlayers = this.state.remainingPlayers;
     return (
       <View style={styles.container}>
-        <Text>Game screen</Text>
         <TouchableOpacity onPress={() => this.startTimer()}>
           <Text>Start round</Text>
         </TouchableOpacity>
-        <Text style={{color: '#ff0000', fontSize: 30}}>{this.state.timerDuration}</Text>
-        <FlatList
+        <Timer seconds={this.state.timeRemaining}/>
+        <Text style={{color: '#ff0000', fontSize: 30}}>{this.state.timeRemaining}</Text>
+        {/* <FlatList
             data={displayPlayers}
             extraData={this.state}
             keyExtractor={(item, index) => index.toString()}
@@ -202,7 +202,7 @@ export default class GameScreen extends Component {
                 </View>
               );
             }}
-          />
+          /> */}
           {nextRoundButton}
       </View>
     );

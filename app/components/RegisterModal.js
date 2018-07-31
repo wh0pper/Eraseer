@@ -45,14 +45,18 @@ export default class RegisterModal extends Component {
   }
 
   render() {
-      let backgroundColor = this.animatedColor.interpolate({
+    let backgroundColor = '#DFDFDF';
+    let textColor = '#000000';
+    if (this.props.clickDetected) {
+      backgroundColor = this.animatedColor.interpolate({
         inputRange: [0, 1],
         outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
       });
-      let textColor = this.animatedText.interpolate({
+      textColor = this.animatedText.interpolate({
         inputRange: [0, 1],
         outputRange: ['#000000', '#ffffff']
       });
+    }
 
     return (
       <View>

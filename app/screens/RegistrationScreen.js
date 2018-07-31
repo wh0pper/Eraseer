@@ -73,6 +73,7 @@ export default class RegistrationScreen extends Component {
     this.state = {
       realms: realms.slice(),
       registrationVisible: false,
+      clickDetected: false,
       playerList: [],
       availableDevices: this.props.screenProps.deviceList,
       realmBeingClaimed: {}
@@ -118,6 +119,7 @@ export default class RegistrationScreen extends Component {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime) {
+          this.setState({clickDetected: true});
           resolve(this.props.screenProps.lastClick.peripheral);
         }
       }, 100);
@@ -187,11 +189,13 @@ export default class RegistrationScreen extends Component {
           </TouchableOpacity>
           {/* <Text>Swipe right to start.</Text>
           <Text>Swipe left to re-start.</Text> */}
-          {this.state.registrationVisible ? <RegisterModal
-            visible={true}
-            hide={() => this.hideRegistration()}
-            realm={this.state.realmBeingClaimed}
-          /> : null}
+          {this.state.registrationVisible ?
+            <RegisterModal
+              visible={this.state.registrationVisible}
+              hide={() => this.hideRegistration()}
+              realm={this.state.realmBeingClaimed}
+              clickDetected={this.state.clickDetected}
+            /> : null}
       </View>
     );
   }
