@@ -30,6 +30,12 @@ export default class RegistrationScreen extends Component {
   }
 
   componentDidMount() {
+    console.log('Registration screen mounted, playerList:', this.state.playerList);
+
+  }
+
+  resetPlayers() {
+    this.setState({playerList: []});
   }
 
   async registerPlayer(selectedBox) {
@@ -80,7 +86,10 @@ export default class RegistrationScreen extends Component {
 
   startGame() {
     this.props.screenProps.stopScan();
-    this.props.navigation.navigate('game', {players: this.state.playerList});
+    this.props.navigation.navigate('game', {
+      players: this.state.playerList,
+      resetPlayers: this.resetPlayers()
+    });
   }
 
   hideRegistration() {

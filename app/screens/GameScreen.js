@@ -28,6 +28,7 @@ export default class GameScreen extends Component {
 
   componentDidMount() {
     console.log('game component did mount, starting timer');
+    console.log('passed params to game screen: ', this.props.navigation.state.params);
     this.startTimer();
   }
 
@@ -146,7 +147,8 @@ export default class GameScreen extends Component {
         gameWon: true
       });
       this.props.navigation.navigate('score', {
-        players: this.state.playerList
+        players: this.state.playerList,
+        resetPlayers: this.props.navigation.getParam('resetPlayers')
       });
     }
     console.log('Player list at end of round: ', this.state.playerList);

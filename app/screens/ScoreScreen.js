@@ -30,6 +30,8 @@ export default class ScoreScreen extends Component {
   resetGame() {
     let players = this.state.playerList;
     players.forEach((player) => player = {} );
+    let resetPlayers = this.props.navigation.getParam('resetPlayers');
+    resetPlayers();
     this.props.navigation.navigate('registration');
   }
 
@@ -47,8 +49,13 @@ export default class ScoreScreen extends Component {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => {
               return (
-                <View>
-                  <PlayerBox displayInfo={item}></PlayerBox>
+                <View style={styles.columnContainer}>
+                  <View style={styles.hexColumn}>
+                    <PlayerBox displayInfo={item}></PlayerBox>
+                  </View>
+                  <View style={styles.pointColumn}>
+                    <Text>{item.points}</Text>
+                  </View>
                 </View>
               );
             }}
@@ -71,5 +78,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
     padding: 20
+  },
+  columnContainer: {
+    flex:1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  hexColumn: {
+
+  },
+  pointColumn: {
+
   }
 });
