@@ -189,21 +189,26 @@ export default class GameScreen extends Component {
         {/* <TouchableOpacity onPress={() => this.startTimer()}>
           <Text>Start round</Text>
         </TouchableOpacity> */}
-        <Timer seconds={this.state.timeRemaining}/>
-        <FlatList
-            data={displayPlayers}
-            extraData={this.state}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => {
-              return (
-                <View>
-                  <TouchableOpacity onPress={() => this.mockClick(item)}>
-                    <PlayerBox displayInfo={item}></PlayerBox>
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
+        <View style={styles.playersContainer}>
+          <FlatList
+              data={displayPlayers}
+              extraData={this.state}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal={true}
+              renderItem={({item}) => {
+                return (
+                  <View>
+                    <TouchableOpacity onPress={() => this.mockClick(item)}>
+                      <PlayerBox displayInfo={item}></PlayerBox>
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
+          </View>
+          <View style={styles.timerContainer}>
+            <Timer seconds={this.state.timeRemaining}/>
+          </View>
           {nextRoundButton}
       </View>
     );
@@ -214,10 +219,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
     padding: 20
+  },
+  playersContainer: {
+    flex: 1,
+    // flexDirection: 'row',
+    // justifyContent: 'center',
+    // height: 300
+  },
+  timerContainer: {
+    flex: 3
   },
   button: {
     backgroundColor: 'lightgray',
