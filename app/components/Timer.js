@@ -70,61 +70,39 @@ export default class Timer extends Component {
           easing: Easing.cubic
         }
       ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .7,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .8,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .9,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: 1,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      )
+      Animated.timing(this.rotateValue, { toValue: .7, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: .8, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: .9, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: 1, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: 1.1, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: 1.2, duration: 1000, easing: Easing.cubic }),
 
-    ]).start();
+
+
+
+    ]).start(() => this.startRotation());
   }
 
 
   render() {
 
     const rotation = this.rotateValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '180deg']
+      inputRange: [0, 1.2],
+      outputRange: ['0deg', '360deg']
     });
 
     return (
-
-      <Animated.View style={[styles.container, {transform: [{rotate: rotation}]}]}>
-        <Text>{this.props.seconds}</Text>
-        <View style={styles.rect}></View>
-        <View style={[styles.rect, styles.two]}></View>
-        <View style={[styles.rect, styles.three]}></View>
-        <View style={[styles.rect, styles.four]}></View>
-        <View style={[styles.rect, styles.five]}></View>
-        <View style={[styles.rect, styles.six]}></View>
-      </Animated.View>
+      <View style={styles.container}>
+        <Text style={{color: '#ff0000', fontSize: 30}}>{this.props.seconds}</Text>
+        <Animated.View style={[styles.rotatingContainer, {transform: [{rotate: rotation}]}]}>
+          <View style={styles.rect}></View>
+          <View style={[styles.rect, styles.two]}></View>
+          <View style={[styles.rect, styles.three]}></View>
+        </Animated.View>
+          <View style={[styles.rect, styles.four]}></View>
+          <View style={[styles.rect, styles.five]}></View>
+          <View style={[styles.rect, styles.six]}></View>
+      </View>
 
     );
   }
@@ -132,6 +110,12 @@ export default class Timer extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  rotatingContainer: {
+    position: 'absolute',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'

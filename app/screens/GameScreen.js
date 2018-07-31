@@ -21,14 +21,14 @@ export default class GameScreen extends Component {
       nextRoundReady: false,
       gameWon: false,
       noClickRoundCount: 0,
-      timeRemaining: 5
+      timeRemaining: 10
     };
 
   }
 
   componentDidMount() {
     console.log('game component did mount, starting timer');
-    // this.startTimer();
+    this.startTimer();
     this.props.screenProps.setCurrentScreen('game');
   }
 
@@ -184,11 +184,10 @@ export default class GameScreen extends Component {
     let displayPlayers = this.state.remainingPlayers;
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => this.startTimer()}>
+        {/* <TouchableOpacity onPress={() => this.startTimer()}>
           <Text>Start round</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Timer seconds={this.state.timeRemaining}/>
-        <Text style={{color: '#ff0000', fontSize: 30}}>{this.state.timeRemaining}</Text>
         {/* <FlatList
             data={displayPlayers}
             extraData={this.state}
