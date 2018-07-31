@@ -138,6 +138,8 @@ export default class RegistrationScreen extends Component {
 
   startGame() {
     // //console.log('playerlist on game start: ', this.state.playerList)
+    this.props.screenProps.stopScan();
+    this.props.navigation.navigate('game', {players: this.state.playerList});
   }
 
   hideRegistration() {
@@ -182,7 +184,6 @@ export default class RegistrationScreen extends Component {
             style={styles.button}
             onPress={() => {
               this.startGame();
-              this.props.navigation.navigate('game', {players: this.state.playerList});
               }
             }>
             <Text>Start Game</Text>

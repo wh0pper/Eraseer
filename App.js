@@ -29,6 +29,14 @@ const SCAN_TIME = 120;
 const ITAG_SERVICE = "ffe0";
 const ITAG_CHARACTERISTIC = "ffe1";
 
+async function sleep(time) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, time);
+  });
+}
+
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
@@ -55,7 +63,8 @@ export default class App extends Component<Props> {
     this.discoveryHandler = BleManagerEmitter.addListener('BleManagerDiscoverPeripheral', this.handleDiscovery );
     this.subscriptionHandler = BleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleSubscription );
     this.disconnectHandler = BleManagerEmitter.addListener('BleManagerDisconnectPeripheral', this.handleDisconnect );
-    this.startScan();
+    this.startScan(); //needs to be async, sleep to delay auto start of scan, otherwise just won't Work
+    console.log('App mounted, scan state: ', this.state.isScanning);
   }
 
   componentWillUnmount() {
@@ -64,7 +73,8 @@ export default class App extends Component<Props> {
     this.disconnectHandler.remove();
   }
 
-  startScan() {
+  async startScan() {
+    await sleep(1000);
     let newState = !this.state.isScanning;
     this.setState({isScanning: newState});
     if (newState) {
@@ -78,10 +88,10 @@ export default class App extends Component<Props> {
       .catch((error) => {
         console.log('Error initializing scan: ', error);
       });
-    } else {
-      console.log('Stopping scan.')
-      BleManager.stopScan();
-    }
+    } //else {
+    //   console.log('Stopping scan.')
+    //   BleManager.stopScan();
+    // }
   }
 
   handleDiscovery(peripheral) {

@@ -59,11 +59,11 @@ export default class GameScreen extends Component {
       }
       let lastClick = this.props.screenProps.lastClick;
       if (lastClick.time > startTime) {
-        console.log('Detected click in round:', lastClick)
+        // console.log('Detected click in round:', lastClick)
         clickedPlayer = players.find((p) => p !== undefined && p.peripheralId == lastClick.peripheral) || {click: 0}
         //only log this click to user if they haven't already clicked this round
-        console.log('Found player: ',clickedPlayer);
-        console.log(!clickedPlayer.click > startTime);
+        // console.log('Found player: ',clickedPlayer);
+        // console.log(!clickedPlayer.click > startTime);
         if (clickedPlayer.click < startTime) {
           let removeAt = players.indexOf(clickedPlayer);
           clickedPlayer.click = lastClick.time;
@@ -188,7 +188,7 @@ export default class GameScreen extends Component {
           <Text>Start round</Text>
         </TouchableOpacity> */}
         <Timer seconds={this.state.timeRemaining}/>
-        {/* <FlatList
+        <FlatList
             data={displayPlayers}
             extraData={this.state}
             keyExtractor={(item, index) => index.toString()}
@@ -201,7 +201,7 @@ export default class GameScreen extends Component {
                 </View>
               );
             }}
-          /> */}
+          />
           {nextRoundButton}
       </View>
     );
