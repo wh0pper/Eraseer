@@ -32,41 +32,41 @@ export default class HexView extends Component {
 
 const styles = StyleSheet.create({
   hexagon: {
-    width: 75,
-    height: 41.25,
+    width: 69.3,
+    height: 80,
     margin: 20
   },
   hexagonInner: {
-    width: 75,
-    height: 41.25,
+    width: 69.3,
+    height: 40,
     // backgroundColor: this.props.color
   },
   hexagonBefore: {
     position: 'absolute',
-    top: -18.75,
+    top: -20,
     left: 0,
     width: 0,
     height: 0,
     borderStyle: 'solid',
-    borderLeftWidth: 37.5,
+    borderLeftWidth: 34.64,
     borderLeftColor: 'transparent',
-    borderRightWidth: 37.5,
+    borderRightWidth: 34.64,
     borderRightColor: 'transparent',
-    borderBottomWidth: 18.75,
+    borderBottomWidth: 20,
     // borderBottomColor: this.props.color
   },
   hexagonAfter: {
     position: 'absolute',
-    bottom: -18.50,
+    bottom: 20,
     left: 0,
     width: 0,
     height: 0,
     borderStyle: 'solid',
-    borderLeftWidth: 37.5,
+    borderLeftWidth: 34.64,
     borderLeftColor: 'transparent',
-    borderRightWidth: 37.5,
+    borderRightWidth: 34.64,
     borderRightColor: 'transparent',
-    borderTopWidth: 18.75,
+    borderTopWidth: 20,
     // borderTopColor: this.props.color
   }
 });
