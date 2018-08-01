@@ -46,7 +46,7 @@ async function sleep(time) {
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
-    BleManager.start({showAlert: true});
+    BleManager.start({showAlert: true, forceLegacy: true});
 
     super(props);
 
