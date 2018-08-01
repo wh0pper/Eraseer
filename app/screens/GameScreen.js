@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import PlayerBox from '../components/PlayerBox';
+import SmallPlayerBox from '../components/SmallPlayerBox';
 import Timer from '../components/Timer';
 
 export default class GameScreen extends Component {
@@ -42,7 +42,7 @@ export default class GameScreen extends Component {
         this.setState({timeRemaining: newValue});
       } else {
         clearInterval(timer);
-        this.processRound();
+        this.processRound(startTime);
         //determine winner
       }
     }, 1000);
@@ -87,13 +87,13 @@ export default class GameScreen extends Component {
     players.splice(updateIndex,0,clickedPlayer);
   }
 
-  processRound() {
+  processRound(startTime) {
     let removePlayer;
     let allPlayers = this.state.playerList;
     let remainingPlayers = this.state.playerList.filter((p) => p.isAlive == true);
     console.log('Scoring, remaining players before scoring: ', remainingPlayers);
     //determine elimination
-    let clickers = remainingPlayers.filter((p) => p !== undefined && p.click > 0);
+    let clickers = remainingPlayers.filter((p) => p !== undefined && p.click > startTime);
     clickers.sort((a,b) => {return a.click-b.click});
     if (clickers.length > 0) {
       this.setState({noClickRoundCount: 0});
@@ -203,7 +203,7 @@ export default class GameScreen extends Component {
                 return (
                   <View>
                     <TouchableOpacity onPress={() => this.mockClick(item)}>
-                      <PlayerBox displayInfo={item}></PlayerBox>
+                      <SmallPlayerBox displayInfo={item}></SmallPlayerBox>
                     </TouchableOpacity>
                   </View>
                 );
