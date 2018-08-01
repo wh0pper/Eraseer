@@ -80,7 +80,7 @@ export default class Timer extends Component {
 
 
 
-    ]).start(() => this.startRotation());
+    ]).start();
   }
 
 
@@ -110,6 +110,7 @@ export default class Timer extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'

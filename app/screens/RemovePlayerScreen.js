@@ -5,8 +5,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  FlatList,
-  Animated
 } from 'react-native';
 
 async function sleep(time) {
@@ -17,18 +15,28 @@ async function sleep(time) {
   });
 }
 
-export default class ScanScreen extends Component {
+export default class RemovePlayerScreen extends Component {
   constructor(props) {
 
     super(props);
 
     this.state = {
-      availableDevices: this.props.screenProps.deviceList,
+      playerList: []
     };
 
   }
 
   componentDidMount() {
+    this.setState({playerList: this.props.navigation.getParam('players')});
+  }
+
+  nextScreen() {
+    let remainingPlayers = this.state.playerList.filter((p) => p.isAlive);
+    if (remainingPlayers == 1) {
+      this.props.navigation.navigate('score', {players: this.state.playerList});
+    } else {
+      this.props.navigation.navigate('game');
+    }
   }
 
   render() {
@@ -36,19 +44,11 @@ export default class ScanScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.title}>
-          <Text>{this.props.screenProps.scanState ? 'Scanning' : 'Scan completed'}</Text>
-          <Text>{this.state.availableDevices.length} runes connected</Text>
+          <Text>{this.props.navigation.getParam('removedPlayer').name} was eliminated.</Text>
         </View>
-        <Text>Swipe left to continue when all runes are connected.</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            this.props.navigation.navigate('registration');
-            }
-          }>
+        <TouchableOpacity onPress={() => this.nextScreen()}>
           <Text>Continue</Text>
         </TouchableOpacity>
-
       </View>
     );
   }
@@ -65,13 +65,5 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 100
-  },
-  button: {
-    backgroundColor: 'lightgray',
-    padding: 10
-  },
-  realmContainer: {
-    width: 300,
-    height: 300
   }
 });

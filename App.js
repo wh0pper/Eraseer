@@ -21,6 +21,7 @@ import ClickListenScreen from './app/screens/ClickListenScreen';
 import WarningScreen from './app/screens/WarningScreen';
 import ConfirmScreen from './app/screens/ConfirmScreen';
 import ClaimErrorScreen from './app/screens/ClaimErrorScreen';
+import RemovePlayerScreen from './app/screens/RemovePlayerScreen';
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -82,7 +83,7 @@ export default class App extends Component<Props> {
     let newState = !this.state.isScanning;
     this.setState({isScanning: newState});
     if (newState) {
-      BleManager.scan([],SCAN_TIME,false)
+      BleManager.scan([],SCAN_TIME,false,{})
       .then(() => {
         setTimeout(() => {
           this.setState({isScanning: false});
@@ -174,6 +175,7 @@ export default class App extends Component<Props> {
         <NavigationStack screenProps={{
           deviceList: this.state.subscribedDevices,
           startScan: () => this.startScan(),
+          scanState: this.state.isScanning,
           // clickHandler: () => this.subscriptionHandler,
           // eventEmitter: BleManagerEmitter,
           lastClick: this.state.lastClick,
@@ -202,6 +204,7 @@ const NavigationStack = createStackNavigator({
     registration: RegistrationScreen,
     clickStack: RegistrationStack,
     game: GameScreen,
+    remove: RemovePlayerScreen,
     score: ScoreScreen,
   },
   {

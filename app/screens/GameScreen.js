@@ -88,6 +88,7 @@ export default class GameScreen extends Component {
   }
 
   processRound() {
+    let removePlayer;
     let allPlayers = this.state.playerList;
     let remainingPlayers = this.state.playerList.filter((p) => p.isAlive == true);
     console.log('Scoring, remaining players before scoring: ', remainingPlayers);
@@ -103,7 +104,7 @@ export default class GameScreen extends Component {
       if (removeIndex >= remainingPlayers.length) {
         removeIndex = removeIndex % remainingPlayers.length;
       }
-      let removePlayer = remainingPlayers[removeIndex];
+      removePlayer = remainingPlayers[removeIndex];
       let updateIndex = allPlayers.indexOf(removePlayer);
       removePlayer.isAlive = false;
       allPlayers.splice(updateIndex, 1, removePlayer);
@@ -138,25 +139,28 @@ export default class GameScreen extends Component {
         //go to game over screen
       }
     }
-    if (remainingPlayers.length>1) {
-      // this.startNewRound();
-      this.setState({nextRoundReady: true})
-    } else {
-      this.setState({
-        nextRoundReady: false,
-        gameWon: true
-      });
-      //this.props.navigation.state.params.resetPlayers();
-      console.log('navigation params via state: ', this.props.navigation.state.params);
-      console.log('navigation params via getParam: ', this.props.navigation.getParam('resetPlayers'));
-      this.props.navigation.state.params.resetPlayers();
-      this.props.navigation.navigate('score', {
-        players: this.state.playerList,
-        // resetPlayers: this.props.navigation.getParam('resetPlayers')
-      });
-    }
+    this.props.navigation.navigate('remove', {
+      removedPlayer: removePlayer,
+      players: this.state.playerList,
+      // resetPlayers: this.props.navigation.getParam('resetPlayers')
+    });
+    // if (remainingPlayers.length>1) {
+    //   // this.startNewRound();
+    //   this.setState({nextRoundReady: true});
+    // } else {
+    //   this.setState({
+    //     nextRoundReady: false,
+    //     gameWon: true
+    //   });
+    //   this.props.navigation.state.params.resetPlayers();
+    //   this.props.navigation.navigate('score', {
+    //     players: this.state.playerList,
+    //     // resetPlayers: this.props.navigation.getParam('resetPlayers')
+    //   });
     console.log('Player list at end of round: ', this.state.playerList);
-  }
+    }
+
+
 
   calcScores() {
 
@@ -209,7 +213,10 @@ export default class GameScreen extends Component {
           <View style={styles.timerContainer}>
             <Timer seconds={this.state.timeRemaining}/>
           </View>
-          {nextRoundButton}
+          <View style={styles.afterContainer}>
+
+          </View>
+          {/* {nextRoundButton} */}
       </View>
     );
   }
@@ -231,7 +238,10 @@ const styles = StyleSheet.create({
     // height: 300
   },
   timerContainer: {
-    flex: 3
+    flex: 5
+  },
+  afterContainer: {
+    flex: 1
   },
   button: {
     backgroundColor: 'lightgray',
