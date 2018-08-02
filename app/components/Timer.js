@@ -13,90 +13,82 @@ export default class Timer extends Component {
   }
 
   componentDidMount() {
-    console.log
-    this.startRotation();
-    // this.focusListener = this.props.navigation.addListener('willFocus', this.startRotation);
-  }
-
-  componentWillFocus() {
-    console.log('Timer received willFocus');
     this.startRotation();
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+
   }
 
   startRotation() {
-    this.rotateValue = 0
-    // Animated.sequence([
+    Animated.sequence([
       Animated.timing(
         this.rotateValue,
         {
-          toValue: 1,
+          toValue: .1,
           duration: 1000,
           easing: Easing.cubic
-        }).start(() => this.startRotation());
-      // ),
-      // Animated.timing(
-      //   this.rotateValue,
-      //   {
-      //     toValue: .2,
-      //     duration: 1000,
-      //     easing: Easing.cubic
-      //   }
-      // ),
-      // Animated.timing(
-      //   this.rotateValue,
-      //   {
-      //     toValue: .3,
-      //     duration: 1000,
-      //     easing: Easing.cubic
-      //   }
-      // ),
-      // Animated.timing(
-      //   this.rotateValue,
-      //   {
-      //     toValue: .4,
-      //     duration: 1000,
-      //     easing: Easing.cubic
-      //   }
-      // ),
-      // Animated.timing(
-      //   this.rotateValue,
-      //   {
-      //     toValue: .5,
-      //     duration: 1000,
-      //     easing: Easing.cubic
-      //   }
-      // ),
-      // Animated.timing(
-      //   this.rotateValue,
-      //   {
-      //     toValue: .6,
-      //     duration: 1000,
-      //     easing: Easing.cubic
-      //   }
-      // ),
-      // Animated.timing(this.rotateValue, { toValue: .7, duration: 1000, easing: Easing.cubic }),
-      // Animated.timing(this.rotateValue, { toValue: .8, duration: 1000, easing: Easing.cubic }),
-      // Animated.timing(this.rotateValue, { toValue: .9, duration: 1000, easing: Easing.cubic }),
-      // Animated.timing(this.rotateValue, { toValue: 1, duration: 1000, easing: Easing.cubic }),
-      // Animated.timing(this.rotateValue, { toValue: 1.1, duration: 1000, easing: Easing.cubic }),
-      // Animated.timing(this.rotateValue, { toValue: 1.2, duration: 1000, easing: Easing.cubic }),
-      //
-      //
-      //
+        }
+      ),
+      Animated.timing(
+        this.rotateValue,
+        {
+          toValue: .2,
+          duration: 1000,
+          easing: Easing.cubic
+        }
+      ),
+      Animated.timing(
+        this.rotateValue,
+        {
+          toValue: .3,
+          duration: 1000,
+          easing: Easing.cubic
+        }
+      ),
+      Animated.timing(
+        this.rotateValue,
+        {
+          toValue: .4,
+          duration: 1000,
+          easing: Easing.cubic
+        }
+      ),
+      Animated.timing(
+        this.rotateValue,
+        {
+          toValue: .5,
+          duration: 1000,
+          easing: Easing.cubic
+        }
+      ),
+      Animated.timing(
+        this.rotateValue,
+        {
+          toValue: .6,
+          duration: 1000,
+          easing: Easing.cubic
+        }
+      ),
+      Animated.timing(this.rotateValue, { toValue: .7, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: .8, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: .9, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: 1, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: 1.1, duration: 1000, easing: Easing.cubic }),
+      Animated.timing(this.rotateValue, { toValue: 1.2, duration: 1000, easing: Easing.cubic }),
 
-    // ]).start();
+
+
+
+    ]).start();
   }
 
 
   render() {
 
     const rotation = this.rotateValue.interpolate({
-      inputRange: [0, .1], //1.2
-      outputRange: ['0deg', '15deg']
+      inputRange: [0, 1.2],
+      outputRange: ['0deg', '360deg']
     });
 
     return (

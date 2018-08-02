@@ -134,7 +134,7 @@ export default class RegistrationScreen extends Component {
           this.makeModalBlack();
           resolve(this.props.screenProps.lastClick);
         }
-      }, 100);
+      }, 10);
       this.timeout = setTimeout(() => {
         clearInterval(this.listening);
         reject('No click detected')
