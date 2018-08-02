@@ -32,7 +32,7 @@ const realms = [
   {
     name: 'DESPAIR',
     color: '#292929',
-    isClaimed: true,
+    isClaimed: false,
     peripheralId: null,
     position: {left: 70, top: 30}
   },

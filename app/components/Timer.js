@@ -126,9 +126,9 @@ const styles = StyleSheet.create({
     width: 259.808,
     height: 150,
     borderStyle: 'solid',
-    borderRightColor: 'black',
+    borderRightColor: 'darkgray',
     borderRightWidth: 1,
-    borderLeftColor: 'black',
+    borderLeftColor: 'darkgray',
     borderLeftWidth: 1,
   },
   two: {

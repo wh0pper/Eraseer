@@ -201,6 +201,6 @@ const NavigationStack = createStackNavigator({
   {
     headerMode: 'none',
     gesturesEnabled: true,
-    initialRouteName: 'registration'
+    initialRouteName: 'scan'
   }
 );

@@ -20,25 +20,27 @@ export default class ScoreScreen extends Component {
   constructor(props) {
 
     super(props);
-    let players = this.props.navigation.getParam('players') || []
-  //   [ { name: 'DESPAIR',
-  //   color: '#292929',
-  //   peripheralId: '53C81C33-9350-FBC5-4AD7-07D9A006026D',
-  //   click: 1533238910047,
-  //   points: 3,
-  //   isAlive: false },
-  // { name: 'DECEIT',
-  //   color: '#7C9132',
-  //   peripheralId: '43E09C09-2358-1AEC-F2A8-8E94611DF7F1',
-  //   click: 0,
-  //   points: 0,
-  //   isAlive: false },
-  // { name: 'INDIFFERENCE',
-  //   color: '#5386AD',
-  //   peripheralId: '85428B3B-E3A9-FC77-1F67-2BFB064A50E9',
-  //   click: 1533238932396,
-  //   points: 8,
-  //   isAlive: true } ]
+    let players = this.props.navigation.getParam('players') ||
+    [ { name: 'DESPAIR',
+    color: '#292929',
+    peripheralId: '53C81C33-9350-FBC5-4AD7-07D9A006026D',
+    click: 1533238910047,
+    points: 3,
+    isAlive: false },
+  { name: 'DECEIT',
+    color: '#7C9132',
+    peripheralId: '43E09C09-2358-1AEC-F2A8-8E94611DF7F1',
+    click: 0,
+    points: 0,
+    isAlive: false },
+  { name: 'INDIFFERENCE',
+    color: '#5386AD',
+    peripheralId: '85428B3B-E3A9-FC77-1F67-2BFB064A50E9',
+    click: 1533238932396,
+    points: 8,
+    isAlive: true } ]
+
+    players.sort((a,b) => {return b.points - a.points})
 
     this.state = {
       playerList: players,
@@ -47,9 +49,9 @@ export default class ScoreScreen extends Component {
   }
 
   componentDidMount() {
-    let players = this.state.playerList;
-    players.sort((a,b) => {return b.points - a.points});
-    this.setState({players: players});
+    // let players = this.state.playerList;
+    // players.sort((a,b) => {return b.points - a.points});
+    // this.setState({players: players});
   }
 
   resetGame() {
@@ -65,7 +67,7 @@ export default class ScoreScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={{top: -30}}>LAST PLAYER STANDING</Text>
+          <Text style={{marginBottom: 20}}>LAST PLAYER STANDING</Text>
           <PlayerBox
             displayInfo={this.state.playerList.find((p) => p.isAlive == true)}>
           </PlayerBox>
@@ -76,7 +78,7 @@ export default class ScoreScreen extends Component {
             <View style={{height: 375}}>
             <FlatList
                 data={players}
-                // extraData={this.state}
+                extraData={this.state}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({item}) => {
                   return (
@@ -116,11 +118,15 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   header: {
+    // display: 'none',
+    flex: 1,
     alignItems: 'center',
     backgroundColor: '#DFDFDF',
-    marginBottom: 20
+    marginTop: 50,
+    marginBottom: 50
   },
   body: {
+    flex: 5,
     alignItems: 'center',
     backgroundColor: '#DFDFDF',
   },
