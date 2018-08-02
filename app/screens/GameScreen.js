@@ -16,12 +16,11 @@ export default class GameScreen extends Component {
     super(props);
 
     this.state = {
-      playerList: this.props.navigation.getParam('players', []).slice(), //was initialPlayers
+      playerList: this.props.navigation.getParam('players', []), //was initialPlayers
       //remainingPlayers: this.props.navigation.getParam('players', []).slice(),
-      nextRoundReady: false,
       gameWon: false,
       noClickRoundCount: 0,
-      timeRemaining: 10
+      timeRemaining: this.props.navigation.getParam('timeRemaining', 10)
     };
 
   }
@@ -30,6 +29,10 @@ export default class GameScreen extends Component {
     console.log('game component did mount, starting timer');
     console.log('passed params to game screen: ', this.props.navigation.state.params);
     this.startTimer();
+  }
+
+  componentDidUpdate() {
+    console.log('game screen DidUpdate');
   }
 
   startTimer() {
@@ -146,10 +149,8 @@ export default class GameScreen extends Component {
     });
     // if (remainingPlayers.length>1) {
     //   // this.startNewRound();
-    //   this.setState({nextRoundReady: true});
     // } else {
     //   this.setState({
-    //     nextRoundReady: false,
     //     gameWon: true
     //   });
     //   this.props.navigation.state.params.resetPlayers();
@@ -177,22 +178,12 @@ export default class GameScreen extends Component {
   }
 
   render() {
-    let nextRoundButton = null;
-    if (this.state.nextRoundReady) {
-      nextRoundButton =
-      <TouchableOpacity onPress={() => this.startNewRound()}>
-        <Text>Next Round</Text>
-      </TouchableOpacity>
-    }
 
     // //console.log('player list in game screen: ', this.props.navigation.getParam('players','no players'));
     //console.log('player list from state in game: ', this.state.remainingPlayers);
     let displayPlayers = this.state.playerList.filter((p) => p.isAlive);
     return (
       <View style={styles.container}>
-        {/* <TouchableOpacity onPress={() => this.startTimer()}>
-          <Text>Start round</Text>
-        </TouchableOpacity> */}
         <View style={styles.playersContainer}>
           <FlatList
               data={displayPlayers}
@@ -214,9 +205,10 @@ export default class GameScreen extends Component {
             <Timer seconds={this.state.timeRemaining}/>
           </View>
           <View style={styles.afterContainer}>
-
+            <TouchableOpacity onPress={() => this.startTimer()}>
+              <Text>Start round</Text>
+            </TouchableOpacity>
           </View>
-          {/* {nextRoundButton} */}
       </View>
     );
   }
@@ -228,7 +220,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#DFDFDF',
     padding: 20
   },
   playersContainer: {

@@ -81,7 +81,11 @@ export default class RegistrationScreen extends Component {
 
   componentDidMount() {
     console.log('Registration screen mounted, playerList:', this.state.playerList);
+    this.props.navigation.addListener('willFocus', this.componentDidFocus);
+  }
 
+  componentDidFocus() {
+    console.log('registration screen did focus');
   }
 
   async registerPlayer(selectedBox) {
