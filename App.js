@@ -9,6 +9,9 @@ import {
 
 import { createStackNavigator } from 'react-navigation';
 
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
+
 import GameScreen from './app/screens/GameScreen';
 import RegistrationScreen from './app/screens/RegistrationScreen';
 import ScoreScreen from './app/screens/ScoreScreen';
@@ -166,6 +169,9 @@ export default class App extends Component<Props> {
 
   render() {
     return (
+      // <GestureRecognizer
+      //   onSwipeRight={(state) => console.log('swipe right')}>
+
         <NavigationStack screenProps={{
           deviceList: this.state.subscribedDevices,
           startScan: () => this.startScan(),
@@ -173,6 +179,7 @@ export default class App extends Component<Props> {
           lastClick: this.state.lastClick,
           stopScan: () => this.stopScan()
         }}/>
+      // </GestureRecognizer>
     );
   }
 }

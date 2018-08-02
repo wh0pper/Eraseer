@@ -11,7 +11,6 @@ import {
 import PlayerBox from '../components/PlayerBox';
 import RealmHex from '../components/RealmHex';
 
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 async function sleep(time) {
   return new Promise(resolve => {
@@ -200,8 +199,8 @@ export default class RegistrationScreen extends Component {
     });
 
     return (
-      <PanGestureHandler
-        onGestureEvent={console.log('pan gesture')}>
+      // <PanGestureHandler
+      //   onGestureEvent={console.log('pan gesture')}>
       <View style={styles.container}>
         {/* <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
           <Text>{this.state.isScanning ? "Stop" : "Scan"}</Text>
@@ -222,7 +221,6 @@ export default class RegistrationScreen extends Component {
           {/* <Text>Swipe right to start.</Text>
           <Text>Swipe left to re-start.</Text> */}
       </View>
-    </PanGestureHandler>
     );
   }
 }

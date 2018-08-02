@@ -5,8 +5,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  // PanGestureHandler
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 // async function sleep(time) {
 //   return new Promise(resolve => {
@@ -34,30 +36,65 @@ export default class ScanScreen extends Component {
   //   this.setState
   // }
 
+  onSwipeLeft(gestureState) {
+    console.log('left swipe');
+    this.props.navigation.navigate('registration')
+  }
+
+  // onSwipe(gestureName, gestureState) {
+  //   const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+  //   this.setState({gestureName: gestureName});
+  //   switch (gestureName) {
+  //     case SWIPE_UP:
+  //       console.log({backgroundColor: 'red'});
+  //       break;
+  //     case SWIPE_DOWN:
+  //       console.log({backgroundColor: 'green'});
+  //       break;
+  //     case SWIPE_LEFT:
+  //       console.log({backgroundColor: 'blue'});
+  //       break;
+  //     case SWIPE_RIGHT:
+  //       console.log({backgroundColor: 'yellow'});
+  //       break;
+  //   }
+  // }
+
   render() {
+    const config = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    };
 
     return (
-      <View style={styles.container}>
-        {this.props.screenProps.scanState ?
-          <ActivityIndicator/>
-          :
-          <TouchableOpacity onPress={() => this.props.screenProps.startScan()}>
-            <Text>Scan</Text>
-          </TouchableOpacity>
-          }
-        <View style={styles.title}>
-          <Text>{this.state.availableDevices.length} runes connected</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            this.props.navigation.navigate('registration');
+      <GestureRecognizer
+        config={config}
+        // onSwipe={(direction, state) => this.onSwipe(direction, state)}
+        onSwipeLeft={(state)=> this.onSwipeLeft(state)}
+        style={{flex: 1}}
+        >
+        <View style={styles.container}>
+          {this.props.screenProps.scanState ?
+            <ActivityIndicator/>
+            :
+            <TouchableOpacity onPress={() => this.props.screenProps.startScan()}>
+              <Text>Scan</Text>
+            </TouchableOpacity>
             }
-          }>
-          <Text>Continue</Text>
-        </TouchableOpacity>
+          <View style={styles.title}>
+            <Text>{this.state.availableDevices.length} runes connected</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              this.props.navigation.navigate('registration');
+              }
+            }>
+            <Text>Continue</Text>
+          </TouchableOpacity>
 
-      </View>
+        </View>
+      </GestureRecognizer>
     );
   }
 }
