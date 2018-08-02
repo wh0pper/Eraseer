@@ -39,7 +39,9 @@ const styles = StyleSheet.create({
   container: {
     width: 69.3,
     height: 80,
-    margin: 20,
+    // margin: 20,
+    top: -20,
+    // left: 24,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'

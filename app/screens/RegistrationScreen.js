@@ -32,7 +32,7 @@ const realms = [
   {
     name: 'DESPAIR',
     color: '#292929',
-    isClaimed: false,
+    isClaimed: true,
     peripheralId: null,
     position: {left: 70, top: 30}
   },
@@ -83,8 +83,8 @@ export default class RegistrationScreen extends Component {
     console.log('Registration screen mounted, playerList:', this.state.playerList);
     // this.setState({newGame: true});
     let realms = this.state.realmList;
-    realms.forEach((r) => r.isClaimed = false);
-    this.setState({realmList: realms});
+    // realms.forEach((r) => r.isClaimed = false);
+    // this.setState({realmList: realms});
     this.props.navigation.addListener('willFocus', this.componentDidFocus);
   }
 
