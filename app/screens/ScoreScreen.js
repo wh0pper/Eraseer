@@ -60,39 +60,43 @@ export default class ScoreScreen extends Component {
   }
 
   render() {
+    let players = this.state.playerList;
 
     return (
       <View style={styles.container}>
-        <View> */}
-          {/* <Text>LAST PLAYER STANDING</Text>
-          <PlayerBox displayInfo={this.state.playerList.find((p) => p.isAlive == true)}></PlayerBox> */}
-        {/* </View>
-        <View style={styles.list}>
-          {/* <Text>OVERSEER RANKING</Text> */}
-          <FlatList
-              data={this.state.playerList}
-              extraData={this.state}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => {
-                return (
-                  <View style={styles.columnContainer}>
-                    <View style={styles.hexColumn}>
-                      <PlayerBox displayInfo={item}></PlayerBox>
-                      {/* <Text>{item.name}</Text> */}
+        <View style={styles.header}>
+          <Text style={{top: -30}}>LAST PLAYER STANDING</Text>
+          <PlayerBox
+            displayInfo={this.state.playerList.find((p) => p.isAlive == true)}>
+          </PlayerBox>
+        </View>
+        <View style={styles.body}>
+          <Text>OVERSEER RANKINGS</Text>
+          <View style={styles.rankingsContainer}>
+            <View style={{height: 375}}>
+            <FlatList
+                data={players}
+                // extraData={this.state}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item}) => {
+                  return (
+                    <View style={styles.playerInfo}>
+                      <View style={styles.box}><PlayerBox displayInfo={item}></PlayerBox></View>
+                      <View style={styles.name}>
+                        <Text>{item.name} - </Text><Text>{item.points}</Text>
+                      </View>
                     </View>
-                    <View style={styles.pointColumn}>
-                      <Text>{item.points}</Text>
-                    </View>
-                  </View>
-                );
-              }}
-            />
+                  );
+                }}
+              />
+            </View>
+            </View>
             <TouchableOpacity
               onPress={() => this.resetGame()}
               >
               <Text>New Match</Text>
             </TouchableOpacity>
-          </View>
+        </View>
       </View>
     );
   }
@@ -107,18 +111,40 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFDFDF',
     // padding: 20
   },
-  list: {
+  rankingsContainer: {
+    // flexDirection: 'row',
     alignItems: 'center'
   },
-  // columnContainer: {
-  //   flex:1,
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  // },
-  // hexColumn: {
-  //
-  // },
-  // pointColumn: {
-  //
-  // }
+  header: {
+    alignItems: 'center',
+    backgroundColor: '#DFDFDF',
+    marginBottom: 20
+  },
+  body: {
+    alignItems: 'center',
+    backgroundColor: '#DFDFDF',
+  },
+  playerInfo: {
+    flexDirection: 'row',
+    margin: 10
+  },
+  box: {
+    top: 20,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  name: {
+    // flexGrow: 1,
+    left: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  score: {
+    // flexDirection: 'column',
+    right: 5,
+    // justifyContent: 'flex-end',
+    // alignItems: 'flex-end'
+    // alignSelf: 'flex-end'
+  }
 });

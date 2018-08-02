@@ -19,7 +19,7 @@ export default class PlayerBox extends Component {
   render() {
 
     return (
-      <View>
+      <View style={styles.container}>
         { this.props.displayInfo && this.props.displayInfo.isClaimed ?
           <ClaimedHexView color={this.props.displayInfo.color || 'red'}>
             <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
@@ -34,10 +34,10 @@ export default class PlayerBox extends Component {
   }
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     width: 100,
-//     height: 100,
-//     marginBottom: 10,
-//   }
-// });
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});

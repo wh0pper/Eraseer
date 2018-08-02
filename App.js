@@ -4,6 +4,7 @@ import {
   NativeAppEventEmitter,
   NativeModules,
   NativeEventEmitter,
+  PermissionsAndroid
 } from 'react-native';
 
 import { createStackNavigator } from 'react-navigation';

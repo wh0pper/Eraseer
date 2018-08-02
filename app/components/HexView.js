@@ -21,20 +21,26 @@ export default class HexView extends Component {
 
 
     return (
-      <View style={[styles.hexagon]}>
-        <View style={[styles.hexagonInner, {backgroundColor: this.props.color}]} />
-        <View style={[styles.hexagonBefore, {borderBottomColor: this.props.color}]} />
-        <View style={[styles.hexagonAfter, {borderTopColor: this.props.color}]} />
+      <View style={styles.container}>
+        <View style={[styles.hexagon]}>
+          <View style={[styles.hexagonInner, {backgroundColor: this.props.color}]} />
+          <View style={[styles.hexagonBefore, {borderBottomColor: this.props.color}]} />
+          <View style={[styles.hexagonAfter, {borderTopColor: this.props.color}]} />
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
   hexagon: {
     width: 69.3,
     height: 80,
-    margin: 20
+    // margin: 20
   },
   hexagonInner: {
     width: 69.3,
