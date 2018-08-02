@@ -28,12 +28,17 @@ export default class GameScreen extends Component {
   componentDidMount() {
     console.log('game component did mount, starting timer');
     console.log('passed params to game screen: ', this.props.navigation.state.params);
+    this.props.navigation.addListener('willFocus', this.componentWillFocus.bind(this));
     this.startTimer();
   }
 
-  componentDidUpdate() {
-    console.log('game screen DidUpdate');
+  componentWillFocus() {
+    console.log('game screen will focus');
+    this.setState({timeRemaining: 10});
+    //put back later, easier to flow through while debugging w/o this.startTimer();
   }
+
+
 
   startTimer() {
     let startTime = Date.now();

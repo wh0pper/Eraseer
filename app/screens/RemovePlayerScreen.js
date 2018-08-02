@@ -38,7 +38,7 @@ export default class RemovePlayerScreen extends Component {
 
   nextScreen() {
     let remainingPlayers = this.state.playerList.filter((p) => p.isAlive);
-    if (remainingPlayers == 1) {
+    if (remainingPlayers.length == 1) {
       this.props.navigation.navigate('score', {players: this.state.playerList});
     } else {
       this.props.navigation.navigate('game', {timeRemaining: 10});
