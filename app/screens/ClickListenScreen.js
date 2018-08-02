@@ -70,13 +70,13 @@ export default class ClickListenScreen extends Component {
     return (
       <Animated.View style={[styles.container, {backgroundColor: backgroundColor}]}>
         <Animated.Text style={[styles.text, {color: textColor}]}>{`YOU ARE CLAIMING\n THE WORLD OF ${this.props.navigation.getParam('realm').name}`}</Animated.Text>
-        <Animated.Text style={[styles.text, {color: textColor}]}>{`TAP YOUR RUNE AND THE WORLD\n WILL TURN BLACK WHEN READY.`}</Animated.Text>
-        <TouchableHighlight
+        <Animated.Text style={[styles.text, {color: textColor}]}>{`TAP YOUR RUNE TO CLAIM.`}</Animated.Text>
+        {/* <TouchableHighlight
           onPress={() => {
             this.props.hide()
           }}>
           <Animated.Text style={{color: textColor}}>back</Animated.Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
         {/* <TouchableHighlight
           onPress={() => {
             this.makeBlack()

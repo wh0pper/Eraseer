@@ -35,6 +35,7 @@ export default class GameScreen extends Component {
   componentWillFocus() {
     console.log('game screen will focus');
     this.setState({timeRemaining: 10});
+    this.startTimer();
     //put back later, easier to flow through while debugging w/o this.startTimer();
   }
 
@@ -210,9 +211,9 @@ export default class GameScreen extends Component {
             <Timer seconds={this.state.timeRemaining}/>
           </View>
           <View style={styles.afterContainer}>
-            <TouchableOpacity onPress={() => this.startTimer()}>
+            {/* <TouchableOpacity onPress={() => this.startTimer()}>
               <Text>Start round</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
       </View>
     );

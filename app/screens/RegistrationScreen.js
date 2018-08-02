@@ -11,13 +11,15 @@ import {
 import PlayerBox from '../components/PlayerBox';
 import RealmHex from '../components/RealmHex';
 
-// async function sleep(time) {
-//   return new Promise(resolve => {
-//     setTimeout(() => {
-//       resolve('resolved');
-//     }, time);
-//   });
-// }
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+
+async function sleep(time) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, time);
+  });
+}
 
 const realms = [
   {
@@ -97,8 +99,10 @@ export default class RegistrationScreen extends Component {
     this.props.navigation.navigate('warning', {realm: selectedBox});
       // mode: 'modal'
     // });
+    await sleep(2000);
     this.listenForClick(startTime)
       .then((clickData) => {
+        console.log('listen for click then');
         this.markRealmClaimed(selectedBox);
         this.props.navigation.navigate('confirm');
         let newPlayer = {
@@ -124,7 +128,7 @@ export default class RegistrationScreen extends Component {
   }
 
   async listenForClick(startTime) {
-    //console.log('Listening for registration click w startTime: ', startTime);
+    console.log('Listening for registration click w startTime: ', startTime);
     // this.listening;
     return new Promise((resolve, reject) => {
       this.listening = setInterval(() => {
@@ -196,6 +200,8 @@ export default class RegistrationScreen extends Component {
     });
 
     return (
+      <PanGestureHandler
+        onGestureEvent={console.log('pan gesture')}>
       <View style={styles.container}>
         {/* <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
           <Text>{this.state.isScanning ? "Stop" : "Scan"}</Text>
@@ -216,6 +222,7 @@ export default class RegistrationScreen extends Component {
           {/* <Text>Swipe right to start.</Text>
           <Text>Swipe left to re-start.</Text> */}
       </View>
+    </PanGestureHandler>
     );
   }
 }

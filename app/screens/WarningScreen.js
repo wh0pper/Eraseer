@@ -34,7 +34,7 @@ export default class WarningScreen extends Component {
 
   async queueNextScreen() {
     console.log('realm to warning: ', this.props.navigation.getParam('realm'));
-    await sleep(2000);
+    await sleep(1200);
     console.log('moving to click listen screen');
     this.props.navigation.navigate('click', {realm: this.props.navigation.getParam('realm')});
   }
