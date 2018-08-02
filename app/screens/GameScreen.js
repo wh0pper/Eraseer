@@ -28,15 +28,19 @@ export default class GameScreen extends Component {
   componentDidMount() {
     console.log('game component did mount, starting timer');
     console.log('passed params to game screen: ', this.props.navigation.state.params);
-    this.props.navigation.addListener('willFocus', this.componentWillFocus.bind(this));
-    this.startTimer();
+    this.focusListener = this.props.navigation.addListener('willFocus', this.componentWillFocus.bind(this));
+    // this.startTimer();
   }
 
   componentWillFocus() {
     console.log('game screen will focus');
     this.setState({timeRemaining: 10});
-    this.startTimer();
+    // this.startTimer();
     //put back later, easier to flow through while debugging w/o this.startTimer();
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
   }
 
 
@@ -100,7 +104,7 @@ export default class GameScreen extends Component {
     let removePlayer;
     let allPlayers = this.state.playerList;
     let remainingPlayers = this.state.playerList.filter((p) => p.isAlive == true);
-    console.log('Scoring, remaining players before scoring: ', remainingPlayers);
+    // console.log('remaining players before scoring: ', remainingPlayers);
     //determine elimination
     let clickers = remainingPlayers.filter((p) => p !== undefined && p.click > startTime);
     clickers.sort((a,b) => {return a.click-b.click});
@@ -148,26 +152,15 @@ export default class GameScreen extends Component {
         //go to game over screen
       }
     }
+    // console.log('removed player sent to remove screen', removePlayer);
     this.props.navigation.navigate('remove', {
       removedPlayer: removePlayer,
       players: this.state.playerList,
       // resetPlayers: this.props.navigation.getParam('resetPlayers')
     });
-    // if (remainingPlayers.length>1) {
-    //   // this.startNewRound();
-    // } else {
-    //   this.setState({
-    //     gameWon: true
-    //   });
-    //   this.props.navigation.state.params.resetPlayers();
-    //   this.props.navigation.navigate('score', {
-    //     players: this.state.playerList,
-    //     // resetPlayers: this.props.navigation.getParam('resetPlayers')
-    //   });
     console.log('Player list at end of round: ', this.state.playerList);
+    // console.log('remaining players list at end of round', remainingPlayers);
     }
-
-
 
   calcScores() {
 
@@ -211,9 +204,9 @@ export default class GameScreen extends Component {
             <Timer seconds={this.state.timeRemaining}/>
           </View>
           <View style={styles.afterContainer}>
-            {/* <TouchableOpacity onPress={() => this.startTimer()}>
+            <TouchableOpacity onPress={() => this.startTimer()}>
               <Text>Start round</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
       </View>
     );
