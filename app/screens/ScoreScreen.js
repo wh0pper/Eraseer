@@ -20,9 +20,28 @@ export default class ScoreScreen extends Component {
   constructor(props) {
 
     super(props);
+    let players = this.props.navigation.getParam('players') ||
+    [ { name: 'DESPAIR',
+    color: '#292929',
+    peripheralId: '53C81C33-9350-FBC5-4AD7-07D9A006026D',
+    click: 1533238910047,
+    points: 3,
+    isAlive: false },
+  { name: 'DECEIT',
+    color: '#7C9132',
+    peripheralId: '43E09C09-2358-1AEC-F2A8-8E94611DF7F1',
+    click: 0,
+    points: 0,
+    isAlive: false },
+  { name: 'INDIFFERENCE',
+    color: '#5386AD',
+    peripheralId: '85428B3B-E3A9-FC77-1F67-2BFB064A50E9',
+    click: 1533238932396,
+    points: 8,
+    isAlive: true } ]
 
     this.state = {
-      playerList: this.props.navigation.getParam('players', []),
+      playerList: players,
     };
 
   }
@@ -44,31 +63,36 @@ export default class ScoreScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Last player standing:</Text>
-        <PlayerBox displayInfo={this.state.playerList.find((p) => p.isAlive == true)}></PlayerBox>
-        <Text>Point Totals:</Text>
-        <FlatList
-            data={this.state.playerList}
-            extraData={this.state}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => {
-              return (
-                <View style={styles.columnContainer}>
-                  <View style={styles.hexColumn}>
-                    <PlayerBox displayInfo={item}></PlayerBox>
+        {/* <View> */}
+          {/* <Text>LAST PLAYER STANDING</Text>
+          <PlayerBox displayInfo={this.state.playerList.find((p) => p.isAlive == true)}></PlayerBox> */}
+        {/* </View> */}
+        <View style={styles.list}>
+          {/* <Text>OVERSEER RANKING</Text> */}
+          <FlatList
+              data={this.state.playerList}
+              extraData={this.state}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => {
+                return (
+                  <View style={styles.columnContainer}>
+                    <View style={styles.hexColumn}>
+                      <PlayerBox displayInfo={item}></PlayerBox>
+                      {/* <Text>{item.name}</Text> */}
+                    </View>
+                    <View style={styles.pointColumn}>
+                      <Text>{item.points}</Text>
+                    </View>
                   </View>
-                  <View style={styles.pointColumn}>
-                    <Text>{item.points}</Text>
-                  </View>
-                </View>
-              );
-            }}
-          />
-          <TouchableOpacity
-            onPress={() => this.resetGame()}
-            >
-            <Text>New Match</Text>
-          </TouchableOpacity>
+                );
+              }}
+            />
+            <TouchableOpacity
+              onPress={() => this.resetGame()}
+              >
+              <Text>New Match</Text>
+            </TouchableOpacity>
+          </View>
       </View>
     );
   }
@@ -81,17 +105,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#DFDFDF',
-    padding: 20
+    // padding: 20
   },
-  columnContainer: {
-    flex:1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  hexColumn: {
-
-  },
-  pointColumn: {
-
-  }
+  // list: {
+  //   alignSelf: 'center'
+  // }
+  // columnContainer: {
+  //   flex:1,
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  // },
+  // hexColumn: {
+  //
+  // },
+  // pointColumn: {
+  //
+  // }
 });

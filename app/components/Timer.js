@@ -21,66 +21,66 @@ export default class Timer extends Component {
   }
 
   startRotation() {
-    Animated.sequence([
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .1,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .2,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .3,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .4,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .5,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(
-        this.rotateValue,
-        {
-          toValue: .6,
-          duration: 1000,
-          easing: Easing.cubic
-        }
-      ),
-      Animated.timing(this.rotateValue, { toValue: .7, duration: 1000, easing: Easing.cubic }),
-      Animated.timing(this.rotateValue, { toValue: .8, duration: 1000, easing: Easing.cubic }),
-      Animated.timing(this.rotateValue, { toValue: .9, duration: 1000, easing: Easing.cubic }),
-      Animated.timing(this.rotateValue, { toValue: 1, duration: 1000, easing: Easing.cubic }),
-      Animated.timing(this.rotateValue, { toValue: 1.1, duration: 1000, easing: Easing.cubic }),
-      Animated.timing(this.rotateValue, { toValue: 1.2, duration: 1000, easing: Easing.cubic }),
-
-
-
-
-    ]).start();
+    // Animated.sequence([
+    //   Animated.timing(
+    //     this.rotateValue,
+    //     {
+    //       toValue: .1,
+    //       duration: 1000,
+    //       easing: Easing.cubic
+    //     }
+    //   ),
+    //   Animated.timing(
+    //     this.rotateValue,
+    //     {
+    //       toValue: .2,
+    //       duration: 1000,
+    //       easing: Easing.cubic
+    //     }
+    //   ),
+    //   Animated.timing(
+    //     this.rotateValue,
+    //     {
+    //       toValue: .3,
+    //       duration: 1000,
+    //       easing: Easing.cubic
+    //     }
+    //   ),
+    //   Animated.timing(
+    //     this.rotateValue,
+    //     {
+    //       toValue: .4,
+    //       duration: 1000,
+    //       easing: Easing.cubic
+    //     }
+    //   ),
+    //   Animated.timing(
+    //     this.rotateValue,
+    //     {
+    //       toValue: .5,
+    //       duration: 1000,
+    //       easing: Easing.cubic
+    //     }
+    //   ),
+    //   Animated.timing(
+    //     this.rotateValue,
+    //     {
+    //       toValue: .6,
+    //       duration: 1000,
+    //       easing: Easing.cubic
+    //     }
+    //   ),
+    //   Animated.timing(this.rotateValue, { toValue: .7, duration: 1000, easing: Easing.cubic }),
+    //   Animated.timing(this.rotateValue, { toValue: .8, duration: 1000, easing: Easing.cubic }),
+    //   Animated.timing(this.rotateValue, { toValue: .9, duration: 1000, easing: Easing.cubic }),
+    //   Animated.timing(this.rotateValue, { toValue: 1, duration: 1000, easing: Easing.cubic }),
+    //   Animated.timing(this.rotateValue, { toValue: 1.1, duration: 1000, easing: Easing.cubic }),
+    //   Animated.timing(this.rotateValue, { toValue: 1.2, duration: 1000, easing: Easing.cubic }),
+    //
+    //
+    //
+    //
+    // ]).start();
   }
 
 

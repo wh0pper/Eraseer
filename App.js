@@ -65,6 +65,22 @@ export default class App extends Component<Props> {
     this.disconnectHandler = BleManagerEmitter.addListener('BleManagerDisconnectPeripheral', this.handleDisconnect );
     this.startScan(); //needs to be async, sleep to delay auto start of scan, otherwise just won't Work
     console.log('App mounted, scan state: ', this.state.isScanning);
+
+    if (Platform.OS === 'android' && Platform.Version >= 23) {
+    PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
+        if (result) {
+          console.log("Permission is OK");
+        } else {
+          PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
+            if (result) {
+              console.log("User accept");
+            } else {
+              console.log("User refuse");
+            }
+          });
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -182,6 +198,6 @@ const NavigationStack = createStackNavigator({
   {
     headerMode: 'none',
     gesturesEnabled: true,
-    initialRouteName: 'scan'
+    initialRouteName: 'score'
   }
 );
