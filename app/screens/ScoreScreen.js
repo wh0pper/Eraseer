@@ -63,10 +63,10 @@ export default class ScoreScreen extends Component {
 
     return (
       <View style={styles.container}>
-        {/* <View> */}
+        <View> */}
           {/* <Text>LAST PLAYER STANDING</Text>
           <PlayerBox displayInfo={this.state.playerList.find((p) => p.isAlive == true)}></PlayerBox> */}
-        {/* </View> */}
+        {/* </View>
         <View style={styles.list}>
           {/* <Text>OVERSEER RANKING</Text> */}
           <FlatList
@@ -103,13 +103,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: '#DFDFDF',
     // padding: 20
   },
-  // list: {
-  //   alignSelf: 'center'
-  // }
+  list: {
+    alignItems: 'center'
+  },
   // columnContainer: {
   //   flex:1,
   //   flexDirection: 'row',
