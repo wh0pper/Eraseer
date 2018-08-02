@@ -70,25 +70,29 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   rowOne: {
-    flex: .5,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
   rowTwo: {
-    flex: 2,
+    flex: 4,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: 15,
+    paddingRight: 15,
     alignItems: 'center'
   },
   rowThree: {
-    flex: 2,
+    flex: 4,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: 15,
+    paddingRight: 15,
     alignItems: 'center'
   },
   rowFour: {
-    flex: .5,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'

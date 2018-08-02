@@ -20,25 +20,25 @@ export default class ScoreScreen extends Component {
   constructor(props) {
 
     super(props);
-    let players = this.props.navigation.getParam('players') ||
-    [ { name: 'DESPAIR',
-    color: '#292929',
-    peripheralId: '53C81C33-9350-FBC5-4AD7-07D9A006026D',
-    click: 1533238910047,
-    points: 3,
-    isAlive: false },
-  { name: 'DECEIT',
-    color: '#7C9132',
-    peripheralId: '43E09C09-2358-1AEC-F2A8-8E94611DF7F1',
-    click: 0,
-    points: 0,
-    isAlive: false },
-  { name: 'INDIFFERENCE',
-    color: '#5386AD',
-    peripheralId: '85428B3B-E3A9-FC77-1F67-2BFB064A50E9',
-    click: 1533238932396,
-    points: 8,
-    isAlive: true } ]
+    let players = this.props.navigation.getParam('players') || []
+  //   [ { name: 'DESPAIR',
+  //   color: '#292929',
+  //   peripheralId: '53C81C33-9350-FBC5-4AD7-07D9A006026D',
+  //   click: 1533238910047,
+  //   points: 3,
+  //   isAlive: false },
+  // { name: 'DECEIT',
+  //   color: '#7C9132',
+  //   peripheralId: '43E09C09-2358-1AEC-F2A8-8E94611DF7F1',
+  //   click: 0,
+  //   points: 0,
+  //   isAlive: false },
+  // { name: 'INDIFFERENCE',
+  //   color: '#5386AD',
+  //   peripheralId: '85428B3B-E3A9-FC77-1F67-2BFB064A50E9',
+  //   click: 1533238932396,
+  //   points: 8,
+  //   isAlive: true } ]
 
     this.state = {
       playerList: players,
