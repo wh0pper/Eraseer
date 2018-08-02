@@ -9,6 +9,12 @@ import {
 } from 'react-native';
 import PlayerBox from '../components/PlayerBox';
 import Timer from '../components/Timer';
+import { StackActions, NavigationActions } from 'react-navigation';
+
+const navigateToNewGame = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({routeName: 'registration'})]
+});
 
 export default class ScoreScreen extends Component {
   constructor(props) {
@@ -30,7 +36,8 @@ export default class ScoreScreen extends Component {
   resetGame() {
     let players = this.state.playerList;
     players.forEach((player) => player = {} );
-    this.props.navigation.navigate('registration');
+    this.props.navigation.dispatch(navigateToNewGame);
+    // this.props.navigation.navigate('registration');
   }
 
   render() {

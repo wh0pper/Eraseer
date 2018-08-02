@@ -82,6 +82,9 @@ export default class RegistrationScreen extends Component {
   componentDidMount() {
     console.log('Registration screen mounted, playerList:', this.state.playerList);
     // this.setState({newGame: true});
+    let realms = this.state.realmList;
+    realms.forEach((r) => r.isClaimed = false);
+    this.setState({realmList: realms});
     this.props.navigation.addListener('willFocus', this.componentDidFocus);
   }
 
