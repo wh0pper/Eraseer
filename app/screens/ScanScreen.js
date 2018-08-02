@@ -5,8 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  FlatList,
-  Animated
+  ActivityIndicator
 } from 'react-native';
 
 async function sleep(time) {
@@ -35,11 +34,10 @@ export default class ScanScreen extends Component {
 
     return (
       <View style={styles.container}>
+        {this.props.screenProps.scanState ? <ActivityIndicator/> : <Text>Scan completed</Text>}
         <View style={styles.title}>
-          <Text>{this.props.screenProps.scanState ? 'Scanning' : 'Scan completed'}</Text>
           <Text>{this.state.availableDevices.length} runes connected</Text>
         </View>
-        <Text>Swipe left to continue when all runes are connected.</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
@@ -58,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#DFDFDF',
     // padding: 20

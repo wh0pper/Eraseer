@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import {
   Platform,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
   NativeAppEventEmitter,
   NativeModules,
   NativeEventEmitter,
@@ -30,7 +25,7 @@ const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 // const ITAG_SERVICE = "0000ffe0-0000-1000-8000-00805f9b34fb";
 // const ITAG_CHARACTERISTIC = "0000ffe1-0000-1000-8000-00805f9b34fb";
 
-const SCAN_TIME = 120;
+const SCAN_TIME = 60;
 
 const ITAG_SERVICE = "ffe0";
 const ITAG_CHARACTERISTIC = "ffe1";
@@ -143,45 +138,22 @@ export default class App extends Component<Props> {
         time: recievedTime
       }
     })
-    // let players = this.state.playerList;
-    // let updatePlayer = players.find((player, index) => player.peripheralId == data.peripheral);
-    // updatePlayer.clickTime = recievedTime;
-    // let updateIndex = players.indexOf(updatePlayer);
-    // players[updateIndex] = updatePlayer;
-    // this.setState({playerList: players});
   }
 
   handleDisconnect(data) {
-    //console.log('Peripheral initiated a disconnect: ', data);
-    // let players = this.state.playerList;
-    // let removePlayer = players.find((player) => player.peripheralId == data.peripheral);
-    // if (removePlayer) {
-    //   //console.log('Removing player from game: ', removePlayer);
-    //   let removeIndex = players.indexOf(removePlayer);
-    //   players.splice(removeIndex, 1);
-    //   delete removePlayer.peripheralId;
-    //   delete removePlayer.clickCount;
-    //   playerBank.push(removePlayer);
-    //   this.setState({playerList: players});
-    // } else {
-    //   //console.log('Error removing player from game');
-    // }
+    console.log('Peripheral initiated a disconnect: ', data);
   }
 
 
   render() {
     return (
-      // <View style={styles.container}>
         <NavigationStack screenProps={{
           deviceList: this.state.subscribedDevices,
           startScan: () => this.startScan(),
           scanState: this.state.isScanning,
-          // clickHandler: () => this.subscriptionHandler,
-          // eventEmitter: BleManagerEmitter,
           lastClick: this.state.lastClick,
           stopScan: () => this.stopScan()
         }}/>
-      // </View>
     );
   }
 }
@@ -212,14 +184,3 @@ const NavigationStack = createStackNavigator({
     initialRouteName: 'scan'
   }
 );
-
-const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   flexDirection: 'column',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: '#F5FCFF',
-  //   padding: 20
-  // }
-});
