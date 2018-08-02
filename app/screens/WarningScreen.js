@@ -44,7 +44,7 @@ export default class WarningScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.title}>
-          <Text>All players hold your clicks.</Text>
+          <Text style={{fontSize: 20}}>{`OTHER PLAYERS\n HOLD YOUR CLICKS`}</Text>
         </View>
       </View>
     );

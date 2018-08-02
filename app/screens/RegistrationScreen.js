@@ -5,21 +5,19 @@ import {
   Text,
   View,
   TouchableOpacity,
-  FlatList,
   Animated
 } from 'react-native';
 
-//import RegisterModal from '../components/RegisterModal';
 import PlayerBox from '../components/PlayerBox';
 import RealmHex from '../components/RealmHex';
 
-async function sleep(time) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('resolved');
-    }, time);
-  });
-}
+// async function sleep(time) {
+//   return new Promise(resolve => {
+//     setTimeout(() => {
+//       resolve('resolved');
+//     }, time);
+//   });
+// }
 
 const realms = [
   {
@@ -96,25 +94,31 @@ export default class RegistrationScreen extends Component {
     //console.log('Registering new player');
     let startTime = Date.now();
     console.log('selected box: ', selectedBox);
-    this.props.navigation.navigate('clickStack', {}, {
-      params: {realm: selectedBox}
-    });
-    let peripheralId = await this.listenForClick(startTime)
-      .then(() => {
+    this.props.navigation.navigate('warning', {realm: selectedBox});
+      // mode: 'modal'
+    // });
+    this.listenForClick(startTime)
+      .then((clickData) => {
         this.markRealmClaimed(selectedBox);
         this.props.navigation.navigate('confirm');
         let newPlayer = {
           name: selectedBox.name,
           color: selectedBox.color,
-          peripheralId: this.props.screenProps.lastClick.peripheral,
+          peripheralId: clickData.peripheral,//this.props.screenProps.lastClick.peripheral,
           click: 0,
           points: 0,
           isAlive: true
         }
         let playerList = this.state.playerList;
         playerList.push(newPlayer);
-        this.setState({ playerList: playerList });
-        console.log('Finished registering, updated Player list: ', this.state.playerList);
+        //remove that device from available devices list
+        let availableDevices = this.state.availableDevices;
+        availableDevices.splice(availableDevices.indexOf(this.props.screenProps.lastClick.peripheral),1);
+        this.setState({
+          playerList: playerList,
+          availableDevices: availableDevices
+        });
+        console.log('Finished registering, updated Player and device lists: ', this.state.playerList, this.state.availableDevices);
       })
       .catch(() => {this.props.navigation.navigate('error')});//console.log(e));
   }
@@ -128,7 +132,7 @@ export default class RegistrationScreen extends Component {
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime) {
           this.makeModalBlack();
-          resolve(this.props.screenProps.lastClick.peripheral);
+          resolve(this.props.screenProps.lastClick);
         }
       }, 100);
       this.timeout = setTimeout(() => {
@@ -203,14 +207,12 @@ export default class RegistrationScreen extends Component {
           <RealmHex realms={this.state.realmList} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
           </View>
             <Text>Tap to select your domain.</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              this.startGame();
-              }
-            }>
-            <Text>Start Game</Text>
-          </TouchableOpacity>
+          {(this.state.playerList.length > 1) ?
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => this.startGame() }>
+              <Text>Start Game</Text>
+            </TouchableOpacity> : null }
           {/* <Text>Swipe right to start.</Text>
           <Text>Swipe left to re-start.</Text> */}
       </View>

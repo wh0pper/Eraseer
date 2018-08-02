@@ -1,6 +1,5 @@
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import SmallHexView from './SmallHexView';
 
 export default class SmallPlayerBox extends Component {
@@ -28,11 +27,10 @@ export default class SmallPlayerBox extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-    // transform: [{ rotate: '60deg'}]
-  }
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     width: 100,
+//     height: 100,
+//     marginBottom: 10,
+//   }
+// });

@@ -8,13 +8,13 @@ import {
   ActivityIndicator
 } from 'react-native';
 
-async function sleep(time) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('resolved');
-    }, time);
-  });
-}
+// async function sleep(time) {
+//   return new Promise(resolve => {
+//     setTimeout(() => {
+//       resolve('resolved');
+//     }, time);
+//   });
+// }
 
 export default class ScanScreen extends Component {
   constructor(props) {
@@ -27,14 +27,24 @@ export default class ScanScreen extends Component {
 
   }
 
-  componentDidMount() {
-  }
+  // componentDidMount() {
+  // }
+  //
+  // componentDidUpdate() {
+  //   this.setState
+  // }
 
   render() {
 
     return (
       <View style={styles.container}>
-        {this.props.screenProps.scanState ? <ActivityIndicator/> : <Text>Scan completed</Text>}
+        {this.props.screenProps.scanState ?
+          <ActivityIndicator/>
+          :
+          <TouchableOpacity onPress={() => this.props.screenProps.startScan()}>
+            <Text>Scan</Text>
+          </TouchableOpacity>
+          }
         <View style={styles.title}>
           <Text>{this.state.availableDevices.length} runes connected</Text>
         </View>

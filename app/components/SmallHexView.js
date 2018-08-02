@@ -1,6 +1,5 @@
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 
 
 export default class SmallHexView extends Component {
@@ -16,9 +15,6 @@ export default class SmallHexView extends Component {
   }
 
   render() {
-
-
-
 
     return (
       <View style={[styles.hexagon]}>

@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
+
 import PlayerBox from '../components/PlayerBox';
-import Timer from '../components/Timer';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 const navigateToNewGame = StackActions.reset({
@@ -44,7 +44,6 @@ export default class ScoreScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Score screen</Text>
         <Text>Last player standing:</Text>
         <PlayerBox displayInfo={this.state.playerList.find((p) => p.isAlive == true)}></PlayerBox>
         <Text>Point Totals:</Text>
