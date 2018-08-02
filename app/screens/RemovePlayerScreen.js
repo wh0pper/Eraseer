@@ -46,17 +46,31 @@ export default class RemovePlayerScreen extends Component {
   }
 
   render() {
-
+    let removedPlayer = this.props.navigation.getParam('removedPlayer');
+    let type = typeof removedPlayer;
     return (
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text>{this.props.navigation.getParam('removedPlayer').name} was eliminated.</Text>
-        </View>
-        <PlayerBox displayInfo={this.props.navigation.getParam('removedPlayer')}></PlayerBox>
-        <TouchableOpacity onPress={() => this.nextScreen()}>
-          <Text>Continue</Text>
-        </TouchableOpacity>
-      </View>
+      { (type != 'undefined')  ?
+        <View>
+            <View style={styles.title}>
+              <Text>{removedPlayer.name} was eliminated.</Text>
+            </View>
+            <PlayerBox displayInfo={removedPlayer}></PlayerBox>
+            <TouchableOpacity onPress={() => this.nextScreen()}>
+              <Text>Continue</Text>
+            </TouchableOpacity>
+          </View>
+          :
+          <View>
+            <View style={styles.title}>
+              <Text>No player eliminated.</Text>
+            </View>
+            <TouchableOpacity onPress={() => this.nextScreen()}>
+              <Text>Continue</Text>
+            </TouchableOpacity>
+          </View>
+        }
+    </View>
     );
   }
 }

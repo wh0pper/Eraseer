@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#DFDFDF',
     padding: 20
   },
   columnContainer: {
