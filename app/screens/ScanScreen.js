@@ -61,14 +61,14 @@ export default class ScanScreen extends Component {
   // }
 
   render() {
-    const config = {
+    const gestureConfig = {
       velocityThreshold: 0.3,
       directionalOffsetThreshold: 80
     };
 
     return (
       <GestureRecognizer
-        config={config}
+        config={gestureConfig}
         // onSwipe={(direction, state) => this.onSwipe(direction, state)}
         onSwipeLeft={(state)=> this.onSwipeLeft(state)}
         style={{flex: 1}}

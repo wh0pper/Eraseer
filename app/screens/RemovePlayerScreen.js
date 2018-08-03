@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 import PlayerBox from '../components/PlayerBox';
 import DoubleHexView from '../components/DoubleHexView';
@@ -50,12 +51,22 @@ export default class RemovePlayerScreen extends Component {
   render() {
     let removedPlayer = this.props.navigation.getParam('removedPlayer') || { name: 'NO PLAYER', color: '#afafaf' };
     let type = typeof removedPlayer;
-    return (
 
+    const gestureConfig = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    };
+
+    return (
+      <GestureRecognizer
+        config={gestureConfig}
+        onSwipeLeft={(state)=> this.nextScreen()}
+        style={{flex: 1}}
+        >
       <View style={styles.container}>
         <View style={styles.title}>
           { (type != 'undefined') ?
-            <Text>{removedPlayer.name} WAS ELIMINATED</Text>
+            <Text>THE WORLD OF {removedPlayer.name} HAS BEEN FORGOTTEN</Text>
             :
             <Text>NO PLAYER ELIMINATED</Text> }
         </View>
@@ -78,6 +89,7 @@ export default class RemovePlayerScreen extends Component {
           </TouchableOpacity>
         </View>
       </View>
+    </GestureRecognizer>
     );
   }
 }

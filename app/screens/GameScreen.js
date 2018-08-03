@@ -203,6 +203,7 @@ export default class GameScreen extends Component {
           <View style={styles.timerContainer}>
             <Timer seconds={this.state.timeRemaining}/>
           </View>
+          <Text>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE`}</Text> 
           <View style={styles.afterContainer}>
             <TouchableOpacity onPress={() => this.startTimer()}>
               <Text>Start round</Text>

@@ -8,9 +8,10 @@ import {
   Animated
 } from 'react-native';
 
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
 import PlayerBox from '../components/PlayerBox';
 import RealmHex from '../components/RealmHex';
-
 
 async function sleep(time) {
   return new Promise(resolve => {
@@ -81,10 +82,14 @@ export default class RegistrationScreen extends Component {
   componentDidMount() {
     console.log('Registration screen mounted, playerList:', this.state.playerList);
     // this.setState({newGame: true});
-    let realms = this.state.realmList;
-    // realms.forEach((r) => r.isClaimed = false);
-    // this.setState({realmList: realms});
+    this.resetRegistration();
     this.props.navigation.addListener('willFocus', this.componentDidFocus);
+  }
+
+  resetRegistration() {
+    let realms = this.state.realmList;
+    realms.forEach((r) => r.isClaimed = false);
+    this.setState({realmList: realms});
   }
 
   componentDidFocus() {
@@ -192,35 +197,51 @@ export default class RegistrationScreen extends Component {
     this.setState({playerList: []});
   }
 
+  onSwipeDown() {
+    console.log('right swipe');
+    this.props.navigation.navigate('registration');
+  }
+
+  onSwipeLeft() {
+    console.log('left swipe')
+    if (this.state.playerList.length > 1) {
+      this.startGame();
+    }
+  }
+
   render() {
     let modalBackgroundColor = this.animatedModalColor.interpolate({
       inputRange: [0, 1],
       outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
     });
 
+    const gestureConfig = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    };
+
     return (
-      // <PanGestureHandler
-      //   onGestureEvent={console.log('pan gesture')}>
-      <View style={styles.container}>
-        {/* <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
-          <Text>{this.state.isScanning ? "Stop" : "Scan"}</Text>
-        </TouchableOpacity> */}
-        <View style={styles.title}>
-          <Text>DOMINIONS</Text>
-        </View>
-        <View style={styles.realmContainer}>
-          <RealmHex realms={this.state.realmList} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
+      <GestureRecognizer
+        config={gestureConfig}
+        onSwipeDown={(state) => this.onSwipeDown(state)}
+        onSwipeLeft={(state) => this.onSwipeLeft(state)}
+        style={{flex: 1}}
+        >
+        <View style={styles.container}>
+          {/* <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
+            <Text>{this.state.isScanning ? "Stop" : "Scan"}</Text>
+          </TouchableOpacity> */}
+          <View style={styles.title}>
+            <Text>DOMINIONS</Text>
           </View>
-            <Text>Tap to select your domain.</Text>
-          {(this.state.playerList.length > 1) ?
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.startGame() }>
-              <Text>Start Game</Text>
-            </TouchableOpacity> : null }
-          {/* <Text>Swipe right to start.</Text>
-          <Text>Swipe left to re-start.</Text> */}
-      </View>
+          <View style={styles.realmContainer}>
+            <RealmHex realms={this.state.realmList} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
+            </View>
+            <Text>TAP TO SELECT YOUR DOMINION</Text>
+            <Text>SWIPE DOWN TO RESTART</Text> */}
+            {(this.state.playerList.length > 1) ? <Text>SWIPE LEFT TO START GAME</Text> : null }
+        </View>
+      </GestureRecognizer>
     );
   }
 }

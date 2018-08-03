@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 import PlayerBox from '../components/PlayerBox';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -64,7 +65,17 @@ export default class ScoreScreen extends Component {
   render() {
     let players = this.state.playerList;
 
+    const gestureConfig = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    };
+
     return (
+      <GestureRecognizer
+        config={gestureConfig}
+        onSwipeUp={(state)=> this.resetGame()}
+        style={{flex: 1}}
+        >
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={{marginBottom: 20}}>LAST PLAYER STANDING</Text>
@@ -96,10 +107,11 @@ export default class ScoreScreen extends Component {
             <TouchableOpacity
               onPress={() => this.resetGame()}
               >
-              <Text>New Match</Text>
+              <Text>SWIPE UP FOR NEW MATCH</Text>
             </TouchableOpacity>
         </View>
       </View>
+    </GestureRecognizer>
     );
   }
 }
