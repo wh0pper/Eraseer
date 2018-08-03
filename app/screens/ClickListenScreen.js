@@ -33,18 +33,18 @@ export default class ClickListenScreen extends Component {
 
   componentDidMount() {
     this.confirmationListener = this.props.screenProps.jsEventEmitter.addListener('registrationConfirmed', this.makeBlack.bind(this));
+    console.log('click listen did mount');
+    setTimeout(() => {
+      console.log('click listen timeout');
+      this.props.navigation.navigate('error');
+    }, 7500);
   }
 
   componentWillUnmount() {
-    this.confirmationListener.remove();
+    // this.confirmationListener.remove();
   }
 
-  static getDerivedStateFromProps(props, state) {
-    console.log('click listen screen get derived state');
-    return null;
-  }
-
-  makeBlack() {
+  async makeBlack() {
     console.log('click confirmed for registration');
       // this.animatedColor.setValue(0);
       // Animated.parallel([
@@ -55,6 +55,8 @@ export default class ClickListenScreen extends Component {
             duration: 1000
           }
         ).start();
+        await sleep(1000);
+        this.props.navigation.navigate('registration');
       //   Animated.timing(
       //     this.animatedText,
       //     {
@@ -63,6 +65,7 @@ export default class ClickListenScreen extends Component {
       //     }
       //   ),
       // ]).start();
+
   }
 
   render() {

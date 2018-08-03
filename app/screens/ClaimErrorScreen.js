@@ -5,7 +5,8 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  Animated
+  Animated,
+  Text
 } from 'react-native';
 
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
@@ -45,7 +46,7 @@ export default class ClaimErrorScreen extends Component {
     return (
       <GestureRecognizer
         config={gestureConfig}
-        onSwipeUp={()=> this.props.navigation.navigate('registration')}
+        onSwipeRight={()=> this.props.navigation.navigate('registration')}
         style={{flex: 1}}
         >
         <View style={styles.container}>
@@ -54,6 +55,9 @@ export default class ClaimErrorScreen extends Component {
             onPress={() => this.props.navigation.navigate('registration')}>
             <CustomText>back</CustomText>
           </TouchableOpacity> */}
+          <View style={styles.upArrow}>
+            <Text style={{fontSize: 19, color: '#c1c1c1'}}>Swipe right to try again</Text>
+          </View>
         </View>
       </GestureRecognizer>
     );
@@ -79,5 +83,15 @@ const styles = StyleSheet.create({
   realmContainer: {
     width: 300,
     height: 300
+  },
+  upArrow: {
+    // marginTop: 20,
+    // width: 100,
+    // height: 100,
+    // borderTopColor: 'darkgray',
+    // borderTopWidth: 1,
+    // borderRightColor: 'darkgray',
+    // borderRightWidth: 1,
+    // transform: [{rotate: '-45deg'}]
   }
 });

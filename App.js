@@ -19,8 +19,8 @@ import ScanScreen from './app/screens/ScanScreen';
 import ClickListenScreen from './app/screens/ClickListenScreen';
 import WarningScreen from './app/screens/WarningScreen';
 import ConfirmScreen from './app/screens/ConfirmScreen';
-import ClaimErrorScreen from './app/screens/ClaimErrorScreen';
 import RemovePlayerScreen from './app/screens/RemovePlayerScreen';
+import ClaimErrorScreen from './app/screens/ClaimErrorScreen';
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -155,12 +155,13 @@ export default class App extends Component<Props> {
   }
 
   handleSubscription(data) {
-    let recievedTime = Date.now();
+    let receivedTime = Date.now();
     console.log('Subscription listener fired, received data from:' + data.peripheral, data);
+    this.jsEventEmitter.emit('clickReceived', {peripheral: data.peripheral, time: receivedTime});
     this.setState({
       lastClick: {
         peripheral: data.peripheral,
-        time: recievedTime
+        time: receivedTime
       }
     })
   }
@@ -192,7 +193,7 @@ const RegistrationStack = createStackNavigator({
   warning: WarningScreen,
   click: ClickListenScreen,
   confirm: ConfirmScreen,
-  error: ClaimErrorScreen
+  error: ClaimErrorScreen,
   },
   {
     mode: 'modal',

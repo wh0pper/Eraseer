@@ -75,6 +75,7 @@ export default class RegistrationScreen extends Component {
       playerList: [],
       realmList: realms.slice(),
       availableDevices: this.props.screenProps.deviceList.slice(),
+      lastClick: {peripheral: null, time: 0}
     };
 
 
@@ -83,7 +84,14 @@ export default class RegistrationScreen extends Component {
   componentDidMount() {
     console.log('Registration screen mounted, playerList, deviceList:', this.state.playerList, this.state.availableDevices);
     this.resetRegistration();
+    this.clickListener = this.props.screenProps.jsEventEmitter.addListener('clickReceived', this.handleReceivedClick.bind(this));
 
+  }
+
+  handleReceivedClick(data) {
+    console.log('Registration screen received click event');
+    this.setState({lastClick: data});
+    console.log(this.state.lastClick);
   }
 
   resetRegistration() {
@@ -138,7 +146,7 @@ export default class RegistrationScreen extends Component {
       this.listening = setInterval(() => {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
-        if (this.props.screenProps.lastClick.time > startTime && this.state.availableDevices.includes(this.props.screenProps.lastClick.peripheral)) { //also check for rune available
+        if (this.state.lastClick.time > startTime && this.state.availableDevices.includes(this.props.screenProps.lastClick.peripheral)) { //also check for rune available
           // this.makeModalBlack();
           this.props.screenProps.jsEventEmitter.emit('registrationConfirmed');
           resolve(this.props.screenProps.lastClick);
@@ -147,7 +155,7 @@ export default class RegistrationScreen extends Component {
       this.timeout = setTimeout(() => {
         clearInterval(this.listening);
         reject('No click detected')
-      }, 10000);
+      }, 7500);
     })
 
   }
