@@ -70,7 +70,6 @@ export default class RegistrationScreen extends Component {
   constructor(props) {
 
     super(props);
-    // this.animatedModalColor = new Animated.Value(0);
     this.state = {
       playerList: [],
       realmList: realms.slice(),
@@ -185,30 +184,6 @@ export default class RegistrationScreen extends Component {
     clearTimeout(this.timeout);
   }
 
-  // makeModalWhite() {
-  //   console.log('making modal white');
-  //   Animated.timing(
-  //     this.animatedModalColor,
-  //     {
-  //       toValue: 0,
-  //       duration: 1
-  //     }
-  //   ).start();
-  // }
-
-  // makeModalBlack() {
-  //   // console.log('making modal black');
-  //   Animated.timing(
-  //     this.animatedModalColor,
-  //     {
-  //       toValue: 1,
-  //       duration: 1000
-  //     }
-  //   ).start();
-  // }
-
-
-
   onSwipeDown() {
     console.log('down swipe');
     this.resetRegistration();
@@ -227,11 +202,6 @@ export default class RegistrationScreen extends Component {
   }
 
   render() {
-    // let modalBackgroundColor = this.animatedModalColor.interpolate({
-    //   inputRange: [0, 1],
-    //   outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
-    // });
-
     const gestureConfig = {
       velocityThreshold: 0.3,
       directionalOffsetThreshold: 80

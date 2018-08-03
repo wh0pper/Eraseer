@@ -56,7 +56,7 @@ export default class ClickListenScreen extends Component {
           this.animatedColor,
           {
             toValue: 1,
-            duration: 1000
+            duration: 2000
           }
         ).start();
         await sleep(2000);

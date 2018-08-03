@@ -28,6 +28,9 @@ const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 // const ITAG_SERVICE = "0000ffe0-0000-1000-8000-00805f9b34fb";
 // const ITAG_CHARACTERISTIC = "0000ffe1-0000-1000-8000-00805f9b34fb";
 
+// console.warn = (warn) => warn.apply;
+console.disableYellowBox = true;
+
 const SCAN_TIME = 60;
 
 const ITAG_SERVICE = "ffe0";
@@ -224,6 +227,6 @@ const NavigationStack = createStackNavigator({
   {
     headerMode: 'none',
     gesturesEnabled: true,
-    initialRouteName: 'game'
+    initialRouteName: 'scan'
   }
 );
