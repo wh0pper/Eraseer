@@ -1,9 +1,7 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, View, Button, TouchableOpacity} from 'react-native';
 import PlayerBox from './PlayerBox';
-
-
 
 export default class RealmHex extends Component {
   constructor(props) {

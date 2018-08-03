@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import HexView from './HexView';
 import ClaimedHexView from './ClaimedHexView';
+
+import CustomText from './CustomText';
 
 export default class PlayerBox extends Component {
   constructor(props) {
@@ -22,11 +24,11 @@ export default class PlayerBox extends Component {
       <View style={styles.container}>
         { this.props.displayInfo && this.props.displayInfo.isClaimed ?
           <ClaimedHexView color={this.props.displayInfo.color || 'red'}>
-            <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
+            <CustomText> style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</CustomText>
           </ClaimedHexView>
           :
           <HexView color={this.props.displayInfo.color}>
-            <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
+            <CustomText> style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</CustomText>
           </HexView>
         }
       </View>

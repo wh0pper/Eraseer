@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   ActivityIndicator,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
+import CustomText from '../components/CustomText';
 // async function sleep(time) {
 //   return new Promise(resolve => {
 //     setTimeout(() => {
@@ -78,11 +78,11 @@ export default class ScanScreen extends Component {
             <ActivityIndicator/>
             :
             <TouchableOpacity onPress={() => this.props.screenProps.startScan()}>
-              <Text>Scan</Text>
+              <CustomText>Scan</CustomText>
             </TouchableOpacity>
             }
           <View style={styles.title}>
-            <Text>{this.state.availableDevices.length} runes connected</Text>
+            <CustomText>{this.state.availableDevices.length} runes connected</CustomText>
           </View>
           <TouchableOpacity
             style={styles.button}
@@ -90,7 +90,7 @@ export default class ScanScreen extends Component {
               this.props.navigation.navigate('registration');
               }
             }>
-            <Text>Continue</Text>
+            <CustomText>Continue</CustomText>
           </TouchableOpacity>
 
         </View>

@@ -1,7 +1,8 @@
 
 import React, {Component} from 'react';
-import {Animated, Easing, Platform, StyleSheet, Text, View, Button} from 'react-native';
+import {Animated, Easing, Platform, StyleSheet, View, Button} from 'react-native';
 
+import CustomText from './CustomText';
 
 export default class Timer extends Component {
   constructor(props) {
@@ -94,7 +95,7 @@ export default class Timer extends Component {
 
     return (
       <View style={styles.container}>
-        <Text style={{color: '#ff0000', fontSize: 30}}>{this.props.seconds}</Text>
+        <CustomText> style={{color: '#ff0000', fontSize: 30}}>{this.props.seconds}</CustomText>
         <Animated.View style={[styles.rotatingContainer, {transform: [{rotate: rotation}]}]}>
           <View style={styles.rect}></View>
           <View style={[styles.rect, styles.two]}></View>

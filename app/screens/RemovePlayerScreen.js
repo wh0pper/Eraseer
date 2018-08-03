@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
+import CustomText from '../components/CustomText';
 import PlayerBox from '../components/PlayerBox';
 import DoubleHexView from '../components/DoubleHexView';
 
@@ -66,9 +66,9 @@ export default class RemovePlayerScreen extends Component {
       <View style={styles.container}>
         <View style={styles.title}>
           { (type != 'undefined') ?
-            <Text>THE WORLD OF {removedPlayer.name} HAS BEEN FORGOTTEN</Text>
+            <CustomText>THE WORLD OF {removedPlayer.name} HAS BEEN FORGOTTEN</CustomText>
             :
-            <Text>NO PLAYER ELIMINATED</Text> }
+            <CustomText>NO PLAYER ELIMINATED</CustomText> }
         </View>
         <View style={styles.playerBoxContainer}>
           { (type != 'undefined') ?
@@ -85,7 +85,7 @@ export default class RemovePlayerScreen extends Component {
         <View style={styles.button}>
           <TouchableOpacity
             onPress={() => this.nextScreen()}>
-            <Text>Continue</Text>
+            <CustomText>Continue</CustomText>
           </TouchableOpacity>
         </View>
       </View>

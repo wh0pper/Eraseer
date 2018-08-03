@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   Animated
 } from 'react-native';
 
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-
+import CustomText from '../components/CustomText';
 import PlayerBox from '../components/PlayerBox';
 import RealmHex from '../components/RealmHex';
 
@@ -227,17 +226,17 @@ export default class RegistrationScreen extends Component {
         style={{flex: 1}} >
         <View style={styles.container}>
           {/* <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
-            <Text>{this.state.isScanning ? "Stop" : "Scan"}</Text>
+            <CustomText>{this.state.isScanning ? "Stop" : "Scan"}</CustomText>
           </TouchableOpacity> */}
           <View style={styles.title}>
-            <Text>DOMINIONS</Text>
+            <CustomText>DOMINIONS</CustomText>
           </View>
           <View style={styles.realmContainer}>
             <RealmHex realms={this.state.realmList} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
           </View>
-          <Text>TAP TO SELECT YOUR DOMINION</Text>
-          <Text>SWIPE DOWN TO RESTART</Text>
-          {(this.state.playerList.length > 1) ? <Text>SWIPE LEFT TO START GAME</Text> : null }
+          <CustomText>TAP TO SELECT YOUR DOMINION</CustomText>
+          <CustomText>SWIPE DOWN TO RESTART</CustomText>
+          {(this.state.playerList.length > 1) ? <CustomText>SWIPE LEFT TO START GAME</CustomText> : null }
         </View>
       </GestureRecognizer>
     );

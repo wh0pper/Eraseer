@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   FlatList,
   Animated
 } from 'react-native';
+
+import CustomText from '../components/CustomText';
 
 async function sleep(time) {
   return new Promise(resolve => {
@@ -42,7 +43,7 @@ export default class ConfirmScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.title}>
-          <Text>Dominion claimed successfully.</Text>
+          <CustomText>Dominion claimed successfully.</CustomText>
         </View>
       </View>
     );

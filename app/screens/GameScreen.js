@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
 import SmallPlayerBox from '../components/SmallPlayerBox';
 import Timer from '../components/Timer';
+
+import CustomText from '../components/CustomText';
 
 export default class GameScreen extends Component {
   constructor(props) {
@@ -203,10 +204,10 @@ export default class GameScreen extends Component {
           <View style={styles.timerContainer}>
             <Timer seconds={this.state.timeRemaining}/>
           </View>
-          <Text>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE`}</Text> 
+          <CustomText>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE`}</CustomText>
           <View style={styles.afterContainer}>
             <TouchableOpacity onPress={() => this.startTimer()}>
-              <Text>Start round</Text>
+              <CustomText>Start round</CustomText>
             </TouchableOpacity>
           </View>
       </View>

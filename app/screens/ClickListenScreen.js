@@ -10,6 +10,8 @@ import {
   Image
 } from 'react-native';
 
+import CustomText from '../components/CustomText';
+
 async function sleep(time) {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -85,7 +87,7 @@ export default class ClickListenScreen extends Component {
           onPress={() => {
             this.makeBlack()
           }}>
-          <Text>make black</Text>
+          <CustomText>make black</CustomText>
         </TouchableHighlight> */}
       </Animated.View>
     )

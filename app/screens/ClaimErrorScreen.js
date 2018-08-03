@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   FlatList,
   Animated
 } from 'react-native';
+
+import CustomText from '../components/CustomText';
 
 // async function sleep(time) {
 //   return new Promise(resolve => {
@@ -37,10 +38,10 @@ export default class ClaimErrorScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>No clicks detected. Please ensure your rune is powered on and connected to the app.</Text>
+        <CustomText>No clicks detected. Please ensure your rune is powered on and connected to the app.</CustomText>
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate('registration')}>
-          <Text>back</Text>
+          <CustomText>back</CustomText>
         </TouchableOpacity>
       </View>
     );

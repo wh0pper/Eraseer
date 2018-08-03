@@ -1,7 +1,6 @@
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button} from 'react-native';
-
+import {Platform, StyleSheet, View, Button} from 'react-native';
 
 export default class ClaimedHexView extends Component {
   constructor(props) {

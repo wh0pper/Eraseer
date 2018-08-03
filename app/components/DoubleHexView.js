@@ -1,7 +1,6 @@
 
 import React, {Component} from 'react';
-import {Animated, Easing, Platform, StyleSheet, Text, View, Button} from 'react-native';
-
+import {Animated, Easing, Platform, StyleSheet, View} from 'react-native';
 
 export default class DoubleHexView extends Component {
   constructor(props) {
@@ -76,11 +75,6 @@ export default class DoubleHexView extends Component {
   // }
 
   render() {
-
-    // const rotation = this.rotateValue.interpolate({
-    //   inputRange: [0, 1.2],
-    //   outputRange: ['0deg', '360deg']
-    // });
 
     return (
       <View style={styles.container}>

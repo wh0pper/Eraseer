@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   FlatList,
   Animated
 } from 'react-native';
+
+import CustomText from '../components/CustomText';
 
 async function sleep(time) {
   return new Promise(resolve => {
@@ -44,7 +45,7 @@ export default class WarningScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.title}>
-          <Text style={{fontSize: 20}}>{`OTHER PLAYERS\n HOLD YOUR CLICKS`}</Text>
+          <CustomText> style={{fontSize: 20}}>{`OTHER PLAYERS\n HOLD YOUR CLICKS`}</CustomText>
         </View>
       </View>
     );

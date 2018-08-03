@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import SmallHexView from './SmallHexView';
+
+import CustomText from '../components/CustomText';
 
 export default class SmallPlayerBox extends Component {
   constructor(props) {
@@ -20,7 +22,7 @@ export default class SmallPlayerBox extends Component {
     return (
       <View>
         <SmallHexView color={this.props.displayInfo.color}>
-          <Text style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</Text>
+          <CustomText> style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</CustomText>
         </SmallHexView>
       </View>
     );

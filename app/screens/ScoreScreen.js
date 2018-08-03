@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
-  Text,
   View,
   TouchableOpacity,
   FlatList,
 } from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
+import CustomText from '../components/CustomText';
 import MediumPlayerBox from '../components/MediumPlayerBox';
 import PlayerBox from '../components/PlayerBox';
 
@@ -80,13 +80,13 @@ export default class ScoreScreen extends Component {
         >
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={{marginBottom: 20}}>LAST PLAYER STANDING</Text>
+          <CustomText> style={{marginBottom: 20}}>LAST PLAYER STANDING</CustomText>
           <PlayerBox
             displayInfo={this.state.playerList.find((p) => p.isAlive == true)}>
           </PlayerBox>
         </View>
         <View style={styles.body}>
-          <Text>OVERSEER RANKINGS</Text>
+          <CustomText>OVERSEER RANKINGS</CustomText>
           <View style={styles.rankingsContainer}>
             <View style={{height: 375}}>
             <FlatList
@@ -98,7 +98,7 @@ export default class ScoreScreen extends Component {
                     <View style={styles.playerInfo}>
                       <View style={styles.box}><MediumPlayerBox displayInfo={item}></MediumPlayerBox></View>
                       <View style={styles.name}>
-                        <Text>{item.name} - </Text><Text>{item.points}</Text>
+                        <CustomText>{item.name} - </CustomText><CustomText>{item.points}</CustomText>
                       </View>
                     </View>
                   );
@@ -109,7 +109,7 @@ export default class ScoreScreen extends Component {
             <TouchableOpacity
               onPress={() => this.resetGame()}
               >
-              <Text>SWIPE UP FOR NEW GAME</Text>
+              <CustomText>SWIPE UP FOR NEW GAME</CustomText>
             </TouchableOpacity>
         </View>
       </View>
