@@ -73,27 +73,25 @@ export default class RegistrationScreen extends Component {
     this.state = {
       playerList: [],
       realmList: realms.slice(),
-      availableDevices: this.props.screenProps.deviceList,
+      availableDevices: this.props.screenProps.deviceList.slice(),
     };
 
   }
 
   componentDidMount() {
-    console.log('Registration screen mounted, playerList:', this.state.playerList);
-    // this.setState({newGame: true});
+    console.log('Registration screen mounted, playerList, deviceList:', this.state.playerList, this.state.availableDevices);
     this.resetRegistration();
-    this.props.navigation.addListener('willFocus', this.componentDidFocus);
+
   }
 
   resetRegistration() {
-    this.setState({playerList: []});
+    this.setState({
+      playerList: [],
+      availableDevices: this.props.screenProps.deviceList.slice()
+    });
     let realms = this.state.realmList;
     realms.forEach((r) => r.isClaimed = false);
     this.setState({realmList: realms});
-  }
-
-  componentDidFocus() {
-    console.log('registration screen did focus');
   }
 
   async registerPlayer(selectedBox) {
@@ -138,7 +136,7 @@ export default class RegistrationScreen extends Component {
       this.listening = setInterval(() => {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
-        if (this.props.screenProps.lastClick.time > startTime) { //also check for rune available
+        if (this.props.screenProps.lastClick.time > startTime && this.state.availableDevices.includes(this.props.screenProps.lastClick.peripheral)) { //also check for rune available
           this.makeModalBlack();
           resolve(this.props.screenProps.lastClick);
         }
@@ -207,6 +205,11 @@ export default class RegistrationScreen extends Component {
     }
   }
 
+  backToScan() {
+    console.log('right swipe');
+    this.props.navigation.navigate('scan');
+  }
+
   render() {
     let modalBackgroundColor = this.animatedModalColor.interpolate({
       inputRange: [0, 1],
@@ -223,6 +226,7 @@ export default class RegistrationScreen extends Component {
         config={gestureConfig}
         onSwipeDown={(state) => this.onSwipeDown(state)}
         onSwipeLeft={(state) => this.onSwipeLeft(state)}
+        onSwipeRight={() => this.backToScan()}
         style={{flex: 1}} >
         <View style={styles.container}>
           {/* <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>

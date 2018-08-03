@@ -16,7 +16,7 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 const navigateToNewGame = StackActions.reset({
   index: 0,
-  actions: [NavigationActions.navigate({routeName: 'registration'})]
+  actions: [NavigationActions.navigate({routeName: 'registration', params: {isNewMatch: true}})]
 });
 
 export default class ScoreScreen extends Component {
