@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    paddingTop: 42
+    paddingTop: 46
   },
   emptyHexContainer: {
     width: 69.3,

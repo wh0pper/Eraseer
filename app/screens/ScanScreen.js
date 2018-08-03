@@ -87,16 +87,8 @@ export default class ScanScreen extends Component {
           <View style={styles.title}>
             <Text style={{fontSize: 30, color: '#7f7f7f', textAlign: 'center'}}>x {deviceList.length}</Text>
           </View>
-          {/* <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              this.props.navigation.navigate('registration');
-              }
-            }>
-            <CustomText>Continue</CustomText>
-          </TouchableOpacity> */}
           <View>
-            <CustomText>SWIPE LEFT WHEN ALL RUNES FOUND</CustomText>
+            <CustomText>{`SWIPE LEFT WHEN ALL RUNES FOUND\n`}</CustomText>
             <CustomText>SWIPE DOWN TO RESTART SCAN</CustomText>
           </View>
         </View>

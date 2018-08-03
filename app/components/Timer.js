@@ -23,19 +23,13 @@ export default class Timer extends Component {
 
   }
 
-  static getDerivedStateFromProps(props, state) {
-    console.log('timer got props n state', props, state);
-    // tickOnce();
-    return null;
-  }
-
   render() {
 
     return (
       <View style={styles.container}>
         <DoubleHexView
           rotationInterpolation={this.props.rotationInterpolation}/>
-        <View style={{top: -190}}>
+        <View style={{top: -180}}>
           <Text style={{fontSize: 35, color: '#8f8f8f'}}>{this.props.seconds}</Text>
         </View>
       </View>

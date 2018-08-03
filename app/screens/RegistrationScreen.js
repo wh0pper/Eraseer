@@ -83,11 +83,22 @@ export default class RegistrationScreen extends Component {
   componentDidMount() {
     console.log('Registration screen mounted, playerList, deviceList:', this.state.playerList, this.state.availableDevices);
     this.resetRegistration();
+    // this.clickListener = this.props.screenProps.jsEventEmitter.addListener('clickReceived', this.handleReceivedClick.bind(this));
+    this.focusListener = this.props.navigation.addListener('willFocus', this.componentWillFocus.bind(this));
     this.clickListener = this.props.screenProps.jsEventEmitter.addListener('clickReceived', this.handleReceivedClick.bind(this));
+
   }
 
   componentWillUnmount() {
+    console.log('registration unmounting');
     // this.clickListener.remove(); jk can't remove, library is questionable
+    // this.props.screenProps.jsEventEmitter.removeListener('clickReceived');
+    this.props.screenProps.jsEventEmitter.removeAllListeners();
+    this.focusListener.remove();
+  }
+
+  componentWillFocus() {
+    console.log('registration screen focused');
   }
 
   handleReceivedClick(data) {
@@ -172,6 +183,7 @@ export default class RegistrationScreen extends Component {
   }
 
   startGame() {
+    this.props.screenProps.jsEventEmitter.removeAllListeners();
     this.props.screenProps.stopScan();
     this.props.navigation.navigate('game', {
       players: this.state.playerList,

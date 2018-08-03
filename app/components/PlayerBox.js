@@ -23,7 +23,7 @@ export default class PlayerBox extends Component {
     return (
       <View style={styles.container}>
         { this.props.displayInfo && this.props.displayInfo.isClaimed ?
-          <ClaimedHexView color={this.props.displayInfo.color || 'red'}>
+          <ClaimedHexView color={this.props.displayInfo.color}>
             <CustomText>{this.props.displayInfo.name}</CustomText>
           </ClaimedHexView>
           :
