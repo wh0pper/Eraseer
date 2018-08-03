@@ -109,7 +109,7 @@ export default class ScoreScreen extends Component {
             <TouchableOpacity
               onPress={() => this.resetGame()}
               >
-              <Text>SWIPE UP FOR NEW MATCH</Text>
+              <Text>SWIPE UP FOR NEW GAME</Text>
             </TouchableOpacity>
         </View>
       </View>
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     margin: 10
   },
   box: {
-    top: 20,
+    top: 12,
     flexDirection: 'column',
     justifyContent: 'center',
   },

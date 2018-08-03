@@ -87,6 +87,7 @@ export default class RegistrationScreen extends Component {
   }
 
   resetRegistration() {
+    this.setState({playerList: []});
     let realms = this.state.realmList;
     realms.forEach((r) => r.isClaimed = false);
     this.setState({realmList: realms});
@@ -162,7 +163,7 @@ export default class RegistrationScreen extends Component {
     this.props.screenProps.stopScan();
     this.props.navigation.navigate('game', {
       players: this.state.playerList,
-      resetPlayers: this.resetPlayers.bind(this)
+      // resetPlayers: this.resetPlayers.bind(this)
     });
   }
 
@@ -171,16 +172,16 @@ export default class RegistrationScreen extends Component {
     clearTimeout(this.timeout);
   }
 
-  makeModalWhite() {
-    console.log('making modal white');
-    Animated.timing(
-      this.animatedModalColor,
-      {
-        toValue: 0,
-        duration: 1
-      }
-    ).start();
-  }
+  // makeModalWhite() {
+  //   console.log('making modal white');
+  //   Animated.timing(
+  //     this.animatedModalColor,
+  //     {
+  //       toValue: 0,
+  //       duration: 1
+  //     }
+  //   ).start();
+  // }
 
   makeModalBlack() {
     // console.log('making modal black');
@@ -193,13 +194,11 @@ export default class RegistrationScreen extends Component {
     ).start();
   }
 
-  resetPlayers() {
-    this.setState({playerList: []});
-  }
+
 
   onSwipeDown() {
-    console.log('right swipe');
-    this.props.navigation.navigate('registration');
+    console.log('down swipe');
+    this.resetRegistration();
   }
 
   onSwipeLeft() {
