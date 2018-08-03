@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import SmallPlayerBox from '../components/SmallPlayerBox';
 import Timer from '../components/Timer';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 import CustomText from '../components/CustomText';
 
@@ -210,37 +211,46 @@ export default class GameScreen extends Component {
       outputRange: ['0deg', '30deg', '60deg', '90deg', '120deg', '150deg', '180deg', '210deg', '240deg', '270deg', '300deg', '330deg', '360deg']
     });
 
+    const gestureConfig = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    };
+
     return (
-      <View style={styles.container}>
-        <View style={styles.playersContainer}>
-          <FlatList
-              data={displayPlayers}
-              extraData={this.state}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal={true}
-              renderItem={({item}) => {
-                return (
-                  <View>
-                    <TouchableOpacity onPress={() => this.mockClick(item)}>
-                      <SmallPlayerBox displayInfo={item}></SmallPlayerBox>
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
-            />
-          </View>
-          <View style={styles.timerContainer}>
-            <Timer
-              seconds={this.state.timeRemaining}
-              rotationInterpolation={timerRotation}/>
-          </View>
-          <CustomText>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE`}</CustomText>
-          <View style={styles.afterContainer}>
-            <TouchableOpacity onPress={() => this.startTimer()}>
-              <CustomText>Start round</CustomText>
-            </TouchableOpacity>
-          </View>
-      </View>
+      <GestureRecognizer
+        config={gestureConfig}
+        onSwipeDown={() => this.startTimer()}>
+        <View style={styles.container}>
+          <View style={styles.playersContainer}>
+            <FlatList
+                data={displayPlayers}
+                extraData={this.state}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal={true}
+                renderItem={({item}) => {
+                  return (
+                    <View>
+                      <TouchableOpacity onPress={() => this.mockClick(item)}>
+                        <SmallPlayerBox displayInfo={item}></SmallPlayerBox>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }}
+              />
+            </View>
+            <View style={styles.timerContainer}>
+              <Timer
+                seconds={this.state.timeRemaining}
+                rotationInterpolation={timerRotation}/>
+            </View>
+            <CustomText>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE`}</CustomText>
+            <View style={styles.afterContainer}>
+              {/* <TouchableOpacity onPress={() => this.startTimer()}>
+                <CustomText>Start round</CustomText>
+              </TouchableOpacity> */}
+            </View>
+        </View>
+      </GestureRecognizer>
     );
   }
 }

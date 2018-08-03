@@ -7,9 +7,9 @@ import {
   PermissionsAndroid
 } from 'react-native';
 
-import { createStackNavigator } from 'react-navigation';
+import EventEmitter from 'events';
 
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import { createStackNavigator } from 'react-navigation';
 
 
 import GameScreen from './app/screens/GameScreen';
@@ -46,8 +46,8 @@ type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
     BleManager.start({showAlert: true, forceLegacy: true});
-
     super(props);
+    this.jsEventEmitter = new EventEmitter();
 
     this.state = {
       isScanning: false,
@@ -56,6 +56,7 @@ export default class App extends Component<Props> {
         peripheral: null,
         time: 0
       }
+
     };
 
     this.handleDiscovery = this.handleDiscovery.bind(this);
@@ -84,7 +85,7 @@ export default class App extends Component<Props> {
       });
     }
 
-    this.startScan(); //needs to be async, sleep to delay auto start of scan, otherwise just won't Work
+    this.startScan();
     console.log('App mounted, scan state: ', this.state.isScanning);
 
   }
@@ -96,24 +97,26 @@ export default class App extends Component<Props> {
   }
 
   async startScan() {
-    await sleep(1000);
-    let newState = !this.state.isScanning;
-    this.setState({isScanning: newState});
-    if (newState) {
-      BleManager.scan([],SCAN_TIME,false,{})
-      .then(() => {
-        setTimeout(() => {
-          this.setState({isScanning: false});
-        }, SCAN_TIME * 1000);
-        console.log('Scan initialized');
-      })
-      .catch((error) => {
-        console.log('Error initializing scan: ', error);
-      });
-    } else {
-      console.log('Stopping scan.')
-      BleManager.stopScan();
-    }
+    await sleep(1000); //needs to be async, otherwise just won't Work
+    // if (newState) {
+    this.setState({
+      subscribedDevices: [],
+      isScanning: true
+    });
+    BleManager.scan([],SCAN_TIME,false,{})
+    .then(() => {
+      setTimeout(() => {
+        this.setState({isScanning: false});
+      }, SCAN_TIME * 1000);
+      console.log('Scan initialized');
+    })
+    .catch((error) => {
+      console.log('Error initializing scan: ', error);
+    });
+    // } else {
+    //   console.log('Stopping scan.')
+    //   BleManager.stopScan();
+    // }
   }
 
   stopScan() {
@@ -164,22 +167,23 @@ export default class App extends Component<Props> {
 
   handleDisconnect(data) {
     console.log('Peripheral initiated a disconnect: ', data);
+    let updatedDevices = this.state.subscribedDevices
+    let updateIndex = updatedDevices.indexOf(data.peripheral);
+    updatedDevices.splice(updateIndex, 1);
+    this.setState({subscribedDevices: updatedDevices})
   }
 
 
   render() {
     return (
-      // <GestureRecognizer
-      //   onSwipeRight={(state) => console.log('swipe right')}>
-
         <NavigationStack screenProps={{
+          jsEventEmitter: this.jsEventEmitter,
           deviceList: this.state.subscribedDevices,
           startScan: () => this.startScan(),
           scanState: this.state.isScanning,
           lastClick: this.state.lastClick,
           stopScan: () => this.stopScan()
         }}/>
-      // </GestureRecognizer>
     );
   }
 }
@@ -208,6 +212,6 @@ const NavigationStack = createStackNavigator({
   {
     headerMode: 'none',
     gesturesEnabled: true,
-    initialRouteName: 'game'
+    initialRouteName: 'scan'
   }
 );

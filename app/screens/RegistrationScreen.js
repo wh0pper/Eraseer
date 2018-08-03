@@ -4,7 +4,8 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  Animated
+  Animated,
+  NativeEventEmitter
 } from 'react-native';
 
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
@@ -69,12 +70,13 @@ export default class RegistrationScreen extends Component {
   constructor(props) {
 
     super(props);
-    this.animatedModalColor = new Animated.Value(0);
+    // this.animatedModalColor = new Animated.Value(0);
     this.state = {
       playerList: [],
       realmList: realms.slice(),
       availableDevices: this.props.screenProps.deviceList.slice(),
     };
+
 
   }
 
@@ -106,7 +108,7 @@ export default class RegistrationScreen extends Component {
       .then((clickData) => {
         console.log('listen for click then');
         this.markRealmClaimed(selectedBox);
-        this.props.navigation.navigate('confirm');
+        // this.props.navigation.navigate('confirm');
         let newPlayer = {
           name: selectedBox.name,
           color: selectedBox.color,
@@ -137,7 +139,8 @@ export default class RegistrationScreen extends Component {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
         if (this.props.screenProps.lastClick.time > startTime && this.state.availableDevices.includes(this.props.screenProps.lastClick.peripheral)) { //also check for rune available
-          this.makeModalBlack();
+          // this.makeModalBlack();
+          this.props.screenProps.jsEventEmitter.emit('registrationConfirmed');
           resolve(this.props.screenProps.lastClick);
         }
       }, 10);
@@ -154,6 +157,7 @@ export default class RegistrationScreen extends Component {
     let updateIndex = realmsArray.indexOf(realm);
     realmsArray[updateIndex].isClaimed = true;
     this.setState({realmList: realmsArray});
+    // this.makeModalBlack();
   }
 
   startGame() {
@@ -180,16 +184,16 @@ export default class RegistrationScreen extends Component {
   //   ).start();
   // }
 
-  makeModalBlack() {
-    // console.log('making modal black');
-    Animated.timing(
-      this.animatedModalColor,
-      {
-        toValue: 1,
-        duration: 1000
-      }
-    ).start();
-  }
+  // makeModalBlack() {
+  //   // console.log('making modal black');
+  //   Animated.timing(
+  //     this.animatedModalColor,
+  //     {
+  //       toValue: 1,
+  //       duration: 1000
+  //     }
+  //   ).start();
+  // }
 
 
 
@@ -211,10 +215,10 @@ export default class RegistrationScreen extends Component {
   }
 
   render() {
-    let modalBackgroundColor = this.animatedModalColor.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
-    });
+    // let modalBackgroundColor = this.animatedModalColor.interpolate({
+    //   inputRange: [0, 1],
+    //   outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
+    // });
 
     const gestureConfig = {
       velocityThreshold: 0.3,

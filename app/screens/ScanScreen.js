@@ -5,7 +5,8 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
-  Text
+  Text,
+  Image
   // PanGestureHandler
 } from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
@@ -67,33 +68,38 @@ export default class ScanScreen extends Component {
       directionalOffsetThreshold: 80
     };
 
+    let deviceList = this.props.screenProps.deviceList || [];
+
     return (
       <GestureRecognizer
         config={gestureConfig}
         // onSwipe={(direction, state) => this.onSwipe(direction, state)}
-        onSwipeLeft={(state)=> this.onSwipeLeft(state)}
+        onSwipeLeft={(state) => this.onSwipeLeft(state) }
+        onSwipeDown={(state) => this.props.screenProps.startScan() }
         style={{flex: 1}}
         >
         <View style={styles.container}>
-          {this.props.screenProps.scanState ?
-            <ActivityIndicator/>
-            :
-            <TouchableOpacity onPress={() => this.props.screenProps.startScan()}>
-              <CustomText>Scan</CustomText>
-            </TouchableOpacity>
-            }
+          this.props.screenProps.scanState ?
+          <ActivityIndicator
+            animating={this.props.screenProps.scanState}
+            size="large"
+            hidesWhenStopped={true}/>
+          <Image style={{top: 70}} source={require('../../rune.png')}/>
           <View style={styles.title}>
-            <CustomText>{this.state.availableDevices.length} runes connected</CustomText>
+            <Text style={{fontSize: 30, color: '#7f7f7f', textAlign: 'center'}}>x {deviceList.length}</Text>
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.button}
             onPress={() => {
               this.props.navigation.navigate('registration');
               }
             }>
             <CustomText>Continue</CustomText>
-          </TouchableOpacity>
-
+          </TouchableOpacity> */}
+          <View>
+            <CustomText>SWIPE LEFT WHEN ALL RUNES FOUND</CustomText>
+            <CustomText>SWIPE DOWN TO RESTART SCAN</CustomText>
+          </View>
         </View>
       </GestureRecognizer>
     );

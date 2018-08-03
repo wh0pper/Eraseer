@@ -7,7 +7,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Animated,
-  Image
+  Image,
+  NativeEventEmitter
 } from 'react-native';
 
 import CustomText from '../components/CustomText';
@@ -31,11 +32,11 @@ export default class ClickListenScreen extends Component {
   }
 
   componentDidMount() {
-
+    this.confirmationListener = this.props.screenProps.jsEventEmitter.addListener('registrationConfirmed', this.makeBlack.bind(this));
   }
 
   componentWillUnmount() {
-
+    this.confirmationListener.remove();
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -44,23 +45,24 @@ export default class ClickListenScreen extends Component {
   }
 
   makeBlack() {
-      this.animatedColor.setValue(0);
-      Animated.parallel([
+    console.log('click confirmed for registration');
+      // this.animatedColor.setValue(0);
+      // Animated.parallel([
         Animated.timing(
           this.animatedColor,
           {
             toValue: 1,
             duration: 1000
           }
-        ),
-        Animated.timing(
-          this.animatedText,
-          {
-            toValue: 1,
-            duration: 1000
-          }
-        ),
-      ]).start();
+        ).start();
+      //   Animated.timing(
+      //     this.animatedText,
+      //     {
+      //       toValue: 1,
+      //       duration: 1000
+      //     }
+      //   ),
+      // ]).start();
   }
 
   render() {
@@ -69,10 +71,10 @@ export default class ClickListenScreen extends Component {
       inputRange: [0, 1],
       outputRange: ['rgba(223, 223, 223, 1.0)', 'rgba(0, 0, 0, 1.0)']
     });
-    let textColor = this.animatedText.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['#000000', '#ffffff']
-    });
+    let textColor = '#7f7f7f';//this.animatedText.interpolate({
+    //   inputRange: [0, 1],
+    //   outputRange: ['#7f7f7f', '#ffffff']
+    // });
 
 
     return (
@@ -112,7 +114,8 @@ const styles = StyleSheet.create({
 
   },
   text: {
-    fontSize: 18,
+    fontSize: 20,
+    color: '#7f7f7f',
     textAlign: 'center'
   }
 });
