@@ -3,18 +3,31 @@ import React, {Component} from 'react';
 import {Animated, Easing, Platform, StyleSheet, View, Button} from 'react-native';
 
 import CustomText from './CustomText';
+import DoubleHexView from './DoubleHexView';
+
+const rotateValue = new Animated.Value(0);
+function tickOnce() {
+  Animated.timing(
+    rotateValue,
+    {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.cubic
+    }
+  ).start();
+}
 
 export default class Timer extends Component {
   constructor(props) {
     super(props);
-    this.rotateValue = new Animated.Value(0);
+    // this.rotateValue = new Animated.Value(0);
     this.state = {
 
     };
   }
 
   componentDidMount() {
-    this.startRotation();
+    // this.startRotation();
     // this.focusListener = this.props.navigation.addListener('willFocus', this.componentWillFocus.bind(this));
   }
 
@@ -22,16 +35,22 @@ export default class Timer extends Component {
 
   }
 
-  startRotation() {
+  static getDerivedStateFromProps(props, state) {
+    console.log('timer got props n state', props, state);
+    tickOnce();
+    return null;
+  }
+
+  // tickOnce() {
     // Animated.sequence([
-    //   Animated.timing(
-    //     this.rotateValue,
-    //     {
-    //       toValue: .1,
-    //       duration: 1000,
-    //       easing: Easing.cubic
-    //     }
-    //   ),
+      // Animated.timing(
+      //   this.rotateValue,
+      //   {
+      //     toValue: 1,
+      //     duration: 1000,
+      //     easing: Easing.cubic
+      //   }
+      // ).start();
     //   Animated.timing(
     //     this.rotateValue,
     //     {
@@ -83,27 +102,29 @@ export default class Timer extends Component {
     //
     //
     // ]).start();
-  }
+  // }
 
 
   render() {
 
-    const rotation = this.rotateValue.interpolate({
-      inputRange: [0, 1.2],
-      outputRange: ['0deg', '360deg']
+    const rotationProp = rotateValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['0deg', '15deg']
     });
 
     return (
       <View style={styles.container}>
+        <DoubleHexView
+          rotationInterpolation={rotationProp}/>
         <CustomText>{this.props.seconds}</CustomText>
-        <Animated.View style={[styles.rotatingContainer, {transform: [{rotate: rotation}]}]}>
-          <View style={styles.rect}></View>
+        {/* <Animated.View style={[styles.rotatingContainer, {transform: [{rotate: rotation}]}]}> */}
+          {/* <View style={styles.rect}></View>
           <View style={[styles.rect, styles.two]}></View>
-          <View style={[styles.rect, styles.three]}></View>
-        </Animated.View>
-          <View style={[styles.rect, styles.four]}></View>
+          <View style={[styles.rect, styles.three]}></View> */}
+        {/* </Animated.View> */}
+          {/* <View style={[styles.rect, styles.four]}></View>
           <View style={[styles.rect, styles.five]}></View>
-          <View style={[styles.rect, styles.six]}></View>
+          <View style={[styles.rect, styles.six]}></View> */}
       </View>
 
     );
