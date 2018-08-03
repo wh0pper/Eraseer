@@ -138,7 +138,7 @@ export default class RegistrationScreen extends Component {
       this.listening = setInterval(() => {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
-        if (this.props.screenProps.lastClick.time > startTime && ) {
+        if (this.props.screenProps.lastClick.time > startTime) { //also check for rune available
           this.makeModalBlack();
           resolve(this.props.screenProps.lastClick);
         }
@@ -225,8 +225,7 @@ export default class RegistrationScreen extends Component {
         config={gestureConfig}
         onSwipeDown={(state) => this.onSwipeDown(state)}
         onSwipeLeft={(state) => this.onSwipeLeft(state)}
-        style={{flex: 1}}
-        >
+        style={{flex: 1}} >
         <View style={styles.container}>
           {/* <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.startScan()}>
             <Text>{this.state.isScanning ? "Stop" : "Scan"}</Text>
@@ -236,10 +235,10 @@ export default class RegistrationScreen extends Component {
           </View>
           <View style={styles.realmContainer}>
             <RealmHex realms={this.state.realmList} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
-            </View>
-            <Text>TAP TO SELECT YOUR DOMINION</Text>
-            <Text>SWIPE DOWN TO RESTART</Text>
-            {(this.state.playerList.length > 1) ? <Text>SWIPE LEFT TO START GAME</Text> : null }
+          </View>
+          <Text>TAP TO SELECT YOUR DOMINION</Text>
+          <Text>SWIPE DOWN TO RESTART</Text>
+          {(this.state.playerList.length > 1) ? <Text>SWIPE LEFT TO START GAME</Text> : null }
         </View>
       </GestureRecognizer>
     );

@@ -14,6 +14,7 @@ export default class Timer extends Component {
 
   componentDidMount() {
     this.startRotation();
+    // this.focusListener = this.props.navigation.addListener('willFocus', this.componentWillFocus.bind(this));
   }
 
   componentWillUnmount() {

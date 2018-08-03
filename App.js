@@ -208,6 +208,6 @@ const NavigationStack = createStackNavigator({
   {
     headerMode: 'none',
     gesturesEnabled: true,
-    initialRouteName: 'scan'
+    initialRouteName: 'score'
   }
 );

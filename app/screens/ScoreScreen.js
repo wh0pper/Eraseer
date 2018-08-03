@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
+import MediumPlayerBox from '../components/MediumPlayerBox';
 import PlayerBox from '../components/PlayerBox';
+
 import { StackActions, NavigationActions } from 'react-navigation';
 
 const navigateToNewGame = StackActions.reset({
@@ -94,7 +96,7 @@ export default class ScoreScreen extends Component {
                 renderItem={({item}) => {
                   return (
                     <View style={styles.playerInfo}>
-                      <View style={styles.box}><PlayerBox displayInfo={item}></PlayerBox></View>
+                      <View style={styles.box}><MediumPlayerBox displayInfo={item}></MediumPlayerBox></View>
                       <View style={styles.name}>
                         <Text>{item.name} - </Text><Text>{item.points}</Text>
                       </View>
