@@ -80,7 +80,7 @@ export default class ScoreScreen extends Component {
         >
       <View style={styles.container}>
         <View style={styles.header}>
-          <CustomText> style={{marginBottom: 20}}>LAST PLAYER STANDING</CustomText>
+          <CustomText>LAST PLAYER STANDING</CustomText>
           <PlayerBox
             displayInfo={this.state.playerList.find((p) => p.isAlive == true)}>
           </PlayerBox>

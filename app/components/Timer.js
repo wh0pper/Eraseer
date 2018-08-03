@@ -95,7 +95,7 @@ export default class Timer extends Component {
 
     return (
       <View style={styles.container}>
-        <CustomText> style={{color: '#ff0000', fontSize: 30}}>{this.props.seconds}</CustomText>
+        <CustomText>{this.props.seconds}</CustomText>
         <Animated.View style={[styles.rotatingContainer, {transform: [{rotate: rotation}]}]}>
           <View style={styles.rect}></View>
           <View style={[styles.rect, styles.two]}></View>

@@ -12,15 +12,15 @@ import { createStackNavigator } from 'react-navigation';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 
-// import GameScreen from './app/screens/GameScreen';
-// import RegistrationScreen from './app/screens/RegistrationScreen';
-// import ScoreScreen from './app/screens/ScoreScreen';
+import GameScreen from './app/screens/GameScreen';
+import RegistrationScreen from './app/screens/RegistrationScreen';
+import ScoreScreen from './app/screens/ScoreScreen';
 import ScanScreen from './app/screens/ScanScreen';
-// import ClickListenScreen from './app/screens/ClickListenScreen';
-// import WarningScreen from './app/screens/WarningScreen';
-// import ConfirmScreen from './app/screens/ConfirmScreen';
-// import ClaimErrorScreen from './app/screens/ClaimErrorScreen';
-// import RemovePlayerScreen from './app/screens/RemovePlayerScreen';
+import ClickListenScreen from './app/screens/ClickListenScreen';
+import WarningScreen from './app/screens/WarningScreen';
+import ConfirmScreen from './app/screens/ConfirmScreen';
+import ClaimErrorScreen from './app/screens/ClaimErrorScreen';
+import RemovePlayerScreen from './app/screens/RemovePlayerScreen';
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -184,26 +184,26 @@ export default class App extends Component<Props> {
   }
 }
 
-// const RegistrationStack = createStackNavigator({
-//   warning: WarningScreen,
-//   click: ClickListenScreen,
-//   confirm: ConfirmScreen,
-//   error: ClaimErrorScreen
-//   },
-//   {
-//     mode: 'modal',
-//     headerMode: 'none',
-//     initialRouteName: 'warning'
-//   }
-// );
+const RegistrationStack = createStackNavigator({
+  warning: WarningScreen,
+  click: ClickListenScreen,
+  confirm: ConfirmScreen,
+  error: ClaimErrorScreen
+  },
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'warning'
+  }
+);
 
 const NavigationStack = createStackNavigator({
     scan: ScanScreen,
-    // registration: RegistrationScreen,
-    // clickStack: RegistrationStack,
-    // game: GameScreen,
-    // remove: RemovePlayerScreen,
-    // score: ScoreScreen,
+    registration: RegistrationScreen,
+    clickStack: RegistrationStack,
+    game: GameScreen,
+    remove: RemovePlayerScreen,
+    score: ScoreScreen,
   },
   {
     headerMode: 'none',

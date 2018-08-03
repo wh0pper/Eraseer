@@ -4,7 +4,7 @@ import {Text} from 'react-native';
 
 
 function CustomText(props) {
-    return <CustomText> style={{fontSize: 22, color: '#666666'}}>{props.children}</CustomText>
+    return <Text style={{fontSize: 22, color: '#666666'}}>{props.children}</Text>
   }
 
 export default CustomText;

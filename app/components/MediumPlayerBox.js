@@ -22,7 +22,7 @@ export default class MediumPlayerBox extends Component {
     return (
       <View>
         <MediumHexView color={this.props.displayInfo.color}>
-          <CustomText> style={{color: '#cfcfcf', fontSize: 20}}>{this.props.displayInfo.name}</CustomText>
+          <CustomText>{this.props.displayInfo.name}</CustomText>
         </MediumHexView>
       </View>
     );
