@@ -1,21 +1,21 @@
 
 import React, {Component} from 'react';
-import {Animated, Easing, Platform, StyleSheet, View, Button} from 'react-native';
+import {Animated, Text, Easing, Platform, StyleSheet, View, Button} from 'react-native';
 
 import CustomText from './CustomText';
 import DoubleHexView from './DoubleHexView';
 
-const rotateValue = new Animated.Value(0);
-function tickOnce() {
-  Animated.timing(
-    rotateValue,
-    {
-      toValue: 1,
-      duration: 1000,
-      easing: Easing.cubic
-    }
-  ).start();
-}
+// const rotateValue = new Animated.Value(0);
+// function tickOnce() {
+//   Animated.timing(
+//     rotateValue,
+//     {
+//       toValue: 1,
+//       duration: 1000,
+//       easing: Easing.cubic
+//     }
+//   ).start();
+// }
 
 export default class Timer extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ export default class Timer extends Component {
 
   static getDerivedStateFromProps(props, state) {
     console.log('timer got props n state', props, state);
-    tickOnce();
+    // tickOnce();
     return null;
   }
 
@@ -107,16 +107,18 @@ export default class Timer extends Component {
 
   render() {
 
-    const rotationProp = rotateValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '15deg']
-    });
+    // const rotationProp = rotateValue.interpolate({
+    //   inputRange: [0, 1],
+    //   outputRange: ['0deg', '30deg']
+    // });
 
     return (
       <View style={styles.container}>
         <DoubleHexView
-          rotationInterpolation={rotationProp}/>
-        <CustomText>{this.props.seconds}</CustomText>
+          rotationInterpolation={this.props.rotationInterpolation}/>
+        <View style={{top: -200}}>
+          <Text style={{fontSize: 35, color: '#8f8f8f'}}>{this.props.seconds}</Text>
+        </View>
         {/* <Animated.View style={[styles.rotatingContainer, {transform: [{rotate: rotation}]}]}> */}
           {/* <View style={styles.rect}></View>
           <View style={[styles.rect, styles.two]}></View>

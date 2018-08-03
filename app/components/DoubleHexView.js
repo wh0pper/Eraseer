@@ -75,10 +75,11 @@ export default class DoubleHexView extends Component {
   // }
 
   render() {
+    let rotationValue = this.props.rotationInterpolation || '0deg';
 
     return (
       <View style={styles.container}>
-        <Animated.View style={styles.rotatingContainer}> {/* {transform: [{rotate: this.props.rotationInterpolation}]} */}
+        <Animated.View style={[styles.rotatingContainer, {transform: [{rotate: rotationValue}]}]}> 
           <View style={styles.rect}></View>
           <View style={[styles.rect, styles.two]}></View>
           <View style={[styles.rect, styles.three]}></View>

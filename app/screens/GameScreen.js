@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  Animated
 } from 'react-native';
 import SmallPlayerBox from '../components/SmallPlayerBox';
 import Timer from '../components/Timer';
@@ -16,6 +17,7 @@ export default class GameScreen extends Component {
 
     super(props);
 
+    this.timerRotation = new Animated.Value(0);
     this.state = {
       playerList: this.props.navigation.getParam('players', []), //was initialPlayers
       //remainingPlayers: this.props.navigation.getParam('players', []).slice(),
@@ -36,6 +38,15 @@ export default class GameScreen extends Component {
   componentWillFocus() {
     console.log('game screen will focus');
     this.setState({timeRemaining: 10});
+
+    Animated.timing(
+      this.timerRotation,
+      {
+        toValue: 0,
+        duration: 1000,
+        // easing: Easing.cubic
+      }
+    ).start();
     // this.startTimer();
     //put back later, easier to flow through while debugging w/o this.startTimer();
   }
@@ -50,17 +61,29 @@ export default class GameScreen extends Component {
     let startTime = Date.now();
     console.log('Round start time: ', startTime);
     this.listenForClick(startTime);
+    let animationTarget = 1;
     let timer = setInterval(() => {
+      //trigger animation every second
+      Animated.timing(
+        this.timerRotation,
+        {
+          toValue: animationTarget,
+          duration: 1000,
+          // easing: Easing.cubic
+        }
+      ).start();
+      animationTarget++;
       let newValue = this.state.timeRemaining - 1;
       if (newValue >= 0) {
+        // this.animateTimer();
         this.setState({timeRemaining: newValue});
       } else {
         clearInterval(timer);
         this.processRound(startTime);
-        //determine winner
       }
     }, 1000);
   }
+
 
   listenForClick(startTime) {
     // do {
@@ -182,6 +205,11 @@ export default class GameScreen extends Component {
     // //console.log('player list in game screen: ', this.props.navigation.getParam('players','no players'));
     //console.log('player list from state in game: ', this.state.remainingPlayers);
     let displayPlayers = this.state.playerList.filter((p) => p.isAlive);
+    const timerRotation = this.timerRotation.interpolate({
+      inputRange: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      outputRange: ['0deg', '30deg', '60deg', '90deg', '120deg', '150deg', '180deg', '210deg', '240deg', '270deg', '300deg', '330deg', '360deg']
+    });
+
     return (
       <View style={styles.container}>
         <View style={styles.playersContainer}>
@@ -202,7 +230,9 @@ export default class GameScreen extends Component {
             />
           </View>
           <View style={styles.timerContainer}>
-            <Timer seconds={this.state.timeRemaining}/>
+            <Timer
+              seconds={this.state.timeRemaining}
+              rotationInterpolation={timerRotation}/>
           </View>
           <CustomText>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE`}</CustomText>
           <View style={styles.afterContainer}>
