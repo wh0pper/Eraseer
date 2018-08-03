@@ -35,7 +35,7 @@ export default class Timer extends Component {
       <View style={styles.container}>
         <DoubleHexView
           rotationInterpolation={this.props.rotationInterpolation}/>
-        <View style={{top: -200}}>
+        <View style={{top: -190}}>
           <Text style={{fontSize: 35, color: '#8f8f8f'}}>{this.props.seconds}</Text>
         </View>
       </View>

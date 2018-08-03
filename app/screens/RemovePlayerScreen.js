@@ -60,7 +60,7 @@ export default class RemovePlayerScreen extends Component {
     return (
       <GestureRecognizer
         config={gestureConfig}
-        onSwipeLeft={(state)=> this.nextScreen()}
+        onSwipeUp={(state)=> this.nextScreen()}
         style={{flex: 1}}
         >
       <View style={styles.container}>
@@ -83,10 +83,11 @@ export default class RemovePlayerScreen extends Component {
         </View>
         <DoubleHexView/>
         <View style={styles.button}>
-          <TouchableOpacity
+          <CustomText>SWIPE UP TO CONTINUE</CustomText>
+          {/* <TouchableOpacity
             onPress={() => this.nextScreen()}>
             <CustomText>Continue</CustomText>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </GestureRecognizer>
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    paddingTop: 38
+    paddingTop: 40
   },
   emptyHexContainer: {
     width: 69.3,

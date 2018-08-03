@@ -115,16 +115,6 @@ export default class GameScreen extends Component {
     this.setState({playerList: players});
   }
 
-  mockClick(player) {
-    let clickTime = Date.now();
-    let players = this.state.playerList;
-    let clickedPlayer = players.find((individual) => p !== undefined && individual.color == player.color);
-    clickedPlayer.click = clickTime;
-    let updateIndex = players.indexOf(clickedPlayer);
-    players.splice(updateIndex,1);
-    players.splice(updateIndex,0,clickedPlayer);
-  }
-
   processRound(startTime) {
     let removePlayer;
     let allPlayers = this.state.playerList;
@@ -219,7 +209,8 @@ export default class GameScreen extends Component {
     return (
       <GestureRecognizer
         config={gestureConfig}
-        onSwipeDown={() => this.startTimer()}>
+        onSwipeDown={() => this.startTimer()}
+        style={{flex: 1}}>
         <View style={styles.container}>
           <View style={styles.playersContainer}>
             <FlatList
@@ -230,9 +221,7 @@ export default class GameScreen extends Component {
                 renderItem={({item}) => {
                   return (
                     <View>
-                      <TouchableOpacity onPress={() => this.mockClick(item)}>
-                        <SmallPlayerBox displayInfo={item}></SmallPlayerBox>
-                      </TouchableOpacity>
+                      <SmallPlayerBox displayInfo={item}></SmallPlayerBox>
                     </View>
                   );
                 }}
@@ -243,7 +232,8 @@ export default class GameScreen extends Component {
                 seconds={this.state.timeRemaining}
                 rotationInterpolation={timerRotation}/>
             </View>
-            <CustomText>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE`}</CustomText>
+            <CustomText>{`OVERSEERS MAY USE RUNES\n TO CAST POWER TO ERASE\n`}</CustomText>
+            <CustomText>SWIPE DOWN TO START</CustomText>
             <View style={styles.afterContainer}>
               {/* <TouchableOpacity onPress={() => this.startTimer()}>
                 <CustomText>Start round</CustomText>

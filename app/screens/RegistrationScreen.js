@@ -85,7 +85,10 @@ export default class RegistrationScreen extends Component {
     console.log('Registration screen mounted, playerList, deviceList:', this.state.playerList, this.state.availableDevices);
     this.resetRegistration();
     this.clickListener = this.props.screenProps.jsEventEmitter.addListener('clickReceived', this.handleReceivedClick.bind(this));
+  }
 
+  componentWillUnmount() {
+    // this.clickListener.remove(); jk can't remove, library is questionable
   }
 
   handleReceivedClick(data) {
@@ -112,6 +115,7 @@ export default class RegistrationScreen extends Component {
       // mode: 'modal'
     // });
     await sleep(2000);
+    console.log('start listening for click');
     this.listenForClick(startTime)
       .then((clickData) => {
         console.log('listen for click then');
@@ -152,7 +156,7 @@ export default class RegistrationScreen extends Component {
           resolve(this.props.screenProps.lastClick);
         }
       }, 10);
-      this.timeout = setTimeout(() => {
+      setTimeout(() => {
         clearInterval(this.listening);
         reject('No click detected')
       }, 7500);

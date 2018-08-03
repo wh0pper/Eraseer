@@ -79,7 +79,6 @@ export default class ScanScreen extends Component {
         style={{flex: 1}}
         >
         <View style={styles.container}>
-          this.props.screenProps.scanState ?
           <ActivityIndicator
             animating={this.props.screenProps.scanState}
             size="large"

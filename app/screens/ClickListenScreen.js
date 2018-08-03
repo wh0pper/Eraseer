@@ -27,24 +27,28 @@ export default class ClickListenScreen extends Component {
     this.animatedColor = new Animated.Value(0);
     this.animatedText = new Animated.Value(0);
     this.state = {
-
+      isClaimed: false
     };
   }
 
   componentDidMount() {
     this.confirmationListener = this.props.screenProps.jsEventEmitter.addListener('registrationConfirmed', this.makeBlack.bind(this));
     console.log('click listen did mount');
-    setTimeout(() => {
+    this.listenTimeout = setTimeout(() => {
       console.log('click listen timeout');
       this.props.navigation.navigate('error');
     }, 7500);
   }
 
   componentWillUnmount() {
+    console.log('click listen screen will unmount');
     // this.confirmationListener.remove();
+
   }
 
   async makeBlack() {
+    clearTimeout(this.listenTimeout);
+    this.setState({isClaimed: true});
     console.log('click confirmed for registration');
       // this.animatedColor.setValue(0);
       // Animated.parallel([
@@ -55,7 +59,7 @@ export default class ClickListenScreen extends Component {
             duration: 1000
           }
         ).start();
-        await sleep(1000);
+        await sleep(2000);
         this.props.navigation.navigate('registration');
       //   Animated.timing(
       //     this.animatedText,
@@ -82,23 +86,20 @@ export default class ClickListenScreen extends Component {
 
     return (
       <Animated.View style={[styles.container, {backgroundColor: backgroundColor}]}>
-        <Animated.Text style={[styles.text, {color: textColor}]}>{`YOU ARE CLAIMING\n THE WORLD OF ${this.props.navigation.getParam('realm').name}`}</Animated.Text>
-        <Image
-          source={require('../../rune.png')}></Image>
-        <Animated.Text style={[styles.text, {color: textColor}]}>{`TAP YOUR RUNE TO CLAIM.`}</Animated.Text>
-
-        {/* <TouchableHighlight
-          onPress={() => {
-            this.props.hide()
-          }}>
-          <Animated.Text style={{color: textColor}}>back</Animated.Text>
-        </TouchableHighlight> */}
-        {/* <TouchableHighlight
-          onPress={() => {
-            this.makeBlack()
-          }}>
-          <CustomText>make black</CustomText>
-        </TouchableHighlight> */}
+        {!this.state.isClaimed ?
+        <View style={styles.container}>
+          <Animated.Text style={[styles.text, {color: textColor}]}>{`YOU ARE CLAIMING\n THE WORLD OF ${this.props.navigation.getParam('realm').name}`}</Animated.Text>
+          <Image
+            source={require('../../rune.png')}></Image>
+            <Animated.Text style={[styles.text, {color: textColor}]}>{`TAP YOUR RUNE TO CLAIM.`}</Animated.Text>
+        </View>
+          :
+        <View style={styles.container}>
+          <Image
+            source={require('../../rune.png')}></Image>
+          <Text style={[styles.text, {color: textColor}]}>{`OVERSEER, YOU HAVE CLAIMED THE WORLD OF ${this.props.navigation.getParam('realm').name}`}</Text>
+        </View>
+        }
       </Animated.View>
     )
 

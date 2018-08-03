@@ -8,9 +8,8 @@ import {
 } from 'react-native';
 
 import EventEmitter from 'events';
-
 import { createStackNavigator } from 'react-navigation';
-
+import { stringToBytes } from 'convert-string';
 
 import GameScreen from './app/screens/GameScreen';
 import RegistrationScreen from './app/screens/RegistrationScreen';
@@ -99,6 +98,9 @@ export default class App extends Component<Props> {
   async startScan() {
     await sleep(1000); //needs to be async, otherwise just won't Work
     // if (newState) {
+    this.state.subscribedDevices.forEach((device) => {
+      BleManager.disconnect(device);
+    })
     this.setState({
       subscribedDevices: [],
       isScanning: true
@@ -133,6 +135,7 @@ export default class App extends Component<Props> {
       BleManager.connect(peripheral.id)
       .then(() => {
         console.log('Connected to new iTag with id: ', peripheral.id);
+
         let existingDevices = this.state.subscribedDevices;
         if (!existingDevices.includes(peripheral.id)) {
           existingDevices.push(peripheral.id)
@@ -148,6 +151,7 @@ export default class App extends Component<Props> {
 
   subscribeToClick(peripheralId) {
     BleManager.retrieveServices(peripheralId).then((serviceData) => {
+      console.log('serviceData', serviceData);
       BleManager.startNotification(peripheralId, ITAG_SERVICE, ITAG_CHARACTERISTIC)
       .then((results) => {console.log('Subscription started on peripheral with ID: ', peripheralId)})
       .catch((error) => {console.log('Error starting subscription for periph with ID: ', peripheralId, error)})
@@ -168,6 +172,13 @@ export default class App extends Component<Props> {
 
   handleDisconnect(data) {
     console.log('Peripheral initiated a disconnect: ', data);
+    // let serviceIdArray = data.peripheral.split('')
+    // serviceIdArray.splice(4,1,'1').splice(5,1,'8').splice(6,1,'0').splice(7,1,'2');
+    // let serviceId = serviceIdArray.join('');
+    // console.log('service id:', serviceId);
+    // BleManager.writeWithoutResponse(data.peripheral, serviceId, "2A06", stringToBytes('00'))
+    //   .then(console.log('wrote to disable itag alarm'))
+    //   .catch((e) => console.log('error disabling itag alarm', e));
     let updatedDevices = this.state.subscribedDevices
     let updateIndex = updatedDevices.indexOf(data.peripheral);
     updatedDevices.splice(updateIndex, 1);
@@ -213,6 +224,6 @@ const NavigationStack = createStackNavigator({
   {
     headerMode: 'none',
     gesturesEnabled: true,
-    initialRouteName: 'scan'
+    initialRouteName: 'game'
   }
 );
