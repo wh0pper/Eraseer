@@ -138,7 +138,7 @@ export default class RegistrationScreen extends Component {
       this.listening = setInterval(() => {
         // need to refactor here to end interval when we've moved on, console log shows
         // //console.log('Still listening, last clickTime: ', this.props.screenProps.lastClick.time)
-        if (this.props.screenProps.lastClick.time > startTime) {
+        if (this.props.screenProps.lastClick.time > startTime && ) {
           this.makeModalBlack();
           resolve(this.props.screenProps.lastClick);
         }
@@ -238,7 +238,7 @@ export default class RegistrationScreen extends Component {
             <RealmHex realms={this.state.realmList} registerPlayer={(realmInfo) => this.registerPlayer(realmInfo)}/>
             </View>
             <Text>TAP TO SELECT YOUR DOMINION</Text>
-            <Text>SWIPE DOWN TO RESTART</Text> */}
+            <Text>SWIPE DOWN TO RESTART</Text>
             {(this.state.playerList.length > 1) ? <Text>SWIPE LEFT TO START GAME</Text> : null }
         </View>
       </GestureRecognizer>
