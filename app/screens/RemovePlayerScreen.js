@@ -49,7 +49,7 @@ export default class RemovePlayerScreen extends Component {
   }
 
   render() {
-    let removedPlayer = this.props.navigation.getParam('removedPlayer') || { name: 'NO PLAYER', color: '#afafaf' };
+    let removedPlayer = this.props.navigation.getParam('removedPlayer');
     let type = typeof removedPlayer;
 
     const gestureConfig = {

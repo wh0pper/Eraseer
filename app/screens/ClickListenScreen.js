@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
-  Animated
+  Animated,
+  Image
 } from 'react-native';
 
 async function sleep(time) {
@@ -70,7 +71,10 @@ export default class ClickListenScreen extends Component {
     return (
       <Animated.View style={[styles.container, {backgroundColor: backgroundColor}]}>
         <Animated.Text style={[styles.text, {color: textColor}]}>{`YOU ARE CLAIMING\n THE WORLD OF ${this.props.navigation.getParam('realm').name}`}</Animated.Text>
+        <Image
+          source={require('../../rune.png')}></Image>
         <Animated.Text style={[styles.text, {color: textColor}]}>{`TAP YOUR RUNE TO CLAIM.`}</Animated.Text>
+
         {/* <TouchableHighlight
           onPress={() => {
             this.props.hide()
