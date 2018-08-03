@@ -9,7 +9,6 @@ import {
 
 import EventEmitter from 'events';
 import { createStackNavigator } from 'react-navigation';
-import { stringToBytes } from 'convert-string';
 
 import GameScreen from './app/screens/GameScreen';
 import RegistrationScreen from './app/screens/RegistrationScreen';
