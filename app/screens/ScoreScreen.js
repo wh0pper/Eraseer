@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
   header: {
     // display: 'none',
     flex: 1,
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#DFDFDF',
     marginTop: 50,

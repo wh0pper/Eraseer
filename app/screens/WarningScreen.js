@@ -34,9 +34,7 @@ export default class WarningScreen extends Component {
   }
 
   async queueNextScreen() {
-    console.log('realm to warning: ', this.props.navigation.getParam('realm'));
     await sleep(1200);
-    console.log('moving to click listen screen');
     this.props.navigation.navigate('click', {realm: this.props.navigation.getParam('realm')});
   }
 
@@ -45,7 +43,7 @@ export default class WarningScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.title}>
-          <CustomText>{`OTHER PLAYERS\n HOLD YOUR CLICKS`}</CustomText>
+          <CustomText>{`OTHER PLAYERS\nHOLD YOUR CLICKS`}</CustomText>
         </View>
       </View>
     );
@@ -62,7 +60,8 @@ const styles = StyleSheet.create({
     // padding: 20
   },
   title: {
-    marginBottom: 100
+    marginBottom: 100,
+    alignItems: 'center'
   },
   button: {
     backgroundColor: 'lightgray',

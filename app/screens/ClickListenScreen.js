@@ -38,6 +38,11 @@ export default class ClickListenScreen extends Component {
 
   }
 
+  static getDerivedStateFromProps(props, state) {
+    console.log('click listen screen get derived state');
+    return null;
+  }
+
   makeBlack() {
       this.animatedColor.setValue(0);
       Animated.parallel([

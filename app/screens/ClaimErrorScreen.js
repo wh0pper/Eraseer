@@ -8,6 +8,8 @@ import {
   Animated
 } from 'react-native';
 
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+
 import CustomText from '../components/CustomText';
 
 // async function sleep(time) {
@@ -35,15 +37,25 @@ export default class ClaimErrorScreen extends Component {
 
 
   render() {
+    const gestureConfig = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    };
 
     return (
-      <View style={styles.container}>
-        <CustomText>No clicks detected. Please ensure your rune is powered on and connected to the app.</CustomText>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('registration')}>
-          <CustomText>back</CustomText>
-        </TouchableOpacity>
-      </View>
+      <GestureRecognizer
+        config={gestureConfig}
+        onSwipeUp={()=> this.props.navigation.navigate('registration')}
+        style={{flex: 1}}
+        >
+        <View style={styles.container}>
+          <CustomText>{`No clicks detected.\n\nPlease confirm that your rune is powered on and connected.`}</CustomText>
+          {/* <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('registration')}>
+            <CustomText>back</CustomText>
+          </TouchableOpacity> */}
+        </View>
+      </GestureRecognizer>
     );
   }
 }
@@ -52,10 +64,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: '#DFDFDF',
-    // padding: 20
+    padding: 20
   },
   title: {
     marginBottom: 100
