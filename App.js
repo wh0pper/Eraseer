@@ -1,16 +1,24 @@
 import React, {Component} from 'react';
 import {
   Platform,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
   NativeAppEventEmitter,
   NativeModules,
   NativeEventEmitter,
+  PermissionsAndroid
 } from 'react-native';
-import Box from './box';
+
+import EventEmitter from 'events';
+import { createStackNavigator } from 'react-navigation';
+
+import GameScreen from './app/screens/GameScreen';
+import RegistrationScreen from './app/screens/RegistrationScreen';
+import ScoreScreen from './app/screens/ScoreScreen';
+import ScanScreen from './app/screens/ScanScreen';
+import ClickListenScreen from './app/screens/ClickListenScreen';
+import WarningScreen from './app/screens/WarningScreen';
+import ConfirmScreen from './app/screens/ConfirmScreen';
+import RemovePlayerScreen from './app/screens/RemovePlayerScreen';
+import ClaimErrorScreen from './app/screens/ClaimErrorScreen';
 
 import BleManager from 'react-native-ble-manager';
 const BleManagerModule = NativeModules.BleManager;
@@ -19,50 +27,37 @@ const BleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 // const ITAG_SERVICE = "0000ffe0-0000-1000-8000-00805f9b34fb";
 // const ITAG_CHARACTERISTIC = "0000ffe1-0000-1000-8000-00805f9b34fb";
 
+// console.warn = (warn) => warn.apply;
+console.disableYellowBox = true;
+
 const SCAN_TIME = 60;
 
 const ITAG_SERVICE = "ffe0";
 const ITAG_CHARACTERISTIC = "ffe1";
 
-let colorBank = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
-
-let playerBank = [
-  {
-    name: 'Player 6',
-    color: colorBank[5]
-  },
-  {
-    name: 'Player 5',
-    color: colorBank[4]
-  },
-  {
-    name: 'Player 4',
-    color: colorBank[3]
-  },
-  {
-    name: 'Player 3',
-    color: colorBank[2]
-  },
-  {
-    name: 'Player 2',
-    color: colorBank[1]
-  },
-  {
-    name: 'Player 1',
-    color: colorBank[0]
-  }
-];
+async function sleep(time) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, time);
+  });
+}
 
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props) {
-    BleManager.start({showAlert: true});
-
+    BleManager.start({showAlert: true, forceLegacy: true});
     super(props);
+    this.jsEventEmitter = new EventEmitter();
 
     this.state = {
       isScanning: false,
-      boxList: []
+      subscribedDevices: [],
+      lastClick: {
+        peripheral: null,
+        time: 0
+      }
+
     };
 
     this.handleDiscovery = this.handleDiscovery.bind(this);
@@ -74,6 +69,26 @@ export default class App extends Component<Props> {
     this.discoveryHandler = BleManagerEmitter.addListener('BleManagerDiscoverPeripheral', this.handleDiscovery );
     this.subscriptionHandler = BleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', this.handleSubscription );
     this.disconnectHandler = BleManagerEmitter.addListener('BleManagerDisconnectPeripheral', this.handleDisconnect );
+
+    if (Platform.OS === 'android' && Platform.Version >= 23) {
+      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
+        if (result) {
+          console.log("Permission is OK");
+        } else {
+          PermissionsAndroid.requestPermission(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
+            if (result) {
+              console.log("User accept");
+            } else {
+              console.log("User refuse");
+            }
+          });
+        }
+      });
+    }
+
+    this.startScan();
+    console.log('App mounted, scan state: ', this.state.isScanning);
+
   }
 
   componentWillUnmount() {
@@ -82,53 +97,63 @@ export default class App extends Component<Props> {
     this.disconnectHandler.remove();
   }
 
-  startScan() {
-    let newState = !this.state.isScanning;
-    this.setState({isScanning: newState});
-    if (newState) {
-      BleManager.scan([],SCAN_TIME,false)
-      .then(() => {
-        setTimeout(() => {
-          this.setState({isScanning: false});
-        }, SCAN_TIME * 1000);
-        console.log('Scan initialized');
-      })
-      .catch((error) => {
-        console.log('Error initializing scan: ', error);
-      });
+  async startScan() {
+    await sleep(1000); //needs to be async, otherwise just won't Work
+    // if (newState) {
+    this.state.subscribedDevices.forEach((device) => {
+      BleManager.disconnect(device);
+    })
+    this.setState({
+      subscribedDevices: [],
+      isScanning: true
+    });
+    BleManager.scan([],SCAN_TIME,false,{})
+    .then(() => {
+      setTimeout(() => {
+        this.setState({isScanning: false});
+      }, SCAN_TIME * 1000);
+      console.log('Scan initialized');
+    })
+    .catch((error) => {
+      console.log('Error initializing scan: ', error);
+    });
+    // } else {
+    //   console.log('Stopping scan.')
+    //   BleManager.stopScan();
+    // }
+  }
 
-    } else {
-      BleManager.stopScan();
-    }
+  stopScan() {
+    BleManager.stopScan();
+    this.setState({isScanning: false});
   }
 
   handleDiscovery(peripheral) {
-    // console.log('New device discovered: ', peripheral);
+    //console.log('Peripheral discovered');
     let name = peripheral.name || '';
-    if (this.state.boxList.length < 6) {
-      if (name.toLowerCase().trim() == 'itag') {
-        console.log('Initializing connection with found iTag device.')
-        BleManager.connect(peripheral.id)
-        .then(() => {
-          console.log('Connected to new iTag with id: ', peripheral.id);
-          let players = this.state.boxList;
-          let newPlayer = playerBank.pop();
-          newPlayer.peripheralId = peripheral.id;
-          newPlayer.clickCount = 0;
-          players.push(newPlayer);
-          this.setState({boxList: players});
-          console.log('Current players list: ', this.state.boxList);
-          this.subscribeToClick(peripheral.id);
-        })
-        .catch((error) => {
-          console.log('Error connecting to new iTag: ', error);
-        });
-      }
+    if (name.toLowerCase().trim() == 'itag') {
+      console.log('New iTag discovered: ', peripheral);
+      console.log('Initializing connection with found iTag device.')
+      BleManager.connect(peripheral.id)
+      .then(() => {
+        console.log('Connected to new iTag with id: ', peripheral.id);
+
+        let existingDevices = this.state.subscribedDevices;
+        if (!existingDevices.includes(peripheral.id)) {
+          existingDevices.push(peripheral.id)
+        }
+        this.setState({subscribedDevices: existingDevices});
+        this.subscribeToClick(peripheral.id);
+      })
+      .catch((error) => {
+        console.log('Error connecting to new iTag: ', error);
+      });
     }
   }
 
   subscribeToClick(peripheralId) {
     BleManager.retrieveServices(peripheralId).then((serviceData) => {
+      console.log('serviceData', serviceData);
       BleManager.startNotification(peripheralId, ITAG_SERVICE, ITAG_CHARACTERISTIC)
       .then((results) => {console.log('Subscription started on peripheral with ID: ', peripheralId)})
       .catch((error) => {console.log('Error starting subscription for periph with ID: ', peripheralId, error)})
@@ -136,72 +161,71 @@ export default class App extends Component<Props> {
   }
 
   handleSubscription(data) {
+    let receivedTime = Date.now();
     console.log('Subscription listener fired, received data from:' + data.peripheral, data);
+    this.jsEventEmitter.emit('clickReceived', {peripheral: data.peripheral, time: receivedTime});
+    this.setState({
+      lastClick: {
+        peripheral: data.peripheral,
+        time: receivedTime
+      }
+    })
   }
 
   handleDisconnect(data) {
     console.log('Peripheral initiated a disconnect: ', data);
-    let players = this.state.boxList;
-    let removePlayer = players.find((player) => player.peripheralId == data.peripheral);
-    if (removePlayer) {
-      console.log('Removing player from game: ', removePlayer);
-      let removeIndex = players.indexOf(removePlayer);
-      players.splice(removeIndex, 1);
-      delete removePlayer.peripheralId;
-      delete removePlayer.clickCount;
-      playerBank.push(removePlayer);
-      this.setState({boxList: players});
-    } else {
-      console.log('Error removing player from game');
-    }
+    // let serviceIdArray = data.peripheral.split('')
+    // serviceIdArray.splice(4,1,'1').splice(5,1,'8').splice(6,1,'0').splice(7,1,'2');
+    // let serviceId = serviceIdArray.join('');
+    // console.log('service id:', serviceId);
+    // BleManager.writeWithoutResponse(data.peripheral, serviceId, "2A06", stringToBytes('00'))
+    //   .then(console.log('wrote to disable itag alarm'))
+    //   .catch((e) => console.log('error disabling itag alarm', e));
+    let updatedDevices = this.state.subscribedDevices
+    let updateIndex = updatedDevices.indexOf(data.peripheral);
+    updatedDevices.splice(updateIndex, 1);
+    this.setState({subscribedDevices: updatedDevices})
   }
 
 
   render() {
-    let playerList = this.state.boxList;
-    console.log('Playerlist in render: ', playerList);
     return (
-      <View style={styles.container}>
-        <FlatList
-            data={this.state.boxList}
-            extraData={this.state}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => {
-              return (
-                <View>
-                  <Box boxInfo={item}></Box>
-                  {/* <Text>{item.name}</Text> */}
-                </View>
-              );
-            }}
-          />
-        <TouchableOpacity style={styles.button} onPress={() => this.startScan()}><Text>{this.state.isScanning ? "Stop" : "Scan"}</Text></TouchableOpacity>
-      </View>
+        <NavigationStack screenProps={{
+          jsEventEmitter: this.jsEventEmitter,
+          deviceList: this.state.subscribedDevices,
+          startScan: () => this.startScan(),
+          scanState: this.state.isScanning,
+          lastClick: this.state.lastClick,
+          stopScan: () => this.stopScan()
+        }}/>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    padding: 20
+const RegistrationStack = createStackNavigator({
+  warning: WarningScreen,
+  click: ClickListenScreen,
+  confirm: ConfirmScreen,
+  error: ClaimErrorScreen,
   },
-  button: {
-    backgroundColor: 'lightgray',
-    padding: 10
+  {
+    mode: 'modal',
+    headerMode: 'none',
+    initialRouteName: 'warning'
+  }
+);
+
+const NavigationStack = createStackNavigator({
+    scan: ScanScreen,
+    registration: RegistrationScreen,
+    clickStack: RegistrationStack,
+    game: GameScreen,
+    remove: RemovePlayerScreen,
+    score: ScoreScreen,
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  {
+    headerMode: 'none',
+    gesturesEnabled: true,
+    initialRouteName: 'scan'
+  }
+);
